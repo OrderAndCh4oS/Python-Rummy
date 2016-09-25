@@ -1,10 +1,11 @@
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 """
 Created on Sun Sep 25 14:14:18 2016
 
 @author: Sarcoma
 """
-
+from operator import itemgetter
 from random import shuffle
 class Rummy:
     cards = ["A"] + list(range(2, 11)) + ["J", "Q", "K"]
@@ -13,7 +14,7 @@ class Rummy:
     discard = []
     playerOneScore = 0
     playerTwoScore = 0
-    
+
     def __init__(self):
         self.setDeck()
 
@@ -24,7 +25,7 @@ class Rummy:
             for card in self.cards:
                 self.deck.append((card, suit))
         shuffle(self.deck)
-    
+
     def deal(self, cardCount, playerCount):
         hands = []
         for _ in range(playerCount):
@@ -33,38 +34,41 @@ class Rummy:
             for i in range(playerCount):
                 hands[i] += (self.deck.pop(), )
         return (tuple(hands))
-        
+
+    def sortHand(self, hand):
+        hand.sort(key=itemgetter(1))
+
     def printHand(self, hand):
         output = ''
-        
         for card in hand:
            output += self.getCardColour(card)
         print(output.strip(', '))
-            
+
     def getCardColour(self, card):
         if card[1] in [u"\u2665",  u"\u2666"]:
             return self.redCard(card)
         elif card[1] in [u"\u2660",  u"\u2663"]:
             return self.blackCard(card)
-            
+
     def redCard(self, card):
-        return  str(card[0]) + "\033[1;31m" + card[1] + "\033[0m, "
-        
+        return str(card[0]) + "\033[1;31m" + card[1] + "\033[0m, "
+
     def blackCard(self, card):
         return str(card[0]) + card[1] + ", "
-     
+
     def printKey(self, hand):
         output = ''
         for i in range(len(hand)):
             output += " %i, " % (i+1)
         print(output.strip(', '))
-        
+
     def drawCard(self, hand):
         hand.append(self.deck.pop())
-    
+
     def choosePickUp(self, hand):
         choice = ''
         while choice.lower() not in ['d', 'p']:
+            self.sortHand(hand)
             self.printHand(hand)
             print("Discard Pile: ", self.getCardColour(self.discard[-1]))
             print("..........................\n")
@@ -73,7 +77,7 @@ class Rummy:
             hand.append(self.discard.pop())
         else:
             self.drawCard(hand)
-      
+
     def playGame(self):
         turn = 1
         (playerOneHand, playerTwoHand) = self.deal(7, 2)
@@ -95,6 +99,7 @@ class Rummy:
                 self.choosePickUp(hand)
             else:
                 self.drawCard(hand)
+            self.sortHand(hand)
             self.printHand(hand)
             self.printKey(hand)
             choice = input("Enter a number to discard a card or 'k' to Knock: ")
@@ -128,10 +133,10 @@ class Rummy:
             print(winner, "is the Winner!!")
             print("Player One Score:", self.playerOneScore)
             print("Player Two Score:", self.playerTwoScore)
-            
-        
+
+
 
 #start game
 game = Rummy()
 game.playGame()
-        
+
