@@ -36,7 +36,7 @@ class Rummy:
         return (tuple(hands))
 
     def sortHand(self, hand):
-        hand.sort(key=itemgetter(1))
+        hand.sort(key=lambda x: (x[1]))
 
     def printHand(self, hand):
         output = ''
@@ -99,7 +99,7 @@ class Rummy:
                 self.choosePickUp(hand)
             else:
                 self.drawCard(hand)
-            self.sortHand(hand)
+                self.sortHand(hand)
             self.printHand(hand)
             self.printKey(hand)
             choice = input("Enter a number to discard a card or 'k' to Knock: ")
@@ -126,6 +126,7 @@ class Rummy:
         if self.playerOneScore < 100 and self.playerTwoScore < 100:
             print("Player One Score:", self.playerOneScore)
             print("Player Two Score:", self.playerTwoScore)
+            not input("Press enter to begin next round...")
             self.setDeck()
             self.playGame()
         else:
