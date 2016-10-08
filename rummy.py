@@ -9,7 +9,7 @@ from random import shuffle
 
 
 class Rummy:
-    cards = ["A"] + [str(d) for d in list(range(2, 11))] + ["J", "Q", "K"]
+    cards = [str(d) for d in list(range(2, 11))] + ["J", "Q", "K", "A"]
     suits = [u"\u2660", u"\u2665", u"\u2666", u"\u2663"]
     deck = []
     discard = []
