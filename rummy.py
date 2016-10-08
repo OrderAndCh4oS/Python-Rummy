@@ -6,9 +6,36 @@ Created on Sun Sep 25 14:14:18 2016
 """
 
 from random import shuffle
+import socket
+from pickle import dumps, loads
 
 
-class Rummy:
+class SocketConnection:
+    def __init__(self, host, port):
+        self.host = host
+        self.port = port
+        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    def bind(self):
+        self.s.bind((self.host, self.port))
+
+    def listen(self, dataToSend):
+        self.s.listen(1)
+        conn, address = self.s.accept()
+        conn.sendall(dumps(dataToSend))
+        while True:
+            data = conn.recv(1024)
+            if not data:
+                break
+            conn.close()
+            return loads(data)
+
+    def send(self, dataToSend):
+        self.s.connect((self.host, self.port))
+        self.s.sendall(dumps(dataToSend))
+
+
+class Rummy(SocketConnection):
     cards = [str(d) for d in list(range(2, 11))] + ["J", "Q", "K", "A"]
     suits = [u"\u2660", u"\u2665", u"\u2666", u"\u2663"]
     deck = []
@@ -16,7 +43,8 @@ class Rummy:
     playerOneScore = 0
     playerTwoScore = 0
 
-    def __init__(self):
+    def __init__(self, host, port):
+        super().__init__(host, port)
         self.lastTurn = False
         self.knocked = False
         self.turn = 1
@@ -162,10 +190,11 @@ class Rummy:
         self.endRound(playerOneHand, playerTwoHand)
         if self.playerOneScore < 100 and self.playerTwoScore < 100:
             self.displayCurrentScores()
-            self.__init__()
+            self.__init__(self.host, self.port)
         else:
             self.endGame()
+            self.s.close()
 
 
 # start game
-Rummy()
+Rummy("127.0.0.1", 50007)
