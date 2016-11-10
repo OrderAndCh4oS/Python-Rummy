@@ -6,54 +6,15 @@ Created on Sun Sep 25 14:14:18 2016
 """
 
 from random import shuffle
-import socket
-from pickle import dumps, loads
 
 
-class SocketConnection:
-    def __init__(self, host, port):
-        self.host = host
-        self.port = port
-        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    def bind(self):
-        self.s.bind((self.host, self.port))
-
-    def listen(self, dataToSend):
-        self.s.listen(1)
-        conn, address = self.s.accept()
-        conn.sendall(dumps(dataToSend))
-        while True:
-            data = conn.recv(1024)
-            if not data:
-                break
-            conn.close()
-            return loads(data)
-
-    def send(self, dataToSend):
-        self.s.connect((self.host, self.port))
-        self.s.sendall(dumps(dataToSend))
-
-
-class Rummy(SocketConnection):
+class Deck:
     cards = [str(d) for d in list(range(2, 11))] + ["J", "Q", "K", "A"]
     suits = [u"\u2660", u"\u2665", u"\u2666", u"\u2663"]
     deck = []
     discard = []
-    playerOneScore = 0
-    playerTwoScore = 0
-
-    def __init__(self, host, port):
-        super().__init__(host, port)
-        self.lastTurn = False
-        self.knocked = False
-        self.turn = 1
-        self.setDeck()
-        self.playGame()
 
     def setDeck(self):
-        self.deck = []
-        self.discard = []
         for suit in self.suits:
             for card in self.cards:
                 self.deck.append((card, suit))
@@ -68,9 +29,13 @@ class Rummy(SocketConnection):
                 hands[i] += (self.deck.pop(),)
         return tuple(hands)
 
+    def checkStack(self):
+        if len(self.deck) == 0:
+            self.deck = self.discard
+            self.discard = []
+
     def printHand(self, hand):
         output = ''
-
         for card in hand:
             output += self.getCardColour(card)
         print(output.strip(', '))
@@ -99,6 +64,22 @@ class Rummy(SocketConnection):
     def drawCard(self, hand):
         hand.append(self.deck.pop())
 
+    def discardCard(self, hand, choice):
+        self.discard.append(hand.pop(choice - 1))
+
+
+class Rummy(Deck):
+    playerOneScore = 0
+    playerTwoScore = 0
+    lastTurn = False
+    knocked = False
+    turn = 1
+    thisPlayer = 1
+
+    def __init__(self):
+        self.setDeck()
+        self.playGame()
+
     def choosePickUp(self, hand):
         choice = ''
         while choice.lower() not in ['d', 'p']:
@@ -110,11 +91,6 @@ class Rummy(SocketConnection):
             hand.append(self.discard.pop())
         else:
             self.drawCard(hand)
-
-    def checkStack(self):
-        if len(self.deck) == 0:
-            self.deck = self.discard
-            self.discard = []
 
     def checkKnocked(self):
         if self.knocked:
@@ -131,17 +107,18 @@ class Rummy(SocketConnection):
             self.drawCard(hand)
 
     def playHand(self, hand):
-        choice = input("Enter a number to discard a card or 'k' to Knock: ")
-        if choice.lower() == "k":
-            self.knocked = True
-            choice = input("Enter a number to discard a card: ")
+        message = "Enter a number to discard a card or 'k' to Knock: "
+        choice = ""
+
         while choice not in [str(i) for i in range(1, 9)]:
-            choice = input("Enter a number to discard a card: ")
+            if self.knocked:
+                message = "Enter a number to discard a card: "
+            choice = input(message)
+            if choice.lower() == "k":
+                self.knocked = True
+
         choice = int(choice)
-        if choice > len(hand) or choice < 1:
-            return False
-        self.discard.append(hand.pop(choice - 1))
-        return
+        self.discardCard(hand, choice)
 
     def endRound(self, playerOneHand, playerTwoHand):
         print("\n***************************")
@@ -190,11 +167,13 @@ class Rummy(SocketConnection):
         self.endRound(playerOneHand, playerTwoHand)
         if self.playerOneScore < 100 and self.playerTwoScore < 100:
             self.displayCurrentScores()
-            self.__init__(self.host, self.port)
+            self.lastTurn = False
+            self.knocked = False
+            self.turn = 1
+            self.setDeck()
+            self.playGame()
         else:
             self.endGame()
-            self.s.close()
-
 
 # start game
-Rummy("127.0.0.1", 50007)
+Rummy()
