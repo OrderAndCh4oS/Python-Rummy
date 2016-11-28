@@ -77,7 +77,7 @@ class Hand:
         self.printKey()
 
 
-class Dealer:
+class Dealer(Deck):
     cardCount = 7
 
     def setCardCount(self, cardCount):
@@ -119,7 +119,7 @@ class Player:
                 self.score += roundScore
 
 
-class Round(Dealer, Deck):
+class Round(Dealer):
     firstPlayer = 0
     currentPlayer = 0
     turn = 1
@@ -199,7 +199,7 @@ class Rummy:
 
     def playerChooseToDiscardOrPickUp(self, hand):
         if self.round.knocked:
-            print("Player %i knocked, this is your last turn!!!\n" % ((self.round.currentPlayer + 1) % 2))
+            print("A Player has knocked, this is your last turn!!!\n")
         if len(self.round.discard) > 0:
             self.choosePickUp(hand)
         else:
@@ -272,7 +272,7 @@ class Rummy:
     def endGame(self):
         winners = self.findLowestScores()
         if len(winners) == 1:
-            print(winners[0], "is the Winner!!")
+            print(winners[0].getPlayerName(), "is the Winner!!")
         else:
             print(", ".join([w.getPlayerName() for w in winners]), "are joint winners!")
         self.displayCurrentScores()
