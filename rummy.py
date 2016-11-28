@@ -291,4 +291,4 @@ class Rummy:
 
 
 # start game
-Rummy(3)
+Rummy(2)
