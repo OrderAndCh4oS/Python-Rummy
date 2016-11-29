@@ -266,7 +266,7 @@ class Rummy:
 
     def isEndOfGame(self):
         for p in self.players:
-            if p.getScore() > 100:
+            if p.getScore() >= 100:
                 return True
         return False
 
