@@ -7,20 +7,24 @@ Created on Sun Sep 25 14:14:18 2016
 """
 
 from random import shuffle
+import itertools
 
 
-class Deck:
-    cards = [str(d) for d in list(range(2, 11))] + ["J", "Q", "K", "A"]
+class Rank:
+    values = ["A"] + [str(d) for d in list(range(2, 11))] + ["J", "Q", "K"]
     suits = [u"\u2660", u"\u2665", u"\u2666", u"\u2663"]
+
+    def __init__(self):
+        self.rankedCards = [Card(value, suit) for suit in self.suits for value in self.values]
+
+
+class Deck(Rank):
     deck = []
     discard = []
 
     def stackDeck(self):
-        self.deck = []
+        self.deck = self.rankedCards[:]
         self.discard = []
-        for suit in self.suits:
-            for card in self.cards:
-                self.deck.append(Card(card, suit))
         shuffle(self.deck)
 
     def checkStack(self):
@@ -34,6 +38,9 @@ class Deck:
 
 
 class Card:
+    value = ""
+    suit = ""
+
     def __init__(self, value, suit):
         self.value = value
         self.suit = suit
@@ -51,8 +58,13 @@ class Card:
         return str(self.value) + self.suit + ", "
 
 
-class Hand:
+class Hand(Rank):
+
+    melds = []
+    score = 0
+
     def __init__(self):
+        super().__init__()
         self.hand = []
 
     def drawCard(self, card):
@@ -62,7 +74,10 @@ class Hand:
         return self.hand.pop(choice)
 
     def printHand(self):
+        self.sortHandBySuitAndRank()
+        self.calculateScore()
         output = ''
+        print("Hand Score:", self.score)
         for card in self.hand:
             output += card.getCardColour()
         print(output.strip(', '))
@@ -77,8 +92,103 @@ class Hand:
         self.printHand()
         self.printKey()
 
+    def sortHandBySuitAndRank(self):
+        self.hand = sorted(self.hand, key=lambda card: self.suitAndRankKey(card))
 
-class Dealer(Deck):
+    def sortHandByRank(self):
+        self.hand = sorted(self.hand, key=lambda card: self.rankKey(card))
+
+    def suitAndRankKey(self, card):
+        return self.suits.index(card.suit), self.values.index(card.value)
+
+    def rankKey(self, card):
+        return self.values.index(card.value)
+
+    def calculateScore(self):
+        self.sortHandBySuitAndRank()
+        cards = {self.suitAndRankKey(card) for card in self.hand}
+        # cards = ({(0, 1), (0, 2), (0, 4), (3, 2), (0, 3), (2, 3), (3, 3)})
+        scores = []
+        self.findSets()
+        self.findRuns()
+        allPossibleMelds = []
+        print("Poss Melds", len(allPossibleMelds))
+        print(self.melds)
+        for L in range(1, 3):
+            for subset in itertools.combinations(self.melds, L):
+                allPossibleMelds.append(subset)
+        self.melds = []
+        if len(allPossibleMelds) > 0:
+            for item in allPossibleMelds:
+                if len(item) > 1:
+                    for i in range(len(item)-1):
+                        if item[i].isdisjoint(item[i + 1]):
+                            leftOver = [cards.difference(x) for x in item]
+                            scores.append(sum([x[1] + 1 for x in leftOver[0]]))
+                else:
+                    leftOver = cards.difference(item[0])
+                    scores.append(sum([x[1] + 1 for x in leftOver]))
+            self.score = max(scores)
+        else:
+            self.score = sum([x[1] + 1 for x in cards])
+
+    def findSets(self):
+        self.sortHandByRank()
+        cards = [self.suitAndRankKey(card) for card in self.hand]
+        # cards = [(0, 1), (0, 2), (0, 4), (3, 2), (0, 3), (2, 3), (3, 3)]
+        i = 1
+        while i < len(cards):
+            i, meld = self.makeSetMeld(cards, i)
+            self.makeAllMelds(meld)
+            i += 1
+
+    def makeAllMelds(self, meld):
+        if len(meld) >= 3:
+            self.melds.append(set(meld))
+        if len(meld) > 3:
+            for width in range(3, len(meld)):
+                for i, step in enumerate(range(len(meld)-2)):
+                    self.melds.append(set(meld[step:width+i]))
+
+    def findRuns(self):
+        self.sortHandBySuitAndRank()
+        cards = [self.suitAndRankKey(card) for card in self.hand]
+        # cards = [(0, 1), (0, 2), (0, 3), (0, 4), (2, 3), (3, 2), (3, 3)]
+        i = 1
+        while i < len(cards):
+            i, meld = self.makeRunMeld(cards, i)
+            self.makeAllMelds(meld)
+            i += 1
+
+    @staticmethod
+    def makeSetMeld(cards, i):
+        meld = []
+        while i < len(cards) and cards[i][1] == cards[i - 1][1]:
+            meld.append(cards[i - 1])
+            i += 1
+        meld.append(cards[i - 1])
+        return i, meld
+
+    @staticmethod
+    def makeRunMeld(cards, i):
+        meld = []
+        while i < len(cards) and cards[i][0] == cards[i - 1][0] and cards[i][1] == cards[i - 1][1] + 1:
+            meld.append(cards[i - 1])
+            i += 1
+        meld.append(cards[i - 1])
+        return i, meld
+
+    @staticmethod
+    def meldFound(meld, melds):
+        if len(meld) >= 3:
+            melds.append(meld)
+
+    @staticmethod
+    def meldRun(card, i):
+        return card[0] + card[1] - i
+
+
+class Dealer:
     cardCount = 7
 
     def setCardCount(self, cardCount):
@@ -120,7 +230,7 @@ class Player:
                 self.score += roundScore
 
 
-class Round(Dealer):
+class Round(Dealer, Deck):
     firstPlayer = 0
     currentPlayer = 0
     turn = 1
@@ -128,6 +238,7 @@ class Round(Dealer):
     knocked = False
 
     def __init__(self, numberOfPlayers):
+        super().__init__()
         self.numberOfPlayers = numberOfPlayers
         self.stackDeck()
 
