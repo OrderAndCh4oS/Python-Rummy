@@ -34,7 +34,7 @@ class Deck(Rank):
 
     def printDiscard(self):
         print("Discard Pile: ", self.discard[-1].getCardColour())
-        print("..........................\n")
+        print("...........................\n")
 
 
 class Card:
@@ -77,6 +77,7 @@ class Hand(Rank):
         self.sortHandBySuitAndRank()
         self.calculateScore()
         output = ''
+        print("...........................")
         print("Hand Score:", self.score)
         for card in self.hand:
             output += card.getCardColour()
@@ -107,13 +108,10 @@ class Hand(Rank):
     def calculateScore(self):
         self.sortHandBySuitAndRank()
         cards = {self.suitAndRankKey(card) for card in self.hand}
-        # cards = ({(0, 1), (0, 2), (0, 4), (3, 2), (0, 3), (2, 3), (3, 3)})
         scores = []
         self.findSets()
         self.findRuns()
         allPossibleMelds = []
-        print("Poss Melds", len(allPossibleMelds))
-        print(self.melds)
         for L in range(1, 3):
             for subset in itertools.combinations(self.melds, L):
                 allPossibleMelds.append(subset)
@@ -123,22 +121,31 @@ class Hand(Rank):
                 if len(item) > 1:
                     for i in range(len(item)-1):
                         if item[i].isdisjoint(item[i + 1]):
-                            leftOver = [cards.difference(x) for x in item]
-                            scores.append(sum([x[1] + 1 for x in leftOver[0]]))
+                            items = item[i] | item[i + 1]
+                            leftOver = cards.difference(items)
+                            scores.append(sum([x[1] + 1 for x in leftOver ]))
                 else:
                     leftOver = cards.difference(item[0])
                     scores.append(sum([x[1] + 1 for x in leftOver]))
-            self.score = max(scores)
+            self.score = min(scores)
         else:
             self.score = sum([x[1] + 1 for x in cards])
 
     def findSets(self):
         self.sortHandByRank()
         cards = [self.suitAndRankKey(card) for card in self.hand]
-        # cards = [(0, 1), (0, 2), (0, 4), (3, 2), (0, 3), (2, 3), (3, 3)]
         i = 1
         while i < len(cards):
             i, meld = self.makeSetMeld(cards, i)
+            self.makeAllMelds(meld)
+            i += 1
+
+    def findRuns(self):
+        self.sortHandBySuitAndRank()
+        cards = [self.suitAndRankKey(card) for card in self.hand]
+        i = 1
+        while i < len(cards):
+            i, meld = self.makeRunMeld(cards, i)
             self.makeAllMelds(meld)
             i += 1
 
@@ -149,16 +156,6 @@ class Hand(Rank):
             for width in range(3, len(meld)):
                 for i, step in enumerate(range(len(meld)-2)):
                     self.melds.append(set(meld[step:width+i]))
-
-    def findRuns(self):
-        self.sortHandBySuitAndRank()
-        cards = [self.suitAndRankKey(card) for card in self.hand]
-        # cards = [(0, 1), (0, 2), (0, 3), (0, 4), (2, 3), (3, 2), (3, 3)]
-        i = 1
-        while i < len(cards):
-            i, meld = self.makeRunMeld(cards, i)
-            self.makeAllMelds(meld)
-            i += 1
 
     @staticmethod
     def makeSetMeld(cards, i):
@@ -210,8 +207,8 @@ class Player:
     def getPlayerName(self):
         return "Player %i" % self.num
 
-    def updateScore(self, points):
-        self.score += points
+    def updateScore(self):
+        self.score += self.hand.score
 
     def getScore(self):
         return self.score
@@ -219,15 +216,8 @@ class Player:
     def getHand(self):
         return self.hand
 
-    def enterPlayerScore(self):
-        roundScore = False
-        while type(roundScore) is not int:
-            try:
-                roundScore = int(input("Enter %s score: " % self.getPlayerName()))
-            except ValueError:
-                print("Please enter a valid score")
-            else:
-                self.score += roundScore
+    def displayRoundScore(self):
+        return self.hand.score
 
 
 class Round(Dealer, Deck):
@@ -357,22 +347,24 @@ class Rummy:
 
     def endRound(self):
         print("\n***************************")
-        print("Round Ended, Enter Your Scores")
+        print("Round Ended")
         self.printAllPlayersHands()
         print("***************************")
-        self.enterAllPlayersScores()
+        self.displayThisRoundScore()
 
     def printAllPlayersHands(self):
         for p in self.players:
-            print("%s:" % p.getPlayerName())
+            print("\n%s:" % p.getPlayerName())
             p.hand.printHand()
 
-    def enterAllPlayersScores(self):
+    def displayThisRoundScore(self):
         for p in self.players:
-            p.enterPlayerScore()
+            p.displayRoundScore()
 
     def displayCurrentScores(self):
         for p in self.players:
+            p.updateScore()
+            print("Game Scores")
             print(p.getPlayerName(), ": ", p.getScore())
 
     def isEndOfGame(self):
