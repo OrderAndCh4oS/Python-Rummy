@@ -6,7 +6,7 @@ Created on Sun Sep 25 14:14:18 2016
 @author: Sarcoma
 """
 
-from random import shuffle
+from random import shuffle, randrange
 import itertools
 
 
@@ -264,8 +264,15 @@ class Round(Dealer, Deck):
 
 class Rummy:
     players = []
+    ai = False
 
-    def __init__(self, numberOfPlayers):
+    def __init__(self):
+        numberOfPlayers = 0
+        while numberOfPlayers not in [i for i in range(1, 5)]:
+            numberOfPlayers = int(input("Enter number of players (1-4)? "))
+        if numberOfPlayers == 1:
+            self.ai = True
+            numberOfPlayers = 2
         self.numberOfPlayers = numberOfPlayers
         self.createPlayers()
         self.round = Round(numberOfPlayers)
@@ -279,12 +286,42 @@ class Rummy:
         while self.round.lastTurn != self.numberOfPlayers:
             self.round.prepareTurn()
             hand = self.getCurrentPlayersHand()
-            self.playTurn(hand)
+            if not self.ai or self.round.currentPlayer == 0:
+                self.playerTurn(hand)
+            else:
+                self.AITurn(hand)
             self.round.endTurn()
         self.endRound()
         self.startNewRoundOrEndGame()
 
-    def playTurn(self, hand):
+    def AITurn(self, hand):
+        self.printPlayersTurn()
+        self.AIChooseToDiscardOrPickUp(hand)
+        hand.printHandAndKey()
+        self.AIDiscardOrKnock(hand)
+
+    def AIChooseToDiscardOrPickUp(self, hand):
+        if self.round.knocked:
+            pass
+        if len(self.round.discard) > 0:
+            self.AIChoosePickUp(hand)
+        else:
+            hand.drawCard(self.round.deck.pop())
+
+    def AIChoosePickUp(self, hand):
+        choice = randrange(0, 2, 1)
+        if choice == 0:
+            hand.drawCard(self.round.discard.pop())
+        else:
+            hand.drawCard(self.round.deck.pop())
+
+    def AIDiscardOrKnock(self, hand):
+        choice = randrange(0, 8, 1)
+        if hand.score < 30:
+            self.round.knocked = True
+        self.round.discard.append(hand.discardCard(choice))
+
+    def playerTurn(self, hand):
         self.printPlayersTurn()
         self.playerChooseToDiscardOrPickUp(hand)
         hand.printHandAndKey()
@@ -403,4 +440,4 @@ class Rummy:
 
 
 # start game
-Rummy(2)
+Rummy()
