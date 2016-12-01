@@ -108,28 +108,37 @@ class Hand(Rank):
     def calculateScore(self):
         self.sortHandBySuitAndRank()
         cards = {self.suitAndRankKey(card) for card in self.hand}
-        scores = []
         self.findSets()
         self.findRuns()
+        allPossibleMelds = self.findAllPossibleMelds()
+        self.melds = []
+        if len(allPossibleMelds) > 0:
+            scores = self.findLowestScoringMelds(allPossibleMelds, cards)
+            self.score = min(scores)
+        else:
+            self.score = sum([x[1] + 1 for x in cards])
+
+    def findAllPossibleMelds(self):
         allPossibleMelds = []
         for L in range(1, 3):
             for subset in itertools.combinations(self.melds, L):
                 allPossibleMelds.append(subset)
-        self.melds = []
-        if len(allPossibleMelds) > 0:
-            for item in allPossibleMelds:
-                if len(item) > 1:
-                    for i in range(len(item)-1):
-                        if item[i].isdisjoint(item[i + 1]):
-                            items = item[i] | item[i + 1]
-                            leftOver = cards.difference(items)
-                            scores.append(sum([x[1] + 1 for x in leftOver ]))
-                else:
-                    leftOver = cards.difference(item[0])
-                    scores.append(sum([x[1] + 1 for x in leftOver]))
-            self.score = min(scores)
-        else:
-            self.score = sum([x[1] + 1 for x in cards])
+        return allPossibleMelds
+
+    @staticmethod
+    def findLowestScoringMelds(allPossibleMelds, cards):
+        scores = []
+        for item in allPossibleMelds:
+            if len(item) > 1:
+                for i in range(len(item) - 1):
+                    if item[i].isdisjoint(item[i + 1]):
+                        items = item[i] | item[i + 1]
+                        remainingCards = cards.difference(items)
+                        scores.append(sum([x[1] + 1 for x in remainingCards]))
+            else:
+                remainingCards = cards.difference(item[0])
+                scores.append(sum([x[1] + 1 for x in remainingCards]))
+        return scores
 
     def findSets(self):
         self.sortHandByRank()
@@ -149,14 +158,6 @@ class Hand(Rank):
             self.makeAllMelds(meld)
             i += 1
 
-    def makeAllMelds(self, meld):
-        if len(meld) >= 3:
-            self.melds.append(set(meld))
-        if len(meld) > 3:
-            for width in range(3, len(meld)):
-                for i, step in enumerate(range(len(meld)-2)):
-                    self.melds.append(set(meld[step:width+i]))
-
     @staticmethod
     def makeSetMeld(cards, i):
         meld = []
@@ -175,14 +176,13 @@ class Hand(Rank):
         meld.append(cards[i - 1])
         return i, meld
 
-    @staticmethod
-    def meldFound(meld, melds):
+    def makeAllMelds(self, meld):
         if len(meld) >= 3:
-            melds.append(meld)
-
-    @staticmethod
-    def meldRun(card, i):
-        return card[0] + card[1] - i
+            self.melds.append(set(meld))
+        if len(meld) > 3:
+            for width in range(3, len(meld)):
+                for i, step in enumerate(range(len(meld)-2)):
+                    self.melds.append(set(meld[step:width+i]))
 
 
 class Dealer:
@@ -233,7 +233,6 @@ class Round(Dealer, Deck):
         self.stackDeck()
 
     def prepareNewRound(self):
-        self.rotateFirstPlayer()
         self.turn = 1
         self.lastTurn = 1
         self.knocked = False
@@ -342,6 +341,11 @@ class Rummy:
             self.endGame()
         else:
             self.displayCurrentScores()
+            self.round.rotateFirstPlayer()
+            print("\nReady %s?" % self.players[self.round.currentPlayer].getPlayerName())
+            ready = ''
+            while ready.lower() != 'y':
+                ready = input("Enter 'y' when you are ready for the next round: ")
             self.round.prepareNewRound()
             self.playGame()
 
@@ -351,6 +355,7 @@ class Rummy:
         self.printAllPlayersHands()
         print("***************************")
         self.displayThisRoundScore()
+        self.updatePlayerScores()
 
     def printAllPlayersHands(self):
         for p in self.players:
@@ -362,10 +367,13 @@ class Rummy:
             p.displayRoundScore()
 
     def displayCurrentScores(self):
+        print("Game Scores")
+        for p in self.players:
+            print("%s: %s" % (p.getPlayerName(), p.getScore()))
+
+    def updatePlayerScores(self):
         for p in self.players:
             p.updateScore()
-            print("Game Scores")
-            print(p.getPlayerName(), ": ", p.getScore())
 
     def isEndOfGame(self):
         for p in self.players:
