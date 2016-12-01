@@ -7,6 +7,7 @@ Created on Sun Sep 25 14:14:18 2016
 """
 
 from random import shuffle, randrange
+from copy import deepcopy
 import itertools
 
 
@@ -59,7 +60,6 @@ class Card:
 
 
 class Hand(Rank):
-
     melds = []
     score = 0
 
@@ -181,8 +181,8 @@ class Hand(Rank):
             self.melds.append(set(meld))
         if len(meld) > 3:
             for width in range(3, len(meld)):
-                for i, step in enumerate(range(len(meld)-2)):
-                    self.melds.append(set(meld[step:width+i]))
+                for i, step in enumerate(range(len(meld) - 2)):
+                    self.melds.append(set(meld[step:width + i]))
 
 
 class Dealer:
@@ -295,9 +295,9 @@ class Rummy:
         self.startNewRoundOrEndGame()
 
     def AITurn(self, hand):
-        self.printPlayersTurn()
+        # self.printPlayersTurn()
         self.AIChooseToDiscardOrPickUp(hand)
-        hand.printHandAndKey()
+        # hand.printHandAndKey()
         self.AIDiscardOrKnock(hand)
 
     def AIChooseToDiscardOrPickUp(self, hand):
@@ -309,14 +309,26 @@ class Rummy:
             hand.drawCard(self.round.deck.pop())
 
     def AIChoosePickUp(self, hand):
-        choice = randrange(0, 2, 1)
+        dummyHand = deepcopy(hand)
+        dummyHand.calculateScore()
+        currentScore = dummyHand.score
+        dummyHand.drawCard(self.round.discard[-1])
+        dummyHand.calculateScore()
+        newScore = dummyHand.score
+        choice = 0 if newScore < currentScore else 1
         if choice == 0:
             hand.drawCard(self.round.discard.pop())
         else:
             hand.drawCard(self.round.deck.pop())
 
     def AIDiscardOrKnock(self, hand):
-        choice = randrange(0, 8, 1)
+        scores = []
+        for i in range(8):
+            dummyHand = deepcopy(hand)
+            dummyHand.discardCard(i)
+            dummyHand.calculateScore()
+            scores.append(dummyHand.score)
+        choice = scores.index(min(scores))
         if hand.score < 30:
             self.round.knocked = True
         self.round.discard.append(hand.discardCard(choice))
