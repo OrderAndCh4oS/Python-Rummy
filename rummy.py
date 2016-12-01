@@ -9,7 +9,7 @@ Created on Sun Sep 25 14:14:18 2016
 from random import shuffle, randrange
 from copy import deepcopy
 import itertools
-
+import time
 
 class Rank:
     values = ["A"] + [str(d) for d in list(range(2, 11))] + ["J", "Q", "K"]
@@ -272,7 +272,10 @@ class Rummy:
             numberOfPlayers = int(input("Enter number of players (1-4)? "))
         if numberOfPlayers == 1:
             self.ai = True
-            numberOfPlayers = 2
+            numberOfOpponents = 0
+            while numberOfOpponents not in [i for i in range(1, 4)]:
+                numberOfOpponents = int(input("Enter number of opponents (1-3)? "))
+            numberOfPlayers += numberOfOpponents
         self.numberOfPlayers = numberOfPlayers
         self.createPlayers()
         self.round = Round(numberOfPlayers)
@@ -296,9 +299,18 @@ class Rummy:
 
     def AITurn(self, hand):
         # self.printPlayersTurn()
+        self.AIDisplay("%s thinking..." % self.players[self.round.currentPlayer].getPlayerName())
         self.AIChooseToDiscardOrPickUp(hand)
         # hand.printHandAndKey()
         self.AIDiscardOrKnock(hand)
+        self.AIDisplay("%s discarding..." % self.players[self.round.currentPlayer].getPlayerName())
+        self.round.printDiscard()
+        time.sleep(1500.0 / 1000.0)
+
+    @staticmethod
+    def AIDisplay(text):
+        print(text)
+        time.sleep(400.0 / 1000.0)
 
     def AIChooseToDiscardOrPickUp(self, hand):
         if self.round.knocked:
@@ -318,26 +330,35 @@ class Rummy:
         choice = 0 if newScore < currentScore else 1
         if choice == 0:
             hand.drawCard(self.round.discard.pop())
+            self.AIDisplay("%s picked up discard" % self.players[self.round.currentPlayer].getPlayerName())
         else:
             hand.drawCard(self.round.deck.pop())
+            self.AIDisplay("%s drew from the deck" % self.players[self.round.currentPlayer].getPlayerName())
 
     def AIDiscardOrKnock(self, hand):
+        scores = self.findDiscardScores(hand)
+        choice = scores.index(min(scores))
+        if min(scores) < 10 and not self.round.knocked:
+            self.round.knocked = True
+            self.AIDisplay("%s has knocked!!" % self.players[self.round.currentPlayer].getPlayerName())
+        self.round.discard.append(hand.discardCard(choice))
+
+    @staticmethod
+    def findDiscardScores(hand):
         scores = []
         for i in range(8):
             dummyHand = deepcopy(hand)
             dummyHand.discardCard(i)
             dummyHand.calculateScore()
             scores.append(dummyHand.score)
-        choice = scores.index(min(scores))
-        if hand.score < 30:
-            self.round.knocked = True
-        self.round.discard.append(hand.discardCard(choice))
+        return scores
 
     def playerTurn(self, hand):
         self.printPlayersTurn()
         self.playerChooseToDiscardOrPickUp(hand)
         hand.printHandAndKey()
         self.playerDiscardOrKnock(hand)
+        self.round.printDiscard()
 
     def getCurrentPlayersHand(self):
         hand = self.players[self.round.currentPlayer].getHand()
@@ -356,13 +377,17 @@ class Rummy:
             hand.drawCard(self.round.deck.pop())
 
     def playerDiscardOrKnock(self, hand):
-        message = "Enter a number to discard a card or 'k' to Knock: "
+        scores = self.findDiscardScores(hand)
+        if min(scores) < 10 and not self.round.knocked:
+            message = "Enter a number to discard a card or 'k' to Knock: "
+        else:
+            message = "Enter a number to discard a card: "
         choice = ""
         while choice not in [str(i) for i in range(1, 9)]:
             if self.round.knocked:
                 message = "Enter a number to discard a card: "
             choice = input(message)
-            if choice.lower() == "k":
+            if choice.lower() == "k" and min(scores) < 10:
                 self.round.knocked = True
         choice = int(choice) - 1
         self.round.discard.append(hand.discardCard(choice))
@@ -396,6 +421,7 @@ class Rummy:
             while ready.lower() != 'y':
                 ready = input("Enter 'y' when you are ready for the next round: ")
             self.round.prepareNewRound()
+            self.round.dealCards(self.players)
             self.playGame()
 
     def endRound(self):
