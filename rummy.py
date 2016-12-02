@@ -11,6 +11,7 @@ from copy import deepcopy
 import itertools
 import time
 
+
 class Rank:
     values = ["A"] + [str(d) for d in list(range(2, 11))] + ["J", "Q", "K"]
     suits = [u"\u2660", u"\u2665", u"\u2666", u"\u2663"]
@@ -47,9 +48,9 @@ class Card:
         self.suit = suit
 
     def getCardColour(self):
-        if self.suit in [u"\u2665", u"\u2666"]:
+        if self.suit in [u"\u2665", u"\u2666", "h", "d"]:
             return self.redCard()
-        elif self.suit in [u"\u2660", u"\u2663"]:
+        elif self.suit in [u"\u2660", u"\u2663", "c", "s"]:
             return self.blackCard()
 
     def redCard(self):
@@ -269,18 +270,30 @@ class Rummy:
     def __init__(self):
         numberOfPlayers = 0
         while numberOfPlayers not in [i for i in range(1, 5)]:
-            numberOfPlayers = int(input("Enter number of players (1-4)? "))
+            numberOfPlayers = input("Enter number of players (1-4)? ")
+            numberOfPlayers = self.validNumberCheck(numberOfPlayers)
+
         if numberOfPlayers == 1:
             self.ai = True
             numberOfOpponents = 0
             while numberOfOpponents not in [i for i in range(1, 4)]:
-                numberOfOpponents = int(input("Enter number of opponents (1-3)? "))
+                numberOfOpponents = input("Enter number of opponents (1-3)? ")
+                numberOfOpponents = self.validNumberCheck(numberOfOpponents)
             numberOfPlayers += numberOfOpponents
         self.numberOfPlayers = numberOfPlayers
         self.createPlayers()
         self.round = Round(numberOfPlayers)
         self.round.dealCards(self.players)
         self.playGame()
+
+    @staticmethod
+    def validNumberCheck(numberOfPlayers):
+        try:
+            numberOfPlayers = int(numberOfPlayers)
+        except ValueError:
+            numberOfPlayers = 0
+            print("Not a valid number, please try again...")
+        return numberOfPlayers
 
     def createPlayers(self):
         self.players = [Player(i + 1) for i in range(self.numberOfPlayers)]
@@ -298,19 +311,24 @@ class Rummy:
         self.startNewRoundOrEndGame()
 
     def AITurn(self, hand):
-        # self.printPlayersTurn()
+        self.printPlayersTurn()
+        # hand.printHand()
+        if len(self.round.discard) > 0:
+            self.round.printDiscard()
+        time.sleep(700.0 / 1000.0)
         self.AIDisplay("%s thinking..." % self.players[self.round.currentPlayer].getPlayerName())
         self.AIChooseToDiscardOrPickUp(hand)
-        # hand.printHandAndKey()
+        # hand.printHand()
+        time.sleep(700.0 / 1000.0)
         self.AIDiscardOrKnock(hand)
-        self.AIDisplay("%s discarding..." % self.players[self.round.currentPlayer].getPlayerName())
+        self.AIDisplay("%s choosing discard..." % self.players[self.round.currentPlayer].getPlayerName())
         self.round.printDiscard()
-        time.sleep(1500.0 / 1000.0)
+        time.sleep(400.0 / 1000.0)
 
     @staticmethod
     def AIDisplay(text):
         print(text)
-        time.sleep(400.0 / 1000.0)
+        time.sleep(600.0 / 1000.0)
 
     def AIChooseToDiscardOrPickUp(self, hand):
         if self.round.knocked:
@@ -416,13 +434,16 @@ class Rummy:
         else:
             self.displayCurrentScores()
             self.round.rotateFirstPlayer()
-            print("\nReady %s?" % self.players[self.round.currentPlayer].getPlayerName())
-            ready = ''
-            while ready.lower() != 'y':
-                ready = input("Enter 'y' when you are ready for the next round: ")
+            # self.confirmStartNewRound()
             self.round.prepareNewRound()
             self.round.dealCards(self.players)
             self.playGame()
+
+    def confirmStartNewRound(self):
+        print("\nReady %s?" % self.players[self.round.currentPlayer].getPlayerName())
+        ready = ''
+        while ready.lower() != 'y':
+            ready = input("Enter 'y' when you are ready for the next round: ")
 
     def endRound(self):
         print("\n***************************")
@@ -476,6 +497,11 @@ class Rummy:
                 lowest.append(p)
         return lowest
 
+try:
+    print(u"\u2660", u"\u2665", u"\u2666", u"\u2663")
+except UnicodeEncodeError:
+    print("The game requires unicode, sorry...")
+    exit()
 
 # start game
 Rummy()
