@@ -11,12 +11,20 @@ from copy import deepcopy
 import itertools
 import time
 
+try:
+    print(u"\u2660", u"\u2665", u"\u2666", u"\u2663")
+    hasUnicode = True
+except UnicodeEncodeError:
+    hasUnicode = False
+
 
 class Rank:
     values = ["A"] + [str(d) for d in list(range(2, 11))] + ["J", "Q", "K"]
     suits = [u"\u2660", u"\u2665", u"\u2666", u"\u2663"]
 
     def __init__(self):
+        if not hasUnicode:
+            self.suits = ["S", "H", "D", "C"]
         self.rankedCards = [Card(value, suit) for suit in self.suits for value in self.values]
 
 
@@ -48,13 +56,16 @@ class Card:
         self.suit = suit
 
     def getCardColour(self):
-        if self.suit in [u"\u2665", u"\u2666", "h", "d"]:
+        if self.suit in [u"\u2665", u"\u2666", "H", "D"]:
             return self.redCard()
-        elif self.suit in [u"\u2660", u"\u2663", "c", "s"]:
+        elif self.suit in [u"\u2660", u"\u2663", "C", "S"]:
             return self.blackCard()
 
     def redCard(self):
-        return str(self.value) + "\033[1;31m" + self.suit + "\033[0m, "
+        if hasUnicode:
+            return str(self.value) + "\033[1;31m" + self.suit + "\033[0m, "
+        else:
+            return str(self.value) + self.suit + ", "
 
     def blackCard(self):
         return str(self.value) + self.suit + ", "
@@ -266,13 +277,13 @@ class Round(Dealer, Deck):
 class Rummy:
     players = []
     ai = False
+    hasUnicode = True
 
     def __init__(self):
         numberOfPlayers = 0
         while numberOfPlayers not in [i for i in range(1, 5)]:
             numberOfPlayers = input("Enter number of players (1-4)? ")
             numberOfPlayers = self.validNumberCheck(numberOfPlayers)
-
         if numberOfPlayers == 1:
             self.ai = True
             numberOfOpponents = 0
@@ -497,11 +508,6 @@ class Rummy:
                 lowest.append(p)
         return lowest
 
-try:
-    print(u"\u2660", u"\u2665", u"\u2666", u"\u2663")
-except UnicodeEncodeError:
-    print("The game requires unicode, sorry...")
-    exit()
 
 # start game
 Rummy()
