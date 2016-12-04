@@ -6,10 +6,10 @@ Created on Sun Sep 25 14:14:18 2016
 @author: Sarcoma
 """
 
-from random import shuffle, randrange
+from random import shuffle
 from copy import deepcopy
 import itertools
-import time
+from time import sleep
 
 try:
     print(u"\u2660", u"\u2665", u"\u2666", u"\u2663")
@@ -326,20 +326,20 @@ class Rummy:
         # hand.printHand()
         if len(self.round.discard) > 0:
             self.round.printDiscard()
-        time.sleep(700.0 / 1000.0)
+        sleep(700.0 / 1000.0)
         self.AIDisplay("%s thinking..." % self.players[self.round.currentPlayer].getPlayerName())
         self.AIChooseToDiscardOrPickUp(hand)
         # hand.printHand()
-        time.sleep(700.0 / 1000.0)
+        sleep(700.0 / 1000.0)
         self.AIDiscardOrKnock(hand)
         self.AIDisplay("%s choosing discard..." % self.players[self.round.currentPlayer].getPlayerName())
         self.round.printDiscard()
-        time.sleep(400.0 / 1000.0)
+        sleep(400.0 / 1000.0)
 
     @staticmethod
     def AIDisplay(text):
         print(text)
-        time.sleep(600.0 / 1000.0)
+        sleep(600.0 / 1000.0)
 
     def AIChooseToDiscardOrPickUp(self, hand):
         if self.round.knocked:
@@ -445,7 +445,7 @@ class Rummy:
         else:
             self.displayCurrentScores()
             self.round.rotateFirstPlayer()
-            # self.confirmStartNewRound()
+            self.confirmStartNewRound()
             self.round.prepareNewRound()
             self.round.dealCards(self.players)
             self.playGame()
