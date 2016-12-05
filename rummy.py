@@ -6,7 +6,7 @@ Created on Sun Sep 25 14:14:18 2016
 @author: Sarcoma
 """
 
-from random import shuffle
+from random import shuffle, choice
 from copy import deepcopy
 import itertools
 from time import sleep
@@ -329,7 +329,7 @@ class Rummy:
         sleep(700.0 / 1000.0)
         self.AIDisplay("%s thinking..." % self.players[self.round.currentPlayer].getPlayerName())
         self.AIChooseToDiscardOrPickUp(hand)
-        # hand.printHand()
+        hand.printHand()
         sleep(700.0 / 1000.0)
         self.AIDiscardOrKnock(hand)
         self.AIDisplay("%s choosing discard..." % self.players[self.round.currentPlayer].getPlayerName())
@@ -366,11 +366,16 @@ class Rummy:
 
     def AIDiscardOrKnock(self, hand):
         scores = self.findDiscardScores(hand)
-        choice = scores.index(min(scores))
+        if scores.count(min(scores)) > 1:
+            print('random:')
+            choices = [(i, x) for (i, x) in enumerate(scores) if (x == min(scores))]
+            discard = choice(choices)[0]
+        else:
+            discard = scores.index(min(scores))
         if min(scores) < 10 and not self.round.knocked:
             self.round.knocked = True
             self.AIDisplay("%s has knocked!!" % self.players[self.round.currentPlayer].getPlayerName())
-        self.round.discard.append(hand.discardCard(choice))
+        self.round.discard.append(hand.discardCard(discard))
 
     @staticmethod
     def findDiscardScores(hand):
