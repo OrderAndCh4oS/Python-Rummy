@@ -1,4 +1,4 @@
-# Command Line Rummy in Python
+# Command Line Rummy in Python 3
 
 This is a one to four player command line version of the card game Rummy.
 
