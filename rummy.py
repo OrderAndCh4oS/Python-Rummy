@@ -144,13 +144,21 @@ class Hand(Rank):
             if len(item) > 1:
                 for i in range(len(item) - 1):
                     if item[i].isdisjoint(item[i + 1]):
-                        items = item[i] | item[i + 1]
-                        remainingCards = cards.difference(items)
-                        scores.append(sum([x[1] + 1 for x in remainingCards]))
+                        scores = findScores(item)
             else:
                 remainingCards = cards.difference(item[0])
                 scores.append(sum([x[1] + 1 for x in remainingCards]))
         return scores
+
+    def findScores(item):
+        if item[i].isdisjoint(item[i + 1]):
+            items = item[i] | item[i + 1]
+            remainingCards = cards.difference(items)
+            scores.append(sum([x[1] + 1 for x in remainingCards]))
+            return scores
+        else:
+            return []
+
 
     def findSets(self):
         self.sortHandByRank()
@@ -326,7 +334,6 @@ class Rummy:
         # hand.printHand()
         if len(self.round.discard) > 0:
             self.round.printDiscard()
-        sleep(700.0 / 1000.0)
         self.AIDisplay("%s thinking..." % self.players[self.round.currentPlayer].getPlayerName())
         self.AIChooseToDiscardOrPickUp(hand)
         # hand.printHand()
