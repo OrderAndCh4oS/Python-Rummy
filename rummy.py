@@ -137,8 +137,7 @@ class Hand(Rank):
                 allPossibleMelds.append(subset)
         return allPossibleMelds
 
-    @staticmethod
-    def findLowestScoringMelds(allPossibleMelds, cards):
+    def findLowestScoringMelds(self, allPossibleMelds, cards):
         scores = []
         for item in allPossibleMelds:
             if len(item) > 1:
@@ -150,6 +149,7 @@ class Hand(Rank):
                 scores.append(sum([x[1] + 1 for x in remainingCards]))
         return scores
 
+    @staticmethod
     def findScores(item):
         if item[i].isdisjoint(item[i + 1]):
             items = item[i] | item[i + 1]
@@ -336,7 +336,7 @@ class Rummy:
             self.round.printDiscard()
         self.AIDisplay("%s thinking..." % self.players[self.round.currentPlayer].getPlayerName())
         self.AIChooseToDiscardOrPickUp(hand)
-        hand.printHand()
+        #hand.printHand()
         sleep(700.0 / 1000.0)
         self.AIDiscardOrKnock(hand)
         self.AIDisplay("%s choosing discard..." % self.players[self.round.currentPlayer].getPlayerName())
