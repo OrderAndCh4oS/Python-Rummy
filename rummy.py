@@ -19,7 +19,7 @@ except UnicodeEncodeError:
 
 
 class Rank:
-    values = ["A"] + [str(d) for d in list(range(2, 11))] + ["J", "Q", "K"]
+    values = ["A"] + [str(d) for d in list(range(2, 10))] + ["T", "J", "Q", "K"]
     suits = [u"\u2660", u"\u2665", u"\u2666", u"\u2663"]
 
     def __init__(self):
@@ -143,14 +143,14 @@ class Hand(Rank):
             if len(item) > 1:
                 for i in range(len(item) - 1):
                     if item[i].isdisjoint(item[i + 1]):
-                        scores = findScores(item)
+                        scores = self.findScores(item, i, cards, scores)
             else:
                 remainingCards = cards.difference(item[0])
                 scores.append(sum([x[1] + 1 for x in remainingCards]))
         return scores
 
     @staticmethod
-    def findScores(item):
+    def findScores(item, i, cards, scores):
         if item[i].isdisjoint(item[i + 1]):
             items = item[i] | item[i + 1]
             remainingCards = cards.difference(items)
@@ -374,7 +374,6 @@ class Rummy:
     def AIDiscardOrKnock(self, hand):
         scores = self.findDiscardScores(hand)
         if scores.count(min(scores)) > 1:
-            print('random:')
             choices = [(i, x) for (i, x) in enumerate(scores) if (x == min(scores))]
             discard = choice(choices)[0]
         else:
