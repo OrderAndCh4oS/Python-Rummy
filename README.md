@@ -21,3 +21,11 @@ At the end of each round players add their scores to their game total
 The game ends once a player reaches 100 or more
 
 The winner is the player with the lowest score
+
+### Created for CS50 Final Project 2016
+
+This was my final CS50 project video:
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=JghRYmAkpXI
+" target="_blank"><img src="http://img.youtube.com/vi/JghRYmAkpXI/3.jpg"
+alt="Python 3 Rummy AI battle" width="240" height="180" border="10" /></a>
