@@ -1,4 +1,4 @@
-from player.player import Player
+from player.playerconfig import PlayerConfig
 
 class Setup:
     numberOfPlayers = -1
@@ -38,4 +38,4 @@ class Setup:
         return number
 
     def createPlayers(self):
-        self.players = [Player(i + 1) for i in range(self.numberOfPlayers)]
+        self.players = [PlayerConfig(i + 1) for i in range(self.numberOfPlayers)]

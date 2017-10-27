@@ -1,6 +1,7 @@
 from player.hand import Hand
 
-class Player:
+
+class PlayerConfig:
     def __init__(self, num):
         self.num = num
         self.score = 0
