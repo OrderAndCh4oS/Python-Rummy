@@ -6,313 +6,57 @@ Created on Sun Sep 25 14:14:18 2016
 @author: Sarcoma
 """
 
-from random import shuffle, choice
+from random import choice
 from copy import deepcopy
-import itertools
-from time import sleep
+#from time import sleep
 
-try:
-    print(u"\u2660", u"\u2665", u"\u2666", u"\u2663")
-    hasUnicode = True
-except UnicodeEncodeError:
-    hasUnicode = False
+from game.round import Round
+from player.player import Player
 
-
-class Rank:
-    values = ["A"] + [str(d) for d in list(range(2, 10))] + ["T", "J", "Q", "K"]
-    suits = [u"\u2660", u"\u2665", u"\u2666", u"\u2663"]
-
-    def __init__(self):
-        if not hasUnicode:
-            self.suits = ["S", "H", "D", "C"]
-        self.rankedCards = [Card(value, suit) for suit in self.suits for value in self.values]
-
-
-class Deck(Rank):
-    deck = []
-    discard = []
-
-    def stackDeck(self):
-        self.deck = self.rankedCards[:]
-        self.discard = []
-        shuffle(self.deck)
-
-    def checkStack(self):
-        if len(self.deck) == 0:
-            self.deck = self.discard
-            self.discard = []
-
-    def printDiscard(self):
-        print("Discard Pile: ", self.discard[-1].getCardColour())
-        print("...........................\n")
-
-
-class Card:
-    value = ""
-    suit = ""
-
-    def __init__(self, value, suit):
-        self.value = value
-        self.suit = suit
-
-    def getCardColour(self):
-        if self.suit in [u"\u2665", u"\u2666", "H", "D"]:
-            return self.redCard()
-        elif self.suit in [u"\u2660", u"\u2663", "C", "S"]:
-            return self.blackCard()
-
-    def redCard(self):
-        if hasUnicode:
-            return str(self.value) + "\033[1;31m" + self.suit + "\033[0m, "
-        else:
-            return str(self.value) + self.suit + ", "
-
-    def blackCard(self):
-        return str(self.value) + self.suit + ", "
-
-
-class Hand(Rank):
-    melds = []
-    score = 0
-
-    def __init__(self):
-        super().__init__()
-        self.hand = []
-
-    def drawCard(self, card):
-        self.hand.append(card)
-
-    def discardCard(self, choice):
-        return self.hand.pop(choice)
-
-    def printHand(self):
-        self.sortHandBySuitAndRank()
-        self.calculateScore()
-        output = ''
-        print("...........................")
-        print("Hand Score:", self.score)
-        for card in self.hand:
-            output += card.getCardColour()
-        print(output.strip(', '))
-
-    def printKey(self):
-        output = ''
-        for i in range(len(self.hand)):
-            output += " %i, " % (i + 1)
-        print(output.strip(', '))
-
-    def printHandAndKey(self):
-        self.printHand()
-        self.printKey()
-
-    def sortHandBySuitAndRank(self):
-        self.hand = sorted(self.hand, key=lambda card: self.suitAndRankKey(card))
-
-    def sortHandByRank(self):
-        self.hand = sorted(self.hand, key=lambda card: self.rankKey(card))
-
-    def suitAndRankKey(self, card):
-        return self.suits.index(card.suit), self.values.index(card.value)
-
-    def rankKey(self, card):
-        return self.values.index(card.value)
-
-    def calculateScore(self):
-        self.sortHandBySuitAndRank()
-        cards = {self.suitAndRankKey(card) for card in self.hand}
-        self.findSets()
-        self.findRuns()
-        allPossibleMelds = self.findAllPossibleMelds()
-        self.melds = []
-        if len(allPossibleMelds) > 0:
-            scores = self.findLowestScoringMelds(allPossibleMelds, cards)
-            self.score = min(scores)
-        else:
-            self.score = sum([x[1] + 1 for x in cards])
-
-    def findAllPossibleMelds(self):
-        allPossibleMelds = []
-        for L in range(1, 3):
-            for subset in itertools.combinations(self.melds, L):
-                allPossibleMelds.append(subset)
-        return allPossibleMelds
-
-    def findLowestScoringMelds(self, allPossibleMelds, cards):
-        scores = []
-        for item in allPossibleMelds:
-            if len(item) > 1:
-                for i in range(len(item) - 1):
-                    if item[i].isdisjoint(item[i + 1]):
-                        scores = self.findScores(item, i, cards, scores)
-            else:
-                remainingCards = cards.difference(item[0])
-                scores.append(sum([x[1] + 1 for x in remainingCards]))
-        return scores
-
-    @staticmethod
-    def findScores(item, i, cards, scores):
-        if item[i].isdisjoint(item[i + 1]):
-            items = item[i] | item[i + 1]
-            remainingCards = cards.difference(items)
-            scores.append(sum([x[1] + 1 for x in remainingCards]))
-            return scores
-        else:
-            return []
-
-
-    def findSets(self):
-        self.sortHandByRank()
-        cards = [self.suitAndRankKey(card) for card in self.hand]
-        i = 1
-        while i < len(cards):
-            i, meld = self.makeSetMeld(cards, i)
-            self.makeAllMelds(meld)
-            i += 1
-
-    def findRuns(self):
-        self.sortHandBySuitAndRank()
-        cards = [self.suitAndRankKey(card) for card in self.hand]
-        i = 1
-        while i < len(cards):
-            i, meld = self.makeRunMeld(cards, i)
-            self.makeAllMelds(meld)
-            i += 1
-
-    @staticmethod
-    def makeSetMeld(cards, i):
-        meld = []
-        while i < len(cards) and cards[i][1] == cards[i - 1][1]:
-            meld.append(cards[i - 1])
-            i += 1
-        meld.append(cards[i - 1])
-        return i, meld
-
-    @staticmethod
-    def makeRunMeld(cards, i):
-        meld = []
-        while i < len(cards) and cards[i][0] == cards[i - 1][0] and cards[i][1] == cards[i - 1][1] + 1:
-            meld.append(cards[i - 1])
-            i += 1
-        meld.append(cards[i - 1])
-        return i, meld
-
-    def makeAllMelds(self, meld):
-        if len(meld) >= 3:
-            self.melds.append(set(meld))
-        if len(meld) > 3:
-            for width in range(3, len(meld)):
-                for i, step in enumerate(range(len(meld) - 2)):
-                    self.melds.append(set(meld[step:width + i]))
-
-
-class Dealer:
-    cardCount = 7
-
-    def setCardCount(self, cardCount):
-        self.cardCount = cardCount
-
-    def deal(self, deck):
-        hand = Hand()
-        for _ in range(self.cardCount):
-            hand.drawCard(deck.pop())
-        return hand
-
-
-class Player:
-    def __init__(self, num):
-        self.num = num
-        self.score = 0
-        self.hand = Hand()
-
-    def getPlayerName(self):
-        return "Player %i" % self.num
-
-    def updateScore(self):
-        self.score += self.hand.score
-
-    def getScore(self):
-        return self.score
-
-    def getHand(self):
-        return self.hand
-
-    def displayRoundScore(self):
-        return self.hand.score
-
-
-class Round(Dealer, Deck):
-    firstPlayer = 0
-    currentPlayer = 0
-    turn = 1
-    lastTurn = 1
-    knocked = False
-
-    def __init__(self, numberOfPlayers):
-        super().__init__()
-        self.numberOfPlayers = numberOfPlayers
-        self.stackDeck()
-
-    def prepareNewRound(self):
-        self.turn = 1
-        self.lastTurn = 1
-        self.knocked = False
-        self.stackDeck()
-
-    def dealCards(self, players):
-        for p in players:
-            p.hand = self.deal(self.deck)
-
-    def prepareTurn(self):
-        self.checkStack()
-        self.checkKnocked()
-
-    def endTurn(self):
-        self.switchCurrentPlayer()
-        self.turn += 1
-
-    def checkKnocked(self):
-        if self.knocked:
-            self.lastTurn += 1
-
-    def switchCurrentPlayer(self):
-        self.currentPlayer = (self.currentPlayer + 1) % self.numberOfPlayers
-
-    def rotateFirstPlayer(self):
-        self.firstPlayer += 1
-        self.currentPlayer = self.firstPlayer % self.numberOfPlayers
-
+# try:
+#     print(u"\u2660", u"\u2665", u"\u2666", u"\u2663")
+#     hasUnicode = True
+# except UnicodeEncodeError:
+#     hasUnicode = False
 
 class Rummy:
     players = []
+    numberOfPlayers = -1
     ai = False
+    aiOnly = False
     hasUnicode = True
 
     def __init__(self):
-        numberOfPlayers = 0
-        while numberOfPlayers not in [i for i in range(1, 5)]:
-            numberOfPlayers = input("Enter number of players (1-4)? ")
-            numberOfPlayers = self.validNumberCheck(numberOfPlayers)
-        if numberOfPlayers == 1:
+        while self.numberOfPlayers not in [i for i in range(0, 5)]:
+            self.numberOfPlayers = input("Enter number of players (0-4)? ")
+            self.numberOfPlayers = self.validNumberCheck(self.numberOfPlayers)
+        if self.numberOfPlayers in range(0, 2):
             self.ai = True
-            numberOfOpponents = 0
-            while numberOfOpponents not in [i for i in range(1, 4)]:
-                numberOfOpponents = input("Enter number of opponents (1-3)? ")
-                numberOfOpponents = self.validNumberCheck(numberOfOpponents)
-            numberOfPlayers += numberOfOpponents
-        self.numberOfPlayers = numberOfPlayers
+        if self.numberOfPlayers == 1:
+            self.chooseNumberOfAIOpponents(3)
+        if self.numberOfPlayers == 0:
+            self.aiOnly = True
+            self.chooseNumberOfAIOpponents(4)
         self.createPlayers()
-        self.round = Round(numberOfPlayers)
+        self.round = Round(self.numberOfPlayers)
         self.round.dealCards(self.players)
         self.playGame()
 
+    def chooseNumberOfAIOpponents(self, max):
+        numberOfOpponents = 0
+        while numberOfOpponents not in [i for i in range(1, max + 1)]:
+            numberOfOpponents = input("Enter number of opponents (1-{0})? ".format(max))
+            numberOfOpponents = self.validNumberCheck(numberOfOpponents)
+        self.numberOfPlayers += numberOfOpponents
+
     @staticmethod
-    def validNumberCheck(numberOfPlayers):
+    def validNumberCheck(number):
         try:
-            numberOfPlayers = int(numberOfPlayers)
+            number = int(number)
         except ValueError:
-            numberOfPlayers = 0
+            number = 0
             print("Not a valid number, please try again...")
-        return numberOfPlayers
+        return number
 
     def createPlayers(self):
         self.players = [Player(i + 1) for i in range(self.numberOfPlayers)]
@@ -321,7 +65,7 @@ class Rummy:
         while self.round.lastTurn != self.numberOfPlayers:
             self.round.prepareTurn()
             hand = self.getCurrentPlayersHand()
-            if not self.ai or self.round.currentPlayer == 0:
+            if not self.ai or (self.round.currentPlayer == 0 and not self.aiOnly):
                 self.playerTurn(hand)
             else:
                 self.AITurn(hand)
@@ -331,22 +75,22 @@ class Rummy:
 
     def AITurn(self, hand):
         self.printPlayersTurn()
-        # hand.printHand()
+        hand.printHand()
         if len(self.round.discard) > 0:
             self.round.printDiscard()
         self.AIDisplay("%s thinking..." % self.players[self.round.currentPlayer].getPlayerName())
         self.AIChooseToDiscardOrPickUp(hand)
-        #hand.printHand()
-        sleep(700.0 / 1000.0)
+        hand.printHand()
+        #sleep(700.0 / 1000.0)
         self.AIDiscardOrKnock(hand)
         self.AIDisplay("%s choosing discard..." % self.players[self.round.currentPlayer].getPlayerName())
         self.round.printDiscard()
-        sleep(400.0 / 1000.0)
+        #sleep(400.0 / 1000.0)
 
     @staticmethod
     def AIDisplay(text):
         print(text)
-        sleep(600.0 / 1000.0)
+        #sleep(600.0 / 1000.0)
 
     def AIChooseToDiscardOrPickUp(self, hand):
         if self.round.knocked:
@@ -456,7 +200,8 @@ class Rummy:
         else:
             self.displayCurrentScores()
             self.round.rotateFirstPlayer()
-            self.confirmStartNewRound()
+            if not self.aiOnly:
+                self.confirmStartNewRound()
             self.round.prepareNewRound()
             self.round.dealCards(self.players)
             self.playGame()
