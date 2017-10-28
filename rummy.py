@@ -8,19 +8,13 @@ Created on Sun Sep 25 14:14:18 2016
 
 from random import choice
 from copy import deepcopy
-#from time import sleep
+# from time import sleep
 
-from game.setup import Setup
+from game.setup_players import SetupPlayers
 from game.round import Round
 
 
-# try:
-#     print(u"\u2660", u"\u2665", u"\u2666", u"\u2663")
-#     hasUnicode = True
-# except UnicodeEncodeError:
-#     hasUnicode = False
-
-class Rummy(Setup):
+class Rummy(SetupPlayers):
     players = []
 
     def __init__(self):
@@ -49,16 +43,16 @@ class Rummy(Setup):
         self.AIDisplay("%s thinking..." % self.players[self.round.currentPlayer].getPlayerName())
         self.AIChooseToDiscardOrPickUp(hand)
         hand.printHand()
-        #sleep(700.0 / 1000.0)
+        # sleep(700.0 / 1000.0)
         self.AIDiscardOrKnock(hand)
         self.AIDisplay("%s choosing discard..." % self.players[self.round.currentPlayer].getPlayerName())
         self.round.printDiscard()
-        #sleep(400.0 / 1000.0)
+        # sleep(400.0 / 1000.0)
 
     @staticmethod
     def AIDisplay(text):
         print(text)
-        #sleep(600.0 / 1000.0)
+        # sleep(600.0 / 1000.0)
 
     def AIChooseToDiscardOrPickUp(self, hand):
         if self.round.knocked:
@@ -71,12 +65,13 @@ class Rummy(Setup):
     def AIChoosePickUp(self, hand):
         dummyHand = deepcopy(hand)
         dummyHand.calculateScore()
+        assert isinstance(dummyHand.score, object)
         currentScore = dummyHand.score
         dummyHand.drawCard(self.round.discard[-1])
         dummyHand.calculateScore()
         newScore = dummyHand.score
-        choice = 0 if newScore < currentScore else 1
-        if choice == 0:
+        aiChoice = 0 if newScore < currentScore else 1
+        if aiChoice == 0:
             hand.drawCard(self.round.discard.pop())
             self.AIDisplay("%s picked up discard" % self.players[self.round.currentPlayer].getPlayerName())
         else:
@@ -134,30 +129,30 @@ class Rummy(Setup):
             message = "Enter a number to discard a card or 'k' to Knock: "
         else:
             message = "Enter a number to discard a card: "
-        choice = ""
-        while choice not in [str(i) for i in range(1, 9)]:
+        playerChoice = ""
+        while playerChoice not in [str(i) for i in range(1, 9)]:
             if self.round.knocked:
                 message = "Enter a number to discard a card: "
-            choice = input(message)
-            if choice.lower() == "k" and min(scores) < 10:
+            playerChoice = input(message)
+            if playerChoice.lower() == "k" and min(scores) < 10:
                 self.round.knocked = True
-        choice = int(choice) - 1
-        self.round.discard.append(hand.discardCard(choice))
+        playerChoice = int(playerChoice) - 1
+        self.round.discard.append(hand.discardCard(playerChoice))
 
     def choosePickUp(self, hand):
-        choice = self.getUserPickUpInput(hand)
-        if choice == 'p':
+        playerChoice = self.getUserPickUpInput(hand)
+        if playerChoice == 'p':
             hand.drawCard(self.round.discard.pop())
         else:
             hand.drawCard(self.round.deck.pop())
 
     def getUserPickUpInput(self, hand):
-        choice = ''
-        while choice.lower() not in ['d', 'p']:
+        playerChoice = ''
+        while playerChoice.lower() not in ['d', 'p']:
             hand.printHand()
             self.round.printDiscard()
-            choice = input("Enter 'd' to draw or 'p' to pickup discard: ")
-        return choice
+            playerChoice = input("Enter 'd' to draw or 'p' to pickup discard: ")
+        return playerChoice
 
     def getCurrentPlayerName(self):
         return self.players[self.round.currentPlayer].getPlayerName()

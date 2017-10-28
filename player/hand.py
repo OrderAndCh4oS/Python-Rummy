@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from itertools import combinations
 from deck.rank import Rank
 

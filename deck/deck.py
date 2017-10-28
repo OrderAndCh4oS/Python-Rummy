@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 from random import shuffle
 from deck.rank import Rank
+
 
 class Deck(Rank):
     deck = []

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from unicode.check import hasUnicode
 
 
 class Card:
@@ -15,11 +17,10 @@ class Card:
             return self.blackCard()
 
     def redCard(self):
-        # if hasUnicode:
-        #     return str(self.value) + "\033[1;31m" + self.suit + "\033[0m, "
-        # else:
-        #     return str(self.value) + self.suit + ", "
-        return str(self.value) + "\033[1;31m" + self.suit + "\033[0m, "
+        if hasUnicode:
+            return str(self.value) + "\033[1;31m" + self.suit + "\033[0m, "
+        else:
+            return str(self.value) + self.suit + ", "
 
     def blackCard(self):
         return str(self.value) + self.suit + ", "

@@ -1,13 +1,15 @@
-from player.playerconfig import PlayerConfig
+# -*- coding: utf-8 -*-
+from player.player_config import PlayerConfig
 
-class Setup:
+
+class SetupPlayers:
     numberOfPlayers = -1
     ai = False
     aiOnly = False
 
     def __init__(self):
         self.choosePlayers()
-        self.createPlayers()
+        self.players = self.createPlayers()
 
     def choosePlayers(self):
         while self.numberOfPlayers not in [i for i in range(0, 5)]:
@@ -21,10 +23,10 @@ class Setup:
             self.aiOnly = True
             self.chooseNumberOfAIOpponents(4)
 
-    def chooseNumberOfAIOpponents(self, max):
+    def chooseNumberOfAIOpponents(self, maxOpponents):
         numberOfOpponents = 0
-        while numberOfOpponents not in [i for i in range(max - 2, max + 1)]:
-            numberOfOpponents = input("Enter number of opponents ({0}-{1})? ".format(max-2, max))
+        while numberOfOpponents not in [i for i in range(maxOpponents - 2, maxOpponents + 1)]:
+            numberOfOpponents = input("Enter number of opponents ({0}-{1})? ".format(maxOpponents - 2, maxOpponents))
             numberOfOpponents = self.validNumberCheck(numberOfOpponents)
         self.numberOfPlayers += numberOfOpponents
 
@@ -38,4 +40,4 @@ class Setup:
         return number
 
     def createPlayers(self):
-        self.players = [PlayerConfig(i + 1) for i in range(self.numberOfPlayers)]
+        return [PlayerConfig(i + 1) for i in range(self.numberOfPlayers)]

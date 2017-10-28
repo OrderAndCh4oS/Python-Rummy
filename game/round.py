@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 from deck.deck import Deck
 from player.dealer import Dealer
+
 
 class Round(Dealer, Deck):
     firstPlayer = 0
@@ -40,4 +42,5 @@ class Round(Dealer, Deck):
 
     def rotateFirstPlayer(self):
         self.firstPlayer += 1
+        assert isinstance(self.numberOfPlayers, int)
         self.currentPlayer = self.firstPlayer % self.numberOfPlayers
