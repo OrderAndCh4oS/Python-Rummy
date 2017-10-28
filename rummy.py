@@ -6,12 +6,14 @@ Created on Sun Sep 25 14:14:18 2016
 @author: Sarcoma
 """
 
-from random import choice
 from copy import deepcopy
-# from time import sleep
+from random import choice
 
-from game.setup_players import SetupPlayers
 from game.round import Round
+from game.setup_players import SetupPlayers
+
+
+# from time import sleep
 
 
 class Rummy(SetupPlayers):
@@ -107,14 +109,6 @@ class Rummy(SetupPlayers):
         self.playerDiscardOrKnock(hand)
         self.round.printDiscard()
 
-    def getCurrentPlayersHand(self):
-        hand = self.players[self.round.currentPlayer].getHand()
-        return hand
-
-    def printPlayersTurn(self):
-        print("###########################\n")
-        print("Turn %i, %s\n" % (self.round.turn, self.getCurrentPlayerName()))
-
     def playerChooseToDiscardOrPickUp(self, hand):
         if self.round.knocked:
             print("A Player has knocked, this is your last turn!!!\n")
@@ -138,6 +132,14 @@ class Rummy(SetupPlayers):
                 self.round.knocked = True
         playerChoice = int(playerChoice) - 1
         self.round.discard.append(hand.discardCard(playerChoice))
+
+    def printPlayersTurn(self):
+        print("###########################\n")
+        print("Turn %i, %s\n" % (self.round.turn, self.getCurrentPlayerName()))
+
+    def getCurrentPlayersHand(self):
+        hand = self.players[self.round.currentPlayer].getHand()
+        return hand
 
     def choosePickUp(self, hand):
         playerChoice = self.getUserPickUpInput(hand)
