@@ -2,6 +2,7 @@
 from player.player import Player
 from colours.colours import green
 
+
 class Human(Player):
     def turn(self, hand):
         self.printPlayersTurn()

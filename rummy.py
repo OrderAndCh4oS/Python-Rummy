@@ -13,7 +13,6 @@ from game.round import Round
 from game.score import Score
 from game.setup_players import SetupPlayers
 
-
 # from time import sleep
 from player.ai import AI
 from player.human import Human

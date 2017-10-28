@@ -3,6 +3,7 @@ from itertools import combinations
 from deck.rank import Rank
 from colours.colours import green
 
+
 class Hand(Rank):
     melds = []
     score = 0
@@ -90,7 +91,6 @@ class Hand(Rank):
             return scores
         else:
             return []
-
 
     def findSets(self):
         self.sortHandByRank()

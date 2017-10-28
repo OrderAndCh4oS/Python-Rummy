@@ -2,6 +2,7 @@
 from unicode.check import hasUnicode
 from colours.colours import red
 
+
 class Card:
     value = ""
     suit = ""
