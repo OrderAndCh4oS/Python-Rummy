@@ -1,6 +1,6 @@
 # coding=utf-8
 from copy import deepcopy
-from colours.colours import blue
+from view.colours import blue
 
 class Player:
     def __init__(self, players, gameRound):

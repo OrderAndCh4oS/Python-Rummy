@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from colours.colours import green
+from view.colours import green
 
 class Score:
     def __init__(self, players):

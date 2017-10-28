@@ -1,6 +1,6 @@
 # coding=utf-8
 from player.player import Player
-from colours.colours import green
+from view.colours import green
 
 
 class Human(Player):

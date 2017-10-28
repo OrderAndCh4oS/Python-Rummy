@@ -11,8 +11,8 @@ from game.score import Score
 from game.setup_players import SetupPlayers
 from player.ai import AI
 from player.human import Human
-from colours.colours import green
-from colours.colours import grey
+from view.colours import green
+from view.colours import grey
 
 class Rummy(SetupPlayers, Score):
     players = []

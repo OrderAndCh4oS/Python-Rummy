@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from unicode.check import hasUnicode
-from colours.colours import red
+from view.colours import red
 
 
 class Card:

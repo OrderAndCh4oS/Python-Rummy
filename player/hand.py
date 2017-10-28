@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from itertools import combinations
 from deck.rank import Rank
-from colours.colours import green
-from colours.colours import grey
+from view.colours import green
+from view.colours import grey
 
 
 class Hand(Rank):

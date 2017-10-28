@@ -11,5 +11,6 @@ def blue(text):
 def grey(text):
     return "\033[0;37m" + text + "\033[0m"
 
+
 def red(text):
     return "\033[0;31m" + text + "\033[0m"
