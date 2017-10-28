@@ -10,6 +10,7 @@ from copy import deepcopy
 from random import choice
 
 from game.round import Round
+from game.score import Score
 from game.setup_players import SetupPlayers
 
 
@@ -18,7 +19,7 @@ from player.ai import AI
 from player.human import Human
 
 
-class Rummy(SetupPlayers):
+class Rummy(SetupPlayers, Score):
     players = []
 
     def __init__(self):
@@ -32,12 +33,10 @@ class Rummy(SetupPlayers):
             self.round.prepareTurn()
             if not self.ai or (self.round.currentPlayer == 0 and not self.aiOnly):
                 player = Human(self.players, self.round)
-                hand = player.getCurrentPlayersHand()
-                player.turn(hand)
             else:
                 player = AI(self.players, self.round)
-                hand = player.getCurrentPlayersHand()
-                player.turn(hand)
+            hand = player.getCurrentPlayersHand()
+            player.turn(hand)
             self.round.endTurn()
         self.endRound()
         self.startNewRoundOrEndGame()
@@ -72,45 +71,6 @@ class Rummy(SetupPlayers):
         for p in self.players:
             print("\n%s:" % p.getPlayerName())
             p.hand.printHand()
-
-    def displayThisRoundScore(self):
-        for p in self.players:
-            p.displayRoundScore()
-
-    def displayCurrentScores(self):
-        print("Game Scores")
-        for p in self.players:
-            print("%s: %s" % (p.getPlayerName(), p.getScore()))
-
-    def updatePlayerScores(self):
-        for p in self.players:
-            p.updateScore()
-
-    def isEndOfGame(self):
-        for p in self.players:
-            if p.getScore() >= 100:
-                return True
-        return False
-
-    def endGame(self):
-        winners = self.findLowestScores()
-        if len(winners) == 1:
-            print(winners[0].getPlayerName(), "is the Winner!!")
-        else:
-            print(", ".join([w.getPlayerName() for w in winners]), "are joint winners!")
-        self.displayCurrentScores()
-
-    def findLowestScores(self):
-        lowest = []
-        for p in self.players:
-            if not lowest:
-                lowest = [p]
-                continue
-            if p.getScore() < lowest[0].getScore():
-                lowest = [p]
-            elif p.getScore() == lowest[0].getScore():
-                lowest.append(p)
-        return lowest
 
 
 # start game
