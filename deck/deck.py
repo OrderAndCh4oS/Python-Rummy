@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from random import shuffle
 from deck.rank import Rank
-
+from colours.colours import grey
 
 class Deck(Rank):
     deck = []
@@ -19,4 +19,4 @@ class Deck(Rank):
 
     def printDiscard(self):
         print("Discard Pile: ", self.discard[-1].getCardColour())
-        print("...........................\n")
+        print(grey("...........................") + "\n")

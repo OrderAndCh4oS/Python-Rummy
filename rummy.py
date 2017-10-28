@@ -6,17 +6,13 @@ Created on Sun Sep 25 14:14:18 2016
 @author: Sarcoma
 """
 
-from copy import deepcopy
-from random import choice
-
 from game.round import Round
 from game.score import Score
 from game.setup_players import SetupPlayers
-
-# from time import sleep
 from player.ai import AI
 from player.human import Human
-
+from colours.colours import green
+from colours.colours import grey
 
 class Rummy(SetupPlayers, Score):
     players = []
@@ -56,13 +52,13 @@ class Rummy(SetupPlayers, Score):
         print("\nReady %s?" % self.players[self.round.currentPlayer].getPlayerName())
         ready = ''
         while ready.lower() != 'y':
-            ready = input("Enter 'y' when you are ready for the next round: ")
+            ready = input("Enter " + green('y') + " when you are ready for the next round: ")
 
     def endRound(self):
-        print("\n***************************")
+        print("\n" + grey("***************************"))
         print("Round Ended")
         self.printAllPlayersHands()
-        print("***************************")
+        print(grey("***************************"))
         self.displayThisRoundScore()
         self.updatePlayerScores()
 

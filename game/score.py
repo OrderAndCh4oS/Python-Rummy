@@ -1,5 +1,6 @@
 # coding=utf-8
 
+from colours.colours import green
 
 class Score:
     def __init__(self, players):
@@ -27,9 +28,9 @@ class Score:
     def endGame(self):
         winners = self.findLowestScores()
         if len(winners) == 1:
-            print(winners[0].getPlayerName(), "is the Winner!!")
+            print(green(winners[0].getPlayerName() + " is the Winner!!"))
         else:
-            print(", ".join([w.getPlayerName() for w in winners]), "are joint winners!")
+            print(green(", ".join([w.getPlayerName() for w in winners]) + " are joint winners!"))
         self.displayCurrentScores()
 
     def findLowestScores(self):

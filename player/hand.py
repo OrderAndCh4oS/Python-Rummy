@@ -2,6 +2,7 @@
 from itertools import combinations
 from deck.rank import Rank
 from colours.colours import green
+from colours.colours import grey
 
 
 class Hand(Rank):
@@ -22,7 +23,7 @@ class Hand(Rank):
         self.sortHandBySuitAndRank()
         self.calculateScore()
         output = ''
-        print("...........................")
+        print(grey("..........................."))
         print("Hand Score:", self.score)
         for card in self.hand:
             output += card.getCardColour()

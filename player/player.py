@@ -1,6 +1,6 @@
 # coding=utf-8
 from copy import deepcopy
-
+from colours.colours import blue
 
 class Player:
     def __init__(self, players, gameRound):
@@ -8,7 +8,7 @@ class Player:
         self.round = gameRound
 
     def printPlayersTurn(self):
-        print("###########################\n")
+        print(blue("###########################") + "\n")
         print("Turn %i, %s\n" % (self.round.turn, self.getCurrentPlayerName()))
 
     def getCurrentPlayersHand(self):
