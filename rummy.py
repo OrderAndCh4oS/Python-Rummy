@@ -34,7 +34,7 @@ class Rummy(SetupPlayers, Score):
             if not self.ai or (self.round.currentPlayer == 0 and not self.aiOnly):
                 player = Human(self.players, self.round)
             else:
-                player = AI(self.players, self.round)
+                player = AI(self.players, self.round, self.aiOnly)
             hand = player.getCurrentPlayersHand()
             player.turn(hand)
             self.round.endTurn()
@@ -74,4 +74,5 @@ class Rummy(SetupPlayers, Score):
 
 
 # start game
-Rummy()
+if __name__ == "__main__":
+    Rummy()

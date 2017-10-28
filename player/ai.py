@@ -1,29 +1,33 @@
 # coding=utf-8
 from random import choice
 from copy import deepcopy
+from time import sleep
 
 from player.player import Player
 
 
 class AI(Player):
+    def __init__(self, players, gameRound, aiOnly):
+        super().__init__(players, gameRound)
+        self.aiOnly = aiOnly
+
     def turn(self, hand):
         self.printPlayersTurn()
-        hand.printHand()
+        if self.aiOnly:
+            hand.printHand()
         if len(self.round.discard) > 0:
             self.round.printDiscard()
         self.display("%s thinking..." % self.players[self.round.currentPlayer].getPlayerName())
         self.chooseToDiscardOrPickUp(hand)
-        hand.printHand()
-        # sleep(700.0 / 1000.0)
+        if self.aiOnly:
+            hand.printHand()
+        if not self.aiOnly:
+            sleep(700.0 / 1000.0)
         self.discardOrKnock(hand)
         self.display("%s choosing discard..." % self.players[self.round.currentPlayer].getPlayerName())
         self.round.printDiscard()
-        # sleep(400.0 / 1000.0)
-
-    @staticmethod
-    def display(text):
-        print(text)
-        # sleep(600.0 / 1000.0)
+        if not self.aiOnly:
+            sleep(400.0 / 1000.0)
 
     def chooseToDiscardOrPickUp(self, hand):
         if self.round.knocked:
@@ -60,3 +64,8 @@ class AI(Player):
             self.round.knocked = True
             self.display("%s has knocked!!" % self.players[self.round.currentPlayer].getPlayerName())
         self.round.discard.append(hand.discardCard(discard))
+
+    def display(self, text):
+        print(text)
+        if not self.aiOnly:
+            sleep(600.0 / 1000.0)

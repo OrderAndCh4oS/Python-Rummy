@@ -3,9 +3,9 @@ from copy import deepcopy
 
 
 class Player:
-    def __init__(self, players, round):
+    def __init__(self, players, gameRound):
         self.players = players
-        self.round = round
+        self.round = gameRound
 
     def printPlayersTurn(self):
         print("###########################\n")
