@@ -1,6 +1,6 @@
 # coding=utf-8
 from player.player import Player
-
+from colours.colours import green
 
 class Human(Player):
     def turn(self, hand):
@@ -21,7 +21,7 @@ class Human(Player):
     def discardOrKnock(self, hand):
         scores = self.findDiscardScores(hand)
         if min(scores) < 10 and not self.round.knocked:
-            message = "Enter a number to discard a card or 'k' to Knock: "
+            message = "Enter a number to discard a card or " + green('k') + " to Knock: "
         else:
             message = "Enter a number to discard a card: "
         playerChoice = ""
@@ -46,5 +46,5 @@ class Human(Player):
         while playerChoice.lower() not in ['d', 'p']:
             hand.printHand()
             self.round.printDiscard()
-            playerChoice = input("Enter 'd' to draw or 'p' to pickup discard: ")
+            playerChoice = input("Enter " + green('d') + " to draw or " + green('p') + " to pickup discard: ")
         return playerChoice

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from itertools import combinations
 from deck.rank import Rank
+from colours.colours import green
 
 class Hand(Rank):
     melds = []
@@ -29,8 +30,8 @@ class Hand(Rank):
     def printKey(self):
         output = ''
         for i in range(len(self.hand)):
-            output += " %i, " % (i + 1)
-        print(output.strip(', '))
+            output += " %s, " % green(str((i + 1)))
+        print(output)
 
     def printHandAndKey(self):
         self.printHand()
