@@ -1,0 +1,9 @@
+###########################
+Turn $turn_number
+
+Player ${player_number}'s turn
+...........................
+Hand Score: $score
+$hand
+$discard
+...........................

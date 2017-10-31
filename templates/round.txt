@@ -1,9 +1,0 @@
-#########################
-Round $round_number
-
-${player}'s turn
-
-$hand
-$key
-.........................
-$discard

@@ -17,6 +17,5 @@ class Deck(Rank):
             self.deck = self.discard
             self.discard = []
 
-    def printDiscard(self):
-        print("Discard Pile: ", self.discard[-1].getCardColour())
-        print(grey("...........................") + "\n")
+    def getDiscard(self):
+        return self.discard[-1].getCardColour()

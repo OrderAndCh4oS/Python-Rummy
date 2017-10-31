@@ -9,6 +9,10 @@ class Hand(Rank):
     melds = []
     score = 0
 
+    # ToDo: move scoring methods to score class or a calc class
+    # ToDo: move meld methods to meld class
+    # ToDo: create classes for each sort (Maybe Decorator or Command pattern for combination sorts?)
+
     def __init__(self):
         super().__init__()
         self.hand = []
@@ -19,25 +23,16 @@ class Hand(Rank):
     def discardCard(self, choice):
         return self.hand.pop(choice)
 
-    def printHand(self):
-        self.sortHandBySuitAndRank()
+    def getScore(self):
         self.calculateScore()
-        output = ''
-        print(grey("..........................."))
-        print("Hand Score:", self.score)
-        for card in self.hand:
-            output += card.getCardColour()
-        print(output.strip(', '))
+        return self.score
 
-    def printKey(self):
-        output = ''
-        for i in range(len(self.hand)):
-            output += " %s, " % green(str((i + 1)))
-        print(output)
+    def getHand(self):
+        self.sortHandBySuitAndRank()
+        return ''.join([card.getCardColour() for card in self.hand]).strip(', ')
 
-    def printHandAndKey(self):
-        self.printHand()
-        self.printKey()
+    def getKey(self):
+        return ''.join([" %s, " % green(str((i + 1))) for i in range(len(self.hand))])
 
     def sortHandBySuitAndRank(self):
         self.hand = sorted(self.hand, key=lambda card: self.suitAndRankKey(card))

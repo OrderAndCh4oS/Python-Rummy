@@ -1,15 +1,13 @@
 # coding=utf-8
 from player.player import Player
 from view.colours import green
+from view.view import View
 
 
 class Human(Player):
-    def setRound(self, round):
+    def turn(self, round):
         self.round = round
-
-    def turn(self):
         self.chooseToDiscardOrPickUp()
-        self.hand.printHandAndKey()
         self.discardOrKnock()
 
     def chooseToDiscardOrPickUp(self):
@@ -21,6 +19,12 @@ class Human(Player):
             self.hand.drawCard(self.round.deck.pop())
 
     def discardOrKnock(self):
+        view = View()
+        print(view.render(
+            template='./templates/player-turn-end.txt',
+            hand=self.hand.getHand(),
+            key=self.hand.getKey()
+        ))
         scores = self.findDiscardScores()
         if min(scores) < 10 and not self.round.knocked:
             message = "Enter a number to discard a card or " + green('k') + " to Knock: "
@@ -46,7 +50,14 @@ class Human(Player):
     def getUserPickUpInput(self):
         playerChoice = ''
         while playerChoice.lower() not in ['d', 'p']:
-            self.hand.printHand()
-            self.round.printDiscard()
+            view = View()
+            print(view.render(
+                template='./templates/player-turn-start.txt',
+                turn_number=self.round.turn,
+                player_number=self.round.currentPlayer + 1,
+                score=self.hand.getScore(),
+                hand=self.hand.getHand(),
+                discard=self.round.getDiscard().strip(', ')
+            ))
             playerChoice = input("Enter " + green('d') + " to draw or " + green('p') + " to pickup discard: ")
         return playerChoice
