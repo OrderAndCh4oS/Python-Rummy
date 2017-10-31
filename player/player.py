@@ -1,27 +1,34 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 from copy import deepcopy
-from view.colours import blue
+
+from player.hand import Hand
+
 
 class Player:
-    def __init__(self, players, gameRound):
-        self.players = players
-        self.round = gameRound
+    def __init__(self, num):
+        self.num = num
+        self.score = 0
+        self.hand = Hand()
 
-    def printPlayersTurn(self):
-        print(blue("###########################") + "\n")
-        print("Turn %i, %s\n" % (self.round.turn, self.getCurrentPlayerName()))
+    def getName(self):
+        return "Player %i" % self.num
 
-    def getCurrentPlayersHand(self):
-        return self.players[self.round.currentPlayer].getHand()
+    def updateScore(self):
+        self.score += self.hand.score
 
-    def getCurrentPlayerName(self):
-        return self.players[self.round.currentPlayer].getPlayerName()
+    def getHand(self):
+        return self.hand
 
-    @staticmethod
-    def findDiscardScores(hand):
+    def getScore(self):
+        return self.score
+
+    def displayRoundScore(self):
+        return self.hand.score
+
+    def findDiscardScores(self):
         scores = []
         for i in range(8):
-            dummyHand = deepcopy(hand)
+            dummyHand = deepcopy(self.hand)
             dummyHand.discardCard(i)
             dummyHand.calculateScore()
             scores.append(dummyHand.score)

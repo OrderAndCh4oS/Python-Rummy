@@ -1,44 +1,26 @@
 # coding=utf-8
 from random import choice
 from copy import deepcopy
-from time import sleep
 
 from player.player import Player
 
 
 class AI(Player):
-    def __init__(self, players, gameRound, aiOnly):
-        super().__init__(players, gameRound)
-        self.aiOnly = aiOnly
+    def turn(self, round):
+        self.round = round
+        self.chooseToDiscardOrPickUp()
+        self.discardOrKnock()
 
-    def turn(self, hand):
-        self.printPlayersTurn()
-        if self.aiOnly:
-            hand.printHand()
-        if len(self.round.discard) > 0:
-            self.round.printDiscard()
-        self.display("%s thinking..." % self.players[self.round.currentPlayer].getPlayerName())
-        self.chooseToDiscardOrPickUp(hand)
-        if self.aiOnly:
-            hand.printHand()
-        if not self.aiOnly:
-            sleep(700.0 / 1000.0)
-        self.discardOrKnock(hand)
-        self.display("%s choosing discard..." % self.players[self.round.currentPlayer].getPlayerName())
-        self.round.printDiscard()
-        if not self.aiOnly:
-            sleep(400.0 / 1000.0)
-
-    def chooseToDiscardOrPickUp(self, hand):
+    def chooseToDiscardOrPickUp(self):
         if self.round.knocked:
             pass
         if len(self.round.discard) > 0:
-            self.choosePickUp(hand)
+            self.choosePickUp()
         else:
-            hand.drawCard(self.round.deck.pop())
+            self.hand.drawCard(self.round.deck.pop())
 
-    def choosePickUp(self, hand):
-        dummyHand = deepcopy(hand)
+    def choosePickUp(self):
+        dummyHand = deepcopy(self.hand)
         dummyHand.calculateScore()
         assert isinstance(dummyHand.score, object)
         currentScore = dummyHand.score
@@ -47,14 +29,12 @@ class AI(Player):
         newScore = dummyHand.score
         aiChoice = 0 if newScore < currentScore else 1
         if aiChoice == 0:
-            hand.drawCard(self.round.discard.pop())
-            self.display("%s picked up discard" % self.players[self.round.currentPlayer].getPlayerName())
+            self.hand.drawCard(self.round.discard.pop())
         else:
-            hand.drawCard(self.round.deck.pop())
-            self.display("%s drew from the deck" % self.players[self.round.currentPlayer].getPlayerName())
+            self.hand.drawCard(self.round.deck.pop())
 
-    def discardOrKnock(self, hand):
-        scores = self.findDiscardScores(hand)
+    def discardOrKnock(self):
+        scores = self.findDiscardScores()
         if scores.count(min(scores)) > 1:
             choices = [(i, x) for (i, x) in enumerate(scores) if (x == min(scores))]
             discard = choice(choices)[0]
@@ -62,10 +42,7 @@ class AI(Player):
             discard = scores.index(min(scores))
         if min(scores) < 10 and not self.round.knocked:
             self.round.knocked = True
-            self.display("%s has knocked!!" % self.players[self.round.currentPlayer].getPlayerName())
-        self.round.discard.append(hand.discardCard(discard))
+        self.round.discard.append(self.hand.discardCard(discard))
 
     def display(self, text):
         print(text)
-        if not self.aiOnly:
-            sleep(600.0 / 1000.0)

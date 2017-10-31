@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from deck.deck import Deck
 from player.dealer import Dealer
+from view.colours import blue
 
 
 class Round(Dealer, Deck):
@@ -10,9 +11,9 @@ class Round(Dealer, Deck):
     lastTurn = 1
     knocked = False
 
-    def __init__(self, numberOfPlayers):
+    def __init__(self, players):
         super().__init__()
-        self.numberOfPlayers = numberOfPlayers
+        self.players = players
         self.stackDeck()
 
     def prepareNewRound(self):
@@ -29,6 +30,16 @@ class Round(Dealer, Deck):
         self.checkStack()
         self.checkKnocked()
 
+    def getTurn(self, round):
+        return "Turn %i, %s\n" % (round.turn, round.getCurrentPlayersName())
+
+    def printPlayersTurn(self):
+        print(blue("###########################") + "\n")
+        print("Turn %i, %s\n" % (self.turn, self.players[self.currentPlayer].getName()))
+
+    def getCurrentPlayersHand(self):
+        return self.players[self.currentPlayer].getHand()
+
     def endTurn(self):
         self.switchCurrentPlayer()
         self.turn += 1
@@ -38,9 +49,8 @@ class Round(Dealer, Deck):
             self.lastTurn += 1
 
     def switchCurrentPlayer(self):
-        self.currentPlayer = (self.currentPlayer + 1) % self.numberOfPlayers
+        self.currentPlayer = (self.currentPlayer + 1) % len(self.players)
 
     def rotateFirstPlayer(self):
         self.firstPlayer += 1
-        assert isinstance(self.numberOfPlayers, int)
-        self.currentPlayer = self.firstPlayer % self.numberOfPlayers
+        self.currentPlayer = self.firstPlayer % len(self.players)

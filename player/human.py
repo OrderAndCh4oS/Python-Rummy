@@ -4,23 +4,24 @@ from view.colours import green
 
 
 class Human(Player):
-    def turn(self, hand):
-        self.printPlayersTurn()
-        self.chooseToDiscardOrPickUp(hand)
-        hand.printHandAndKey()
-        self.discardOrKnock(hand)
-        self.round.printDiscard()
+    def setRound(self, round):
+        self.round = round
 
-    def chooseToDiscardOrPickUp(self, hand):
+    def turn(self):
+        self.chooseToDiscardOrPickUp()
+        self.hand.printHandAndKey()
+        self.discardOrKnock()
+
+    def chooseToDiscardOrPickUp(self):
         if self.round.knocked:
             print("A Player has knocked, this is your last turn!!!\n")
         if len(self.round.discard) > 0:
-            self.choosePickUp(hand)
+            self.choosePickUp()
         else:
-            hand.drawCard(self.round.deck.pop())
+            self.hand.drawCard(self.round.deck.pop())
 
-    def discardOrKnock(self, hand):
-        scores = self.findDiscardScores(hand)
+    def discardOrKnock(self):
+        scores = self.findDiscardScores()
         if min(scores) < 10 and not self.round.knocked:
             message = "Enter a number to discard a card or " + green('k') + " to Knock: "
         else:
@@ -33,19 +34,19 @@ class Human(Player):
             if playerChoice.lower() == "k" and min(scores) < 10:
                 self.round.knocked = True
         playerChoice = int(playerChoice) - 1
-        self.round.discard.append(hand.discardCard(playerChoice))
+        self.round.discard.append(self.hand.discardCard(playerChoice))
 
-    def choosePickUp(self, hand):
-        playerChoice = self.getUserPickUpInput(hand)
+    def choosePickUp(self):
+        playerChoice = self.getUserPickUpInput()
         if playerChoice == 'p':
-            hand.drawCard(self.round.discard.pop())
+            self.hand.drawCard(self.round.discard.pop())
         else:
-            hand.drawCard(self.round.deck.pop())
+            self.hand.drawCard(self.round.deck.pop())
 
-    def getUserPickUpInput(self, hand):
+    def getUserPickUpInput(self):
         playerChoice = ''
         while playerChoice.lower() not in ['d', 'p']:
-            hand.printHand()
+            self.hand.printHand()
             self.round.printDiscard()
             playerChoice = input("Enter " + green('d') + " to draw or " + green('p') + " to pickup discard: ")
         return playerChoice

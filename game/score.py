@@ -13,7 +13,7 @@ class Score:
     def displayCurrentScores(self):
         print("Game Scores")
         for p in self.players:
-            print("%s: %s" % (p.getPlayerName(), p.getScore()))
+            print("%s: %s" % (p.getName(), p.getScore()))
 
     def updatePlayerScores(self):
         for p in self.players:
@@ -28,9 +28,9 @@ class Score:
     def endGame(self):
         winners = self.findLowestScores()
         if len(winners) == 1:
-            print(green(winners[0].getPlayerName() + " is the Winner!!"))
+            print(green(winners[0].getName() + " is the Winner!!"))
         else:
-            print(green(", ".join([w.getPlayerName() for w in winners]) + " are joint winners!"))
+            print(green(", ".join([w.getName() for w in winners]) + " are joint winners!"))
         self.displayCurrentScores()
 
     def findLowestScores(self):

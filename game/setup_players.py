@@ -1,34 +1,38 @@
 # -*- coding: utf-8 -*-
-from player.player_config import PlayerConfig
+from player.ai import AI
+from player.human import Human
 
 
 class SetupPlayers:
+    players = []
     numberOfPlayers = -1
-    ai = False
-    aiOnly = False
+    numberOfOpponents = -1
 
     def __init__(self):
         self.choosePlayers()
-        self.players = self.createPlayers()
 
     def choosePlayers(self):
-        while self.numberOfPlayers not in [i for i in range(0, 5)]:
-            self.numberOfPlayers = input("Enter number of players (0-4)? ")
-            self.numberOfPlayers = self.validNumberCheck(self.numberOfPlayers)
-        if self.numberOfPlayers in range(0, 2):
-            self.ai = True
-        if self.numberOfPlayers == 1:
-            self.chooseNumberOfAIOpponents(3)
-        if self.numberOfPlayers == 0:
-            self.aiOnly = True
+        numberOfPlayers = -1
+        while numberOfPlayers not in [i for i in range(0, 5)]:
+            numberOfPlayers = input("Enter number of players (0-4)? ")
+            numberOfPlayers = self.validNumberCheck(numberOfPlayers)
+        if numberOfPlayers in [0, 1]:
+            self.setupAI(numberOfPlayers)
+        self.numberOfPlayers = numberOfPlayers
+
+    def setupAI(self, numberOfPlayers):
+        self.ai = True
+        if numberOfPlayers == 0:
             self.chooseNumberOfAIOpponents(4)
+        elif numberOfPlayers == 1:
+            self.chooseNumberOfAIOpponents(3)
 
     def chooseNumberOfAIOpponents(self, maxOpponents):
-        numberOfOpponents = 0
+        numberOfOpponents = -1
         while numberOfOpponents not in [i for i in range(maxOpponents - 2, maxOpponents + 1)]:
             numberOfOpponents = input("Enter number of opponents ({0}-{1})? ".format(maxOpponents - 2, maxOpponents))
             numberOfOpponents = self.validNumberCheck(numberOfOpponents)
-        self.numberOfPlayers += numberOfOpponents
+        self.numberOfOpponents = numberOfOpponents
 
     @staticmethod
     def validNumberCheck(number):
@@ -40,4 +44,6 @@ class SetupPlayers:
         return number
 
     def createPlayers(self):
-        return [PlayerConfig(i + 1) for i in range(self.numberOfPlayers)]
+        human = [Human(i + 1) for i in range(self.numberOfPlayers)]
+        ai = [AI(i + 1) for i in range(self.numberOfOpponents)]
+        return human + ai

@@ -14,42 +14,39 @@ from player.human import Human
 from view.colours import green
 from view.colours import grey
 
-class Rummy(SetupPlayers, Score):
-    players = []
 
+class Rummy():
     def __init__(self):
-        super().__init__()
-        self.round = Round(self.numberOfPlayers)
+        setup = SetupPlayers()
+        self.players = setup.createPlayers()
+        self.score = Score(self.players)
+        self.round = Round(self.players)
         self.round.dealCards(self.players)
         self.playGame()
 
     def playGame(self):
-        while self.round.lastTurn != self.numberOfPlayers:
+        while self.round.lastTurn != len(self.players):
             self.round.prepareTurn()
-            if not self.ai or (self.round.currentPlayer == 0 and not self.aiOnly):
-                player = Human(self.players, self.round)
-            else:
-                player = AI(self.players, self.round, self.aiOnly)
-            hand = player.getCurrentPlayersHand()
-            player.turn(hand)
+            player = self.players[self.round.currentPlayer]
+            player.turn(self.round)
             self.round.endTurn()
         self.endRound()
         self.startNewRoundOrEndGame()
 
     def startNewRoundOrEndGame(self):
-        if self.isEndOfGame():
-            self.endGame()
+        if self.score.isEndOfGame():
+            self.score.endGame()
         else:
-            self.displayCurrentScores()
+            self.score.displayCurrentScores()
             self.round.rotateFirstPlayer()
-            if not self.aiOnly:
+            if any(isinstance(x, Human) for x in self.players):
                 self.confirmStartNewRound()
             self.round.prepareNewRound()
             self.round.dealCards(self.players)
             self.playGame()
 
     def confirmStartNewRound(self):
-        print("\nReady %s?" % self.players[self.round.currentPlayer].getPlayerName())
+        print("\nReady %s?" % self.players[self.round.currentPlayer].getName())
         ready = ''
         while ready.lower() != 'y':
             ready = input("Enter " + green('y') + " when you are ready for the next round: ")
@@ -59,12 +56,12 @@ class Rummy(SetupPlayers, Score):
         print("Round Ended")
         self.printAllPlayersHands()
         print(grey("***************************"))
-        self.displayThisRoundScore()
-        self.updatePlayerScores()
+        self.score.displayThisRoundScore()
+        self.score.updatePlayerScores()
 
     def printAllPlayersHands(self):
         for p in self.players:
-            print("\n%s:" % p.getPlayerName())
+            print("\n%s:" % p.getName())
             p.hand.printHand()
 
 
