@@ -12,16 +12,15 @@ class Human(Player):
 
     def chooseToDiscardOrPickUp(self):
         if self.round.knocked:
-            view = View()
-            view.render(template='./templates/knocked.txt')
+            print(View.render(template='./templates/knocked.txt'))
         if len(self.round.discard) > 0:
             self.choosePickUp()
         else:
             self.hand.drawCard(self.round.deck.pop())
 
     def discardOrKnock(self):
-        view = View()
-        print(view.render(
+
+        print(View.render(
             template='./templates/player-turn-end.txt',
             hand=self.hand.getHand(),
             key=self.hand.getKey()
@@ -51,8 +50,7 @@ class Human(Player):
     def getUserPickUpInput(self):
         playerChoice = ''
         while playerChoice.lower() not in ['d', 'p']:
-            view = View()
-            print(view.render(
+            print(View.render(
                 template='./templates/player-turn-start.txt',
                 turn_number=self.round.turn,
                 player_number=self.round.currentPlayer + 1,

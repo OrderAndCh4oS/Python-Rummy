@@ -44,7 +44,12 @@ class SetupPlayers:
         return number
 
     def createPlayers(self):
-        # ToDo: count player numbers correctly, both start at 1
-        human = [Human(i + 1) for i in range(self.numberOfPlayers)]
-        ai = [AI(i + 1) for i in range(self.numberOfOpponents)]
-        return human + ai
+        i = 0
+        players = []
+        for j in range(self.numberOfPlayers):
+            i += 1
+            players.append(Human(i))
+        for j in range(self.numberOfOpponents):
+            i += 1
+            players.append(AI(i))
+        return players

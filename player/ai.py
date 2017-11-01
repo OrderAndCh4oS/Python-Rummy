@@ -22,18 +22,17 @@ class AI(Player):
     def choosePickUp(self):
         dummyHand = deepcopy(self.hand)
         dummyHand.calculateScore()
-        assert isinstance(dummyHand.score, object)
         currentScore = dummyHand.score
         dummyHand.drawCard(self.round.discard[-1])
         dummyHand.calculateScore()
         newScore = dummyHand.score
-        aiChoice = 0 if newScore < currentScore else 1
-        if aiChoice == 0:
+        if newScore < currentScore:
             self.hand.drawCard(self.round.discard.pop())
         else:
             self.hand.drawCard(self.round.deck.pop())
 
     def discardOrKnock(self):
+        # ToDo: fix bug here, knocks but has score over ten, discarding wrong card?
         scores = self.findDiscardScores()
         if scores.count(min(scores)) > 1:
             choices = [(i, x) for (i, x) in enumerate(scores) if (x == min(scores))]

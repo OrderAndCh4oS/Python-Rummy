@@ -8,8 +8,8 @@ class Score:
         self.players = players
 
     def displayThisRoundScore(self):
-        view = View()
-        print(view.render(
+
+        print(View.render(
             template='./templates/round-end.txt',
             round_scores=self.getEndOfRoundScores(),
             game_scores=self.getCurrentGameScores()
@@ -19,10 +19,10 @@ class Score:
         return ''.join(["%s: %s\n" % (p.getName(), p.getScore()) for p in self.players])
 
     def getEndOfRoundScores(self):
-        view = View()  # ToDo: Dependency inject view or inherit?
+        # ToDo: Dependency inject view or inherit?
         output = ''
         for p in self.players:
-            output += view.render(
+            output += View.render(
                 template='./templates/hand-score.txt',
                 player=p.getName(),
                 hand=p.hand.getHand(),
