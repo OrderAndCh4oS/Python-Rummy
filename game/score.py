@@ -1,19 +1,35 @@
 # coding=utf-8
 
 from view.colours import green
+from view.view import View
+
 
 class Score:
     def __init__(self, players):
         self.players = players
 
     def displayThisRoundScore(self):
-        for p in self.players:
-            p.displayRoundScore()
+        view = View()
+        print(view.render(
+            template='./templates/round-end.txt',
+            round_scores=self.getEndOfRoundScores(),
+            game_scores=self.getCurrentGameScores()
+        ))
 
-    def displayCurrentScores(self):
-        print("Game Scores")
+    def getCurrentGameScores(self):
+        return ''.join(["%s: %s\n" % (p.getName(), p.getScore()) for p in self.players])
+
+    def getEndOfRoundScores(self):
+        view = View()  # ToDo: Dependency inject view or inherit?
+        output = ''
         for p in self.players:
-            print("%s: %s" % (p.getName(), p.getScore()))
+            output += view.render(
+                template='./templates/hand-score.txt',
+                player=p.getName(),
+                hand=p.hand.getHand(),
+                score=p.hand.getScore()
+            )
+        return output
 
     def updatePlayerScores(self):
         for p in self.players:
@@ -26,12 +42,12 @@ class Score:
         return False
 
     def endGame(self):
+        self.displayThisRoundScore()
         winners = self.findLowestScores()
         if len(winners) == 1:
             print(green(winners[0].getName() + " is the Winner!!"))
         else:
             print(green(", ".join([w.getName() for w in winners]) + " are joint winners!"))
-        self.displayCurrentScores()
 
     def findLowestScores(self):
         lowest = []

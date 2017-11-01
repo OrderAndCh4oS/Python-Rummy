@@ -13,6 +13,7 @@ from player.ai import AI
 from player.human import Human
 from view.colours import green
 from view.colours import grey
+from view.view import View
 
 
 class Rummy():
@@ -37,7 +38,7 @@ class Rummy():
         if self.score.isEndOfGame():
             self.score.endGame()
         else:
-            self.score.displayCurrentScores()
+            self.score.displayThisRoundScore()
             self.round.rotateFirstPlayer()
             if any(isinstance(x, Human) for x in self.players):
                 self.confirmStartNewRound()
@@ -52,17 +53,8 @@ class Rummy():
             ready = input("Enter " + green('y') + " when you are ready for the next round: ")
 
     def endRound(self):
-        print("\n" + grey("***************************"))
-        print("Round Ended")
-        self.printAllPlayersHands()
-        print(grey("***************************"))
         self.score.displayThisRoundScore()
         self.score.updatePlayerScores()
-
-    def printAllPlayersHands(self):
-        for p in self.players:
-            print("\n%s:" % p.getName())
-            p.hand.printHand()
 
 
 # start game

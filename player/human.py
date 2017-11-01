@@ -12,7 +12,8 @@ class Human(Player):
 
     def chooseToDiscardOrPickUp(self):
         if self.round.knocked:
-            print("A Player has knocked, this is your last turn!!!\n")
+            view = View()
+            view.render(template='./templates/knocked.txt')
         if len(self.round.discard) > 0:
             self.choosePickUp()
         else:

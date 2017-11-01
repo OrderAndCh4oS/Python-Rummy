@@ -39,11 +39,12 @@ class SetupPlayers:
         try:
             number = int(number)
         except ValueError:
-            number = 0
+            number = -1
             print("Not a valid number, please try again...")
         return number
 
     def createPlayers(self):
+        # ToDo: count player numbers correctly, both start at 1
         human = [Human(i + 1) for i in range(self.numberOfPlayers)]
         ai = [AI(i + 1) for i in range(self.numberOfOpponents)]
         return human + ai

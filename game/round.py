@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from deck.deck import Deck
 from player.dealer import Dealer
-from view.colours import blue
-
 
 class Round(Dealer, Deck):
     firstPlayer = 0
@@ -32,10 +30,6 @@ class Round(Dealer, Deck):
 
     def getTurn(self, round):
         return "Turn %i, %s\n" % (round.turn, round.getCurrentPlayersName())
-
-    def printPlayersTurn(self):
-        print(blue("###########################") + "\n")
-        print("Turn %i, %s\n" % (self.turn, self.players[self.currentPlayer].getName()))
 
     def getCurrentPlayersHand(self):
         return self.players[self.currentPlayer].getHand()

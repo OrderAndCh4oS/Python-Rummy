@@ -1,2 +1,4 @@
-#########################
-Round $round_number
+${player}
+Hand Score: $score
+$hand
+.............................
