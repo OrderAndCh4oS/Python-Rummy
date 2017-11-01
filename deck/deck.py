@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from random import shuffle
 from deck.rank import Rank
-from view.colours import grey
 
 class Deck(Rank):
     deck = []

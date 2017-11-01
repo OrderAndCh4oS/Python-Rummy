@@ -1,6 +1,6 @@
 # coding=utf-8
 from player.player import Player
-from view.colours import green
+from view.colour import Colour
 from view.view import View
 
 
@@ -28,7 +28,7 @@ class Human(Player):
         ))
         scores = self.findDiscardScores()
         if min(scores) < 10 and not self.round.knocked:
-            message = "Enter a number to discard a card or " + green('k') + " to Knock: "
+            message = "Enter a number to discard a card or " + Colour.green('k') + " to Knock: "
         else:
             message = "Enter a number to discard a card: "
         playerChoice = ""
@@ -60,5 +60,6 @@ class Human(Player):
                 hand=self.hand.getHand(),
                 discard=self.round.getDiscard().strip(', ')
             ))
-            playerChoice = input("Enter " + green('d') + " to draw or " + green('p') + " to pickup discard: ")
+            playerChoice = input(
+                "Enter " + Colour.green('d') + " to draw or " + Colour.green('p') + " to pickup discard: ")
         return playerChoice

@@ -9,11 +9,8 @@ Created on Sun Sep 25 14:14:18 2016
 from game.round import Round
 from game.score import Score
 from game.setup_players import SetupPlayers
-from player.ai import AI
 from player.human import Human
-from view.colours import green
-from view.colours import grey
-from view.view import View
+from view.colour import Colour
 
 
 class Rummy():
@@ -50,7 +47,7 @@ class Rummy():
         print("\nReady %s?" % self.players[self.round.currentPlayer].getName())
         ready = ''
         while ready.lower() != 'y':
-            ready = input("Enter " + green('y') + " when you are ready for the next round: ")
+            ready = input("Enter " + Colour.green('y') + " when you are ready for the next round: ")
 
     def endRound(self):
         self.score.displayThisRoundScore()

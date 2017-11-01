@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from itertools import combinations
 from deck.rank import Rank
-from view.colours import green
-from view.colours import grey
+from view.colour import Colour
 
 
 class Hand(Rank):
@@ -15,6 +14,7 @@ class Hand(Rank):
 
     def __init__(self):
         super().__init__()
+        self.colour = Colour()
         self.hand = []
 
     def drawCard(self, card):
@@ -32,7 +32,7 @@ class Hand(Rank):
         return ''.join([card.getCardColour() for card in self.hand]).strip(', ')
 
     def getKey(self):
-        return ''.join([" %s, " % green(str((i + 1))) for i in range(len(self.hand))])
+        return ''.join([" %s, " % Colour.green(str((i + 1))) for i in range(len(self.hand))])
 
     def sortHandBySuitAndRank(self):
         self.hand = sorted(self.hand, key=lambda card: self.suitAndRankKey(card))

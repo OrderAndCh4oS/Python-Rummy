@@ -1,6 +1,5 @@
 # coding=utf-8
-
-from view.colours import green
+from view.colour import Colour
 from view.view import View
 
 
@@ -45,9 +44,9 @@ class Score:
         self.displayThisRoundScore()
         winners = self.findLowestScores()
         if len(winners) == 1:
-            print(green(winners[0].getName() + " is the Winner!!"))
+            print(Colour.green(winners[0].getName() + " is the Winner!!"))
         else:
-            print(green(", ".join([w.getName() for w in winners]) + " are joint winners!"))
+            print(Colour.green(", ".join([w.getName() for w in winners]) + " are joint winners!"))
 
     def findLowestScores(self):
         lowest = []

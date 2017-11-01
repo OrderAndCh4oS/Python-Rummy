@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from unicode.check import hasUnicode
-from view.colours import red
+from view.colour import Colour
 
 
 class Card:
@@ -19,7 +19,7 @@ class Card:
 
     def redCard(self):
         if hasUnicode:
-            return str(self.value) + red(self.suit) + ", "
+            return str(self.value) + Colour.red(self.suit) + ", "
         else:
             return str(self.value) + self.suit + ", "
 
