@@ -8,7 +8,6 @@ class Score:
         self.players = players
 
     def displayThisRoundScore(self):
-
         print(View.render(
             template='./templates/round-end.txt',
             round_scores=self.getEndOfRoundScores(),
@@ -19,7 +18,6 @@ class Score:
         return ''.join(["%s: %s\n" % (p.getName(), p.getScore()) for p in self.players])
 
     def getEndOfRoundScores(self):
-        # ToDo: Dependency inject view or inherit?
         output = ''
         for p in self.players:
             output += View.render(
@@ -32,6 +30,7 @@ class Score:
 
     def updatePlayerScores(self):
         for p in self.players:
+            p.hand.calculateScore()
             p.updateScore()
 
     def isEndOfGame(self):
@@ -41,7 +40,6 @@ class Score:
         return False
 
     def endGame(self):
-        self.displayThisRoundScore()
         winners = self.findLowestScores()
         if len(winners) == 1:
             print(Colour.green(winners[0].getName() + " is the Winner!!"))

@@ -19,7 +19,6 @@ class Human(Player):
             self.hand.drawCard(self.round.deck.pop())
 
     def discardOrKnock(self):
-
         print(View.render(
             template='./templates/player-turn-end.txt',
             hand=self.hand.getHand(),

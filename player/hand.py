@@ -24,7 +24,6 @@ class Hand(Rank):
         return self.hand.pop(choice)
 
     def getScore(self):
-        self.calculateScore()
         return self.score
 
     def getHand(self):

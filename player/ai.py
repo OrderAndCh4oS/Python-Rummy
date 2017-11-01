@@ -32,15 +32,14 @@ class AI(Player):
             self.hand.drawCard(self.round.deck.pop())
 
     def discardOrKnock(self):
-        # ToDo: fix bug here, knocks but has score over ten, discarding wrong card?
         scores = self.findDiscardScores()
+        if min(scores) <= 10 and not self.round.knocked:
+            self.round.knocked = True
         if scores.count(min(scores)) > 1:
             choices = [(i, x) for (i, x) in enumerate(scores) if (x == min(scores))]
             discard = choice(choices)[0]
         else:
             discard = scores.index(min(scores))
-        if min(scores) < 10 and not self.round.knocked:
-            self.round.knocked = True
         self.round.discard.append(self.hand.discardCard(discard))
 
     def display(self, text):

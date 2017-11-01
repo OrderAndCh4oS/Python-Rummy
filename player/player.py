@@ -14,8 +14,7 @@ class Player:
         return "Player %i" % self.num
 
     def updateScore(self):
-        self.hand.calculateScore()
-        self.score += self.hand.score
+        self.score += self.hand.getScore()
 
     def getHand(self):
         return self.hand

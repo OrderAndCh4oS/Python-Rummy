@@ -35,7 +35,6 @@ class Rummy():
         if self.score.isEndOfGame():
             self.score.endGame()
         else:
-            self.score.displayThisRoundScore()
             self.round.rotateFirstPlayer()
             if any(isinstance(x, Human) for x in self.players):
                 self.confirmStartNewRound()
@@ -50,9 +49,8 @@ class Rummy():
             ready = input("Enter " + Colour.green('y') + " when you are ready for the next round: ")
 
     def endRound(self):
-        self.score.displayThisRoundScore()
         self.score.updatePlayerScores()
-
+        self.score.displayThisRoundScore()
 
 # start game
 if __name__ == "__main__":
