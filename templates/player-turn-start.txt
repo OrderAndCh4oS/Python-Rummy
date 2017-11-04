@@ -7,4 +7,3 @@ Hand Score: $score
 $hand
 Discard Pile: $discard
 ${grey}.............................${colour_end}
-

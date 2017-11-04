@@ -5,6 +5,7 @@ Created on Sun Sep 25 14:14:18 2016
 
 @author: Sarcoma
 """
+from time import sleep
 
 from game.round import Round
 from game.score import Score
@@ -17,6 +18,7 @@ class Rummy():
     def __init__(self):
         setup = SetupPlayers()
         self.players = setup.createPlayers()
+        self.aiOnly = not any(isinstance(x, Human) for x in self.players)
         self.score = Score(self.players)
         self.round = Round(self.players)
         self.round.dealCards(self.players)
@@ -26,9 +28,10 @@ class Rummy():
         while self.round.lastTurn != len(self.players):
             self.round.prepareTurn()
             player = self.players[self.round.currentPlayer]
-            player.turn(self.round)
+            player.turn(self.round, self.aiOnly)
             self.round.endTurn()
         self.endRound()
+        sleep(0.8)
         self.startNewRoundOrEndGame()
 
     def startNewRoundOrEndGame(self):
@@ -36,7 +39,7 @@ class Rummy():
             self.score.endGame()
         else:
             self.round.rotateFirstPlayer()
-            if any(isinstance(x, Human) for x in self.players):
+            if not self.aiOnly:
                 self.confirmStartNewRound()
             self.round.prepareNewRound()
             self.round.dealCards(self.players)

@@ -1,29 +1,25 @@
 # coding=utf-8
 from player.player import Player
 from view.colour import Colour
-from view.view import View
 
 
 class Human(Player):
-    def turn(self, round):
-        self.round = round
-        self.chooseToDiscardOrPickUp()
-        self.discardOrKnock()
 
     def chooseToDiscardOrPickUp(self):
-        if self.round.knocked:
-            print(View.render(template='./templates/knocked.txt'))
         if len(self.round.discard) > 0:
             self.choosePickUp()
         else:
             self.hand.drawCard(self.round.deck.pop())
 
+    def choosePickUp(self):
+        playerChoice = self.getUserPickUpInput()
+        if playerChoice == 'p':
+            self.hand.drawCard(self.round.discard.pop())
+        else:
+            self.hand.drawCard(self.round.deck.pop())
+
     def discardOrKnock(self):
-        print(View.render(
-            template='./templates/player-turn-end.txt',
-            hand=self.hand.getHand(),
-            key=self.hand.getKey()
-        ))
+        self.renderPlayerTurnEnd()
         scores = self.findDiscardScores()
         if min(scores) < 10 and not self.round.knocked:
             message = "Enter a number to discard a card or " + Colour.green('k') + " to Knock: "
@@ -39,24 +35,10 @@ class Human(Player):
         playerChoice = int(playerChoice) - 1
         self.round.discard.append(self.hand.discardCard(playerChoice))
 
-    def choosePickUp(self):
-        playerChoice = self.getUserPickUpInput()
-        if playerChoice == 'p':
-            self.hand.drawCard(self.round.discard.pop())
-        else:
-            self.hand.drawCard(self.round.deck.pop())
-
     def getUserPickUpInput(self):
         playerChoice = ''
         while playerChoice.lower() not in ['d', 'p']:
-            print(View.render(
-                template='./templates/player-turn-start.txt',
-                turn_number=self.round.turn,
-                player_number=self.round.currentPlayer + 1,
-                score=self.hand.getScore(),
-                hand=self.hand.getHand(),
-                discard=self.round.getDiscard().strip(', ')
-            ))
+            self.renderPlayerTurnStart()
             playerChoice = input(
                 "Enter " + Colour.green('d') + " to draw or " + Colour.green('p') + " to pickup discard: ")
         return playerChoice

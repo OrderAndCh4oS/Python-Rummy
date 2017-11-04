@@ -1,20 +1,19 @@
 # coding=utf-8
 from random import choice
 from copy import deepcopy
+from time import sleep
 
 from player.player import Player
+from view.view import View
 
 
 class AI(Player):
-    def turn(self, round):
-        self.round = round
-        self.chooseToDiscardOrPickUp()
-        self.discardOrKnock()
 
     def chooseToDiscardOrPickUp(self):
-        if self.round.knocked:
-            pass
         if len(self.round.discard) > 0:
+            if self.aiOnly:
+                self.renderPlayerTurnStart()
+                self.aiThinking('Choosing pick up')
             self.choosePickUp()
         else:
             self.hand.drawCard(self.round.deck.pop())
@@ -32,6 +31,9 @@ class AI(Player):
             self.hand.drawCard(self.round.deck.pop())
 
     def discardOrKnock(self):
+        if self.aiOnly:
+            self.renderAITurnEnd()
+            self.aiThinking('Choosing discard')
         scores = self.findDiscardScores()
         if min(scores) <= 10 and not self.round.knocked:
             self.round.knocked = True
@@ -42,5 +44,15 @@ class AI(Player):
             discard = scores.index(min(scores))
         self.round.discard.append(self.hand.discardCard(discard))
 
-    def display(self, text):
-        print(text)
+    def aiThinking(self, action):
+        print(View.render(
+            template='./templates/ai-thinking.txt',
+            action=action,
+        ))
+        sleep(0.8)
+
+    def renderAITurnEnd(self):
+        print(View.render(
+            template='./templates/ai-turn-end.txt',
+            hand=self.hand.getHand(),
+        ))

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from deck.deck import Deck
 from player.dealer import Dealer
+from player.human import Human
+
 
 class Round(Dealer, Deck):
     firstPlayer = 0
