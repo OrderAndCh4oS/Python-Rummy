@@ -5,7 +5,10 @@ Created on Sun Sep 25 14:14:18 2016
 
 @author: Sarcoma
 """
+import os
 from time import sleep
+
+import colorama
 
 from game.round import Round
 from game.score import Score
@@ -13,8 +16,14 @@ from game.setup_players import SetupPlayers
 from player.human import Human
 from view.colour import Colour
 
-from colorama import init
-init()
+if 'PYCHARM_HOSTED' in os.environ:
+    convert = False  # in PyCharm, we should disable convert
+    strip = False
+else:
+    convert = None
+    strip = None
+
+colorama.init(convert=convert, strip=strip)
 
 class Rummy():
     def __init__(self):
