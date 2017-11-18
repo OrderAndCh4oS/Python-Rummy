@@ -49,7 +49,8 @@ class AI(Player):
             template='./templates/ai-thinking.txt',
             action=action,
         ))
-        sleep(0.8)
+        if not self.aiOnly:
+            sleep(0.8)
 
     def renderAITurnEnd(self):
         print(View.render(
