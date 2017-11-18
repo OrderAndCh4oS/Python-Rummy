@@ -13,6 +13,8 @@ from game.setup_players import SetupPlayers
 from player.human import Human
 from view.colour import Colour
 
+from colorama import init
+init()
 
 class Rummy():
     def __init__(self):
