@@ -1,6 +1,6 @@
 # coding=utf-8
-from random import choice
 from copy import deepcopy
+from random import choice
 from time import sleep
 
 from player.player import Player
@@ -46,7 +46,7 @@ class AI(Player):
 
     def aiThinking(self, action):
         print(View.render(
-            template='./templates/ai-thinking.txt',
+            template='../templates/ai-thinking.txt',
             action=action,
         ))
         if not self.aiOnly:
@@ -54,6 +54,6 @@ class AI(Player):
 
     def renderAITurnEnd(self):
         print(View.render(
-            template='./templates/ai-turn-end.txt',
+            template='../templates/ai-turn-end.txt',
             hand=self.hand.getHand(),
         ))

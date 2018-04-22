@@ -9,7 +9,7 @@ class Score:
 
     def displayThisRoundScore(self):
         print(View.render(
-            template='./templates/round-end.txt',
+            template='../templates/round-end.txt',
             round_scores=self.getEndOfRoundScores(),
             game_scores=self.getCurrentGameScores()
         ))
@@ -21,7 +21,7 @@ class Score:
         output = ''
         for p in self.players:
             output += View.render(
-                template='./templates/hand-score.txt',
+                template='../templates/hand-score.txt',
                 player=p.getName(),
                 hand=p.hand.getHand(),
                 score=p.hand.getScore()

@@ -47,11 +47,11 @@ class Player(metaclass=ABCMeta):
 
     def hasSomeoneKnocked(self):
         if self.round.knocked:
-            print(View.render(template='./templates/knocked.txt'))
+            print(View.render(template='../templates/knocked.txt'))
 
     def renderPlayerTurnStart(self):
         print(View.render(
-            template='./templates/player-turn-start.txt',
+            template='../templates/player-turn-start.txt',
             turn_number=self.round.turn,
             player_number=self.round.currentPlayer + 1,
             score=self.hand.getScore(),
@@ -61,7 +61,7 @@ class Player(metaclass=ABCMeta):
 
     def renderPlayerTurnEnd(self):
         print(View.render(
-            template='./templates/player-turn-end.txt',
+            template='../templates/player-turn-end.txt',
             hand=self.hand.getHand(),
             key=self.hand.getKey()
         ))

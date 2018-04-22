@@ -9,7 +9,7 @@ class View(Colour):
     @classmethod
     def render(cls, template, **kwargs):
         if not os.path.isfile(template):
-            raise OSError("Template was not found")
+            raise OSError("Template was not found: " + template)
         with open(template, 'r') as content_file:
             content = content_file.read()
             t = Template(content)
