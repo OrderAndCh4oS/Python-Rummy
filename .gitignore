@@ -1,2 +1,18 @@
 # Duplicate of rummy.py for testing
 /rummy2.py
+build/
+develop-eggs/
+dist/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+venv/
+.idea/

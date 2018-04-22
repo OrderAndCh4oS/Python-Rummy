@@ -1,0 +1,4 @@
+${player}
+Hand Score: $score
+$hand
+${light_grey}.............................${colour_end}

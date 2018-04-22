@@ -1,0 +1,4 @@
+${light_grey}.............................${colour_end}
+$hand
+$key
+${light_grey}.............................${colour_end}

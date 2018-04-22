@@ -6,7 +6,9 @@ This is a one to four player command line version of the card game Rummy.
 
 Play against friends or AI
 
-Run with: `python rummy.py`
+## Installation
+
+`pip install rummy`
 
 ## Rules
 Players must make melds of three or more cards _eg_  A♠ 2♠ 3♠ or 4♠ 4♥ 4♣

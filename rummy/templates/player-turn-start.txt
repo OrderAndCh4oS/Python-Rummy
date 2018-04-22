@@ -1,0 +1,9 @@
+${blue}#############################${colour_end}
+Turn $turn_number
+${light_grey}-----------------------------${colour_end}
+Player ${player_number}'s turn
+${light_grey}.............................${colour_end}
+Hand Score: $score
+$hand
+Discard Pile: $discard
+${light_grey}.............................${colour_end}

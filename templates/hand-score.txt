@@ -1,4 +1,0 @@
-${player}
-Hand Score: $score
-$hand
-${grey}.............................${colour_end}
