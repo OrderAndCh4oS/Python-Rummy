@@ -10,7 +10,15 @@ Play against friends or AI
 
 `pip install rummy`
 
+
+## Usage
+
+Run `rummy` in terminal
+
+Select number of players then the number of AI opponents
+
 ## Rules
+
 Players must make melds of three or more cards _eg_  A♠ 2♠ 3♠ or 4♠ 4♥ 4♣
 
 Unmelded cards score points as follows:
@@ -26,9 +34,9 @@ The game ends once a player reaches 100 or more
 
 The winner is the player with the lowest score
 
-### Created for CS50 Final Project 2016
+### This project was created for EDx CS50 Final Project 2016
 
-This was my final CS50 project video:
+Final CS50 project video:
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=JghRYmAkpXI
 " target="_blank"><img src="http://img.youtube.com/vi/JghRYmAkpXI/3.jpg"

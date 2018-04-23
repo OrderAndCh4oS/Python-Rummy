@@ -1,7 +1,12 @@
+import sys
+
 from rummy import Rummy as Play
 
 def main():
-    Play()
+    try:
+        Play()
+    except KeyboardInterrupt:
+        sys.exit()
 
 if __name__ == "__main__":
     main()

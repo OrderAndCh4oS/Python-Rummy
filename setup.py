@@ -6,7 +6,7 @@ readme.close()
 
 setup(
     name='rummy',
-    version='0.1.0',
+    version='0.1.3',
     url='https://github.com/sarcoma/Python-Rummy',
     license='MIT',
     author='sarcoma',
@@ -17,11 +17,12 @@ setup(
     entry_points={
         'console_scripts': ['rummy=rummy.command_line:main'],
     },
-    include_package_data=True,
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     package_data={'rummy':"templates/*.txt"},
+    include_package_data=True,
     install_requires=['colorama', 'text_template', 'ansi_colours'],
     project_urls={
         'Order & Chaos Creative': 'https://orderandchaoscreative.com',
-    }
+    },
+    python_requires='>=3.5'
 )
