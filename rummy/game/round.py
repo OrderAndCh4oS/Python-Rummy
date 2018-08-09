@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from ..deck.deck import Deck
-from ..player.dealer import Dealer
+from rummy.deck.deck import Deck
+from rummy.player.dealer import Dealer
 
 
 class Round(Dealer, Deck):
@@ -33,7 +33,7 @@ class Round(Dealer, Deck):
         return "Turn %i, %s\n" % (round.turn, round.getCurrentPlayersName())
 
     def getCurrentPlayersHand(self):
-        return self.players[self.currentPlayer].getHand()
+        return self.players[self.currentPlayer].getHandToPrint()
 
     def endTurn(self):
         self.switchCurrentPlayer()

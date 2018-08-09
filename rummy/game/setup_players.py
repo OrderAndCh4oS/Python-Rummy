@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from ..player.ai import AI
-from ..player.human import Human
+from rummy.player.ai import AI
+from rummy.player.human import Human
 
 
 class SetupPlayers:

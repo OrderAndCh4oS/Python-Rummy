@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .hand import Hand
+from rummy.player.hand import Hand
 
 
 class Dealer:

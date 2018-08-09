@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
-from copy import deepcopy
 
-from ..constants.package_resource_path import TEMPLATE_PATH
-from .hand import Hand
 from text_template import TextTemplate as View
+
+from rummy.constants.package_resource_path import TEMPLATE_PATH
+from rummy.deck.melds import Melds
+from rummy.player.hand import Hand
 
 
 class Player(metaclass=ABCMeta):
@@ -12,8 +13,9 @@ class Player(metaclass=ABCMeta):
 
     def __init__(self, num):
         self.num = num
-        self.score = 0
+        self.gameScore = 0
         self.hand = Hand()
+        self.melds = Melds()
 
     def turn(self, round, aiOnly):
         self.round = round
@@ -26,25 +28,16 @@ class Player(metaclass=ABCMeta):
         return "Player %i" % self.num
 
     def updateScore(self):
-        self.score += self.hand.getScore()
+        self.gameScore += self.hand.getScore()
 
     def getHand(self):
         return self.hand
 
-    def getScore(self):
-        return self.score
+    def getGameScore(self):
+        return self.gameScore
 
     def displayRoundScore(self):
         return self.hand.score
-
-    def findDiscardScores(self):
-        scores = []
-        for i in range(8):
-            dummyHand = deepcopy(self.hand)
-            dummyHand.discardCard(i)
-            dummyHand.calculateScore()
-            scores.append(dummyHand.score)
-        return scores
 
     def hasSomeoneKnocked(self):
         if self.round.knocked:
@@ -56,14 +49,14 @@ class Player(metaclass=ABCMeta):
             turn_number=self.round.turn,
             player_number=self.round.currentPlayer + 1,
             score=self.hand.getScore(),
-            hand=self.hand.getHand(),
+            hand=self.hand.getHandToPrint(),
             discard=self.round.getDiscard()
         ))
 
     def renderPlayerTurnEnd(self):
         print(View.render(
             template=TEMPLATE_PATH + '/player-turn-end.txt',
-            hand=self.hand.getHand(),
+            hand=self.hand.getHandToPrint(),
             key=self.hand.getKey()
         ))
 

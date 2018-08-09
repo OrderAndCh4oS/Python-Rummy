@@ -1,6 +1,7 @@
 # coding=utf-8
-from .player import Player
 from ansi_colours import AnsiColours as Colour
+
+from rummy.player.player import Player
 
 
 class Human(Player):
@@ -20,7 +21,7 @@ class Human(Player):
 
     def discardOrKnock(self):
         self.renderPlayerTurnEnd()
-        scores = self.findDiscardScores()
+        scores = self.melds.findDiscardScores(self.hand.getHand())
         if min(scores) < 10 and not self.round.knocked:
             message = "Enter a number to discard a card or " + Colour.green('k') + " to Knock: "
         else:

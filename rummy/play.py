@@ -9,15 +9,15 @@ import os
 from time import sleep
 
 import colorama
-
-from .game.round import Round
-from .game.score import Score
-from .game.setup_players import SetupPlayers
-from .player.human import Human
 from ansi_colours import AnsiColours as Colour
 
+from rummy.game.round import Round
+from rummy.game.score import Score
+from rummy.game.setup_players import SetupPlayers
+from rummy.player.human import Human
 
-class Rummy():
+
+class Play():
     def __init__(self):
         self.coloramaConfig()
         setup = SetupPlayers()
@@ -44,7 +44,7 @@ class Rummy():
             player.turn(self.round, self.aiOnly)
             self.round.endTurn()
         self.endRound()
-        sleep(0.8)
+        sleep(1.2)
         self.startNewRoundOrEndGame()
 
     def startNewRoundOrEndGame(self):
@@ -70,4 +70,4 @@ class Rummy():
 
 # start game
 if __name__ == "__main__":
-    Rummy()
+    Play()

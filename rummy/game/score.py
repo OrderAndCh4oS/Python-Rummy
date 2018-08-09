@@ -1,7 +1,10 @@
 # coding=utf-8
+from time import sleep
+
 from ansi_colours import AnsiColours as Colour
 from text_template import TextTemplate as View
-from ..constants.package_resource_path import TEMPLATE_PATH
+
+from rummy.constants.package_resource_path import TEMPLATE_PATH
 
 
 class Score:
@@ -16,27 +19,34 @@ class Score:
         ))
 
     def getCurrentGameScores(self):
-        return ''.join(["%s: %s\n" % (p.getName(), p.getScore()) for p in self.players])
+        return ''.join(["%s: %s\n" % (p.getName(), p.getGameScore()) for p in self.players])
 
     def getEndOfRoundScores(self):
         output = ''
+        lessThanTen = False
         for p in self.players:
+            score = p.hand.getScore()
+            if score <= 10:
+                lessThanTen = True
             output += View.render(
                 template=TEMPLATE_PATH + '/hand-score.txt',
                 player=p.getName(),
-                hand=p.hand.getHand(),
-                score=p.hand.getScore()
+                hand=p.hand.getHandToPrint(),
+                score=score
             )
+        if not lessThanTen:
+            print(Colour.red('<+++++++++++++++++++BUG+++++++++++++++++++++++++'))
+            sleep(8)
         return output
 
     def updatePlayerScores(self):
         for p in self.players:
-            p.hand.calculateScore()
+            p.hand.getScore()
             p.updateScore()
 
     def isEndOfGame(self):
         for p in self.players:
-            if p.getScore() >= 100:
+            if p.getGameScore() >= 100:
                 return True
         return False
 
@@ -53,8 +63,8 @@ class Score:
             if not lowest:
                 lowest = [p]
                 continue
-            if p.getScore() < lowest[0].getScore():
+            if p.getGameScore() < lowest[0].getGameScore():
                 lowest = [p]
-            elif p.getScore() == lowest[0].getScore():
+            elif p.getGameScore() == lowest[0].getGameScore():
                 lowest.append(p)
         return lowest

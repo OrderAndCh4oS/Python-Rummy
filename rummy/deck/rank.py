@@ -11,3 +11,7 @@ class Rank:
         if not hasUnicode:
             self.suits = ["S", "H", "D", "C"]
         self.rankedCards = [Card(value, suit) for suit in self.suits for value in self.values]
+
+    def __str__(self):
+        return str([(i, str(card)) for i, card in
+                    enumerate([(Card(value, suit)) for suit in self.suits for value in self.values])])

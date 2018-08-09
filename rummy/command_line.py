@@ -1,6 +1,7 @@
 import sys
 
-from rummy import Rummy as Play
+from rummy.play import Play
+
 
 def main():
     try:
