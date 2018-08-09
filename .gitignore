@@ -16,5 +16,4 @@ wheels/
 *.egg
 venv/
 .idea/
-__pycache__/
 *.pyc
