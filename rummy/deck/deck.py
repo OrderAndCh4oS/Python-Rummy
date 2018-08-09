@@ -17,4 +17,4 @@ class Deck(Rank):
             self.discard = []
 
     def getDiscard(self):
-        return self.discard[-1].getCardColour()
+        return self.discard[-1].getCardColour() if len(self.discard) else 'Empty'

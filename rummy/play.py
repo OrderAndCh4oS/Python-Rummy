@@ -9,12 +9,12 @@ import os
 from time import sleep
 
 import colorama
-from ansi_colours import AnsiColours as Colour
 
 from rummy.game.round import Round
 from rummy.game.score import Score
 from rummy.game.setup_players import SetupPlayers
 from rummy.player.human import Human
+from ansi_colours import AnsiColours as Colour
 
 
 class Play():

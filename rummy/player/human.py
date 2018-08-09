@@ -7,6 +7,7 @@ from rummy.player.player import Player
 class Human(Player):
 
     def chooseToDiscardOrPickUp(self):
+        self.renderPlayerTurnStart()
         if len(self.round.discard) > 0:
             self.choosePickUp()
         else:
@@ -22,7 +23,7 @@ class Human(Player):
     def discardOrKnock(self):
         self.renderPlayerTurnEnd()
         scores = self.melds.findDiscardScores(self.hand.getHand())
-        if min(scores) < 10 and not self.round.knocked:
+        if min(scores) <= 10 and not self.round.knocked:
             message = "Enter a number to discard a card or " + Colour.green('k') + " to Knock: "
         else:
             message = "Enter a number to discard a card: "
@@ -39,7 +40,6 @@ class Human(Player):
     def getUserPickUpInput(self):
         playerChoice = ''
         while playerChoice.lower() not in ['d', 'p']:
-            self.renderPlayerTurnStart()
             playerChoice = input(
                 "Enter " + Colour.green('d') + " to draw or " + Colour.green('p') + " to pickup discard: ")
         return playerChoice

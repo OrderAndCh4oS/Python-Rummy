@@ -53,6 +53,14 @@ class Player(metaclass=ABCMeta):
             discard=self.round.getDiscard()
         ))
 
+    def renderAITurnStart(self):
+        print(View.render(
+            template=TEMPLATE_PATH + '/turn-start.txt',
+            turn_number=self.round.turn,
+            player_number=self.round.currentPlayer + 1,
+            discard=self.round.getDiscard()
+        ))
+
     def renderPlayerTurnEnd(self):
         print(View.render(
             template=TEMPLATE_PATH + '/player-turn-end.txt',

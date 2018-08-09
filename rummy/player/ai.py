@@ -15,8 +15,14 @@ class AI(Player):
             if self.aiOnly:
                 self.renderPlayerTurnStart()
                 self.aiThinking('Choosing pick up')
+            else:
+                self.renderAITurnStart()
             self.choosePickUp()
         else:
+            if self.aiOnly:
+                self.renderPlayerTurnStart()
+            else:
+                self.renderAITurnStart()
             self.aiThinking('Drawing first card from deck')
             self.hand.drawCard(self.round.deck.pop())
 
@@ -28,7 +34,7 @@ class AI(Player):
         if self.aiOnly:
             print('Possible Hand Scores: ', scores)
             print('Min Score: ', min(scores))
-        if min(scores) < currentScore - 4 or min(scores) < 10:
+        if min(scores) < currentScore - 4 or min(scores) <= 10:
             self.aiThinking('Drawing from discard')
             self.hand.drawCard(self.round.discard.pop())
         else:
