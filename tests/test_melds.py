@@ -1,6 +1,6 @@
 # coding=utf-8
 from deck.card import Card
-from deck.melds import Melds
+from game.melds import Melds
 
 
 class TestMelds:

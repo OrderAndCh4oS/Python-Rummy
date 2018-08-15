@@ -13,8 +13,8 @@ class Round(Dealer):
 
     def __init__(self, players):
         super().__init__()
-        self.deck = Deck()
         self.players = players
+        self.deck = Deck()
 
     def prepare_new_round(self):
         self.turn = 1

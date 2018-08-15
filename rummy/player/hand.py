@@ -2,7 +2,7 @@
 
 from ansi_colours import AnsiColours as Colour
 
-from rummy.deck.melds import Melds
+from game.melds import Melds
 from rummy.deck.rank import Rank
 from rummy.deck.sort import Sort
 
@@ -37,4 +37,7 @@ class Hand(Rank):
         return self.melds.calculate_score(self.hand)
 
     def get_key(self):
-        return ''.join([" %s, " % Colour.green(str((i + 1))) for i in range(len(self.hand))])
+        return ',  '.join(["%s" % Colour.green(str((i + 1))) for i in range(len(self.hand))])
+
+
+z

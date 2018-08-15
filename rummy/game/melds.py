@@ -19,7 +19,7 @@ class Melds:
         hand_copy = deepcopy(hand)
         if discard:
             hand_copy.append(discard)
-        for i in range(8):
+        for i in range(len(hand)):
             dummy_hand = deepcopy(hand_copy)
             dummy_hand.pop(i)
             score = self.calculate_score(dummy_hand)
