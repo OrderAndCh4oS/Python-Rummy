@@ -1,11 +1,13 @@
 # coding=utf-8
+from constants.constants import VALUES
 
 
 class FaceValues:
-    values = ('A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K')
 
-    def get(self) -> tuple:
-        return self.values
+    @staticmethod
+    def get() -> tuple:
+        return VALUES
 
-    def is_value_in_range(self, value):
-        return value in self.values
+    @staticmethod
+    def is_value_in_range(value):
+        return value in VALUES

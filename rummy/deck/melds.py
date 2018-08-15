@@ -47,9 +47,9 @@ class Melds:
                 all_possible_melds.append(subset)
         return all_possible_melds
 
-    def find_lowest_scoring_melds(self, allPossibleMelds, cards):
+    def find_lowest_scoring_melds(self, all_possible_melds, cards):
         scores = []
-        for item in allPossibleMelds:
+        for item in all_possible_melds:
             if len(item) > 1:
                 for i in range(len(item) - 1):
                     if item[i].isdisjoint(item[i + 1]):
@@ -141,7 +141,6 @@ if __name__ == '__main__':
             print('Hand: ', ', '.join([str(card) for card in hand]))
             print('Score: ', melds.calculate_score(hand))
             print("\n==============================\n")
-
 
     try:
         main()

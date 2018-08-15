@@ -6,20 +6,20 @@ from rummy.deck.card import Card
 class TestCard:
 
     def test_value_ace(self):
-        card = Card("A", "H")
+        card = Card("A", "♥")
         assert "A" == card.value
 
     def test_value_number(self):
-        card = Card("7", "H")
+        card = Card("7", "♥")
         assert "7" == card.value
 
     def test_suit_plain(self):
         card = Card("A", "H")
-        assert card.suit == "H"
+        assert card.suit == "♥"
 
     def test_red_card_plain_text(self):
         card = Card("A", "H")
-        assert 'A\x1b[0;31mH\x1b[0m' == card.get_card_colour()
+        assert 'A\x1b[0;31m♥\x1b[0m' == card.get_card_colour()
 
     def test_diamond_glyph(self):
         card = Card("8", "♦")

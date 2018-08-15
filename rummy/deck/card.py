@@ -3,6 +3,7 @@
 from ansi_colours import AnsiColours as Colour
 
 from constants.constants import UNICODE_SUPPORT
+from deck.suits import Suits
 
 
 class Card:
@@ -11,7 +12,7 @@ class Card:
 
     def __init__(self, value, suit):
         self.value = value
-        self.suit = suit
+        self.suit = Suits.alpha_to_unicode_suit_glyph(suit)
 
     def __str__(self):
         return "%s%s" % (self.value, self.suit)

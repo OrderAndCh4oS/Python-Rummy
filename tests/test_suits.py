@@ -1,6 +1,13 @@
 from deck.suits import Suits
 
 
-def test_suits():
-    suits = Suits()
-    assert ("♠", "♥", "♦", "♣") == suits.get()
+class TestSuits:
+
+    def test_suits(self):
+        assert ("♠", "♥", "♦", "♣") == Suits.get()
+
+    def test_alpha_to_unicode_suit_glyph(self):
+        assert "♠" == Suits.alpha_to_unicode_suit_glyph('S')
+        assert "♥" == Suits.alpha_to_unicode_suit_glyph('H')
+        assert "♦" == Suits.alpha_to_unicode_suit_glyph('D')
+        assert "♣" == Suits.alpha_to_unicode_suit_glyph('C')
