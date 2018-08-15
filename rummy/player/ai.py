@@ -1,51 +1,52 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 from random import choice
 from time import sleep
 
 from text_template import TextTemplate as View
 
-from rummy.constants.package_resource_path import TEMPLATE_PATH
+from rummy.constants.constants import TEMPLATE_PATH
 from rummy.player.player import Player
 
 
 class AI(Player):
 
-    def chooseToDiscardOrPickUp(self):
-        if len(self.round.discard) > 0:
-            if self.aiOnly:
-                self.renderPlayerTurnStart()
-                self.aiThinking('Choosing pick up')
+    # Todo remove all prints return only data create a new class to handle displaying data
+    def choose_to_discard_or_pick_up(self):
+        if self.round.deck.has_discard():
+            if self.ai_only:
+                self.render_player_turn_start()
+                self.ai_thinking('Choosing pick up')
             else:
-                self.renderAITurnStart()
-            self.choosePickUp()
+                self.render_ai_turn_start()
+            self.choose_pick_up()
         else:
-            if self.aiOnly:
-                self.renderPlayerTurnStart()
+            if self.ai_only:
+                self.render_player_turn_start()
             else:
-                self.renderAITurnStart()
-            self.aiThinking('Drawing first card from deck')
-            self.hand.drawCard(self.round.deck.pop())
+                self.render_ai_turn_start()
+            self.ai_thinking('Drawing first card from deck')
+            self.hand.draw_card(self.round.deck.take_card())
 
-    def choosePickUp(self):
-        currentScore = self.hand.getScore()
-        if self.aiOnly:
-            print('Current Score: ', currentScore)
-        scores = self.melds.findDiscardScores(self.hand.getHand(), self.round.discard[-1])
-        if self.aiOnly:
+    def choose_pick_up(self):
+        current_score = self.hand.get_score()
+        if self.ai_only:
+            print('Current Score: ', current_score)
+        scores = self.melds.find_discard_scores(self.hand.get_hand(), self.round.deck.inspect_discard())
+        if self.ai_only:
             print('Possible Hand Scores: ', scores)
             print('Min Score: ', min(scores))
-        if min(scores) < currentScore - 4 or min(scores) <= 10:
-            self.aiThinking('Drawing from discard')
-            self.hand.drawCard(self.round.discard.pop())
+        if min(scores) < current_score - 4 or min(scores) <= 10:
+            self.ai_thinking('Drawing from discard')
+            self.hand.draw_card(self.round.deck.take_discard())
         else:
-            self.aiThinking('Drawing from deck')
-            self.hand.drawCard(self.round.deck.pop())
+            self.ai_thinking('Drawing from deck')
+            self.hand.draw_card(self.round.deck.take_card())
 
-    def discardOrKnock(self):
-        if self.aiOnly:
-            self.renderAITurnEnd()
-        self.aiThinking('Choosing card to discard')
-        scores = self.melds.findDiscardScores(self.hand.getHand())
+    def discard_or_knock(self):
+        if self.ai_only:
+            self.render_ai_turn_end()
+        self.ai_thinking('Choosing card to discard')
+        scores = self.melds.find_discard_scores(self.hand.get_hand())
         score = min(scores)
         if score <= 10 and not self.round.knocked:
             self.round.knocked = True
@@ -54,22 +55,23 @@ class AI(Player):
             discard = choice(choices)[0]
         else:
             discard = scores.index(score)
-        discard = self.hand.discardCard(discard)
-        if self.aiOnly:
+        discard = self.hand.discard_card(discard)
+        if self.ai_only:
             print('Discarding: ', discard)
             print('Hand Score: ', score)
-        self.round.discard.append(discard)
+        self.round.deck.discard_card(discard)
 
-    def aiThinking(self, action):
+    # Todo: move to new view class
+    def ai_thinking(self, action):
         print(View.render(
             template=TEMPLATE_PATH + '/ai-thinking.txt',
             action=action,
         ))
-        if not self.aiOnly:
+        if not self.ai_only:
             sleep(0.8)
 
-    def renderAITurnEnd(self):
+    def render_ai_turn_end(self):
         print(View.render(
             template=TEMPLATE_PATH + '/ai-turn-end.txt',
-            hand=self.hand.getHandToPrint(),
+            hand=str(self.hand),
         ))

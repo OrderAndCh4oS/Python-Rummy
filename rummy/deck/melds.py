@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
+
 from copy import deepcopy
 from itertools import combinations
 
+from rummy.deck.rank import Rank
 from rummy.deck.sort import Sort
 
 
@@ -8,82 +11,83 @@ class Melds:
 
     def __init__(self):
         self.sort = Sort()
+        self.rank = Rank()
         self.melds = []
 
-    def findDiscardScores(self, hand, discard=None):
+    def find_discard_scores(self, hand, discard=None):
         scores = []
-        handCopy = deepcopy(hand)
+        hand_copy = deepcopy(hand)
         if discard:
-            handCopy.append(discard)
+            hand_copy.append(discard)
         for i in range(8):
-            dummyHand = deepcopy(handCopy)
-            dummyHand.pop(i)
-            score = self.calculateScore(dummyHand)
+            dummy_hand = deepcopy(hand_copy)
+            dummy_hand.pop(i)
+            score = self.calculate_score(dummy_hand)
             scores.append(score)
         return scores
 
-    def calculateScore(self, hand):
+    def calculate_score(self, hand):
         self.melds = []
-        hand = self.sort.sortHandBySuitAndRank(hand)
-        cards = {self.sort.suitAndRankKey(card) for card in hand}
-        self.findSets(hand)
-        self.findRuns(hand)
-        allPossibleMelds = self.findAllPossibleMelds()
-        if len(allPossibleMelds) > 0:
-            scores = self.findLowestScoringMelds(allPossibleMelds, cards)
+        hand = self.sort.sort_hand_by_suit_and_rank(hand)
+        cards = {self.rank.get_suit_and_rank_key(card) for card in hand}
+        self.find_sets(hand)
+        self.find_runs(hand)
+        all_possible_melds = self.find_all_possible_melds()
+        if len(all_possible_melds) > 0:
+            scores = self.find_lowest_scoring_melds(all_possible_melds, cards)
             score = min(scores)
         else:
             score = sum([x[1] + 1 for x in cards])
         return score
 
-    def findAllPossibleMelds(self):
-        allPossibleMelds = []
+    def find_all_possible_melds(self):
+        all_possible_melds = []
         for L in range(1, 3):
             for subset in combinations(self.melds, L):
-                allPossibleMelds.append(subset)
-        return allPossibleMelds
+                all_possible_melds.append(subset)
+        return all_possible_melds
 
-    def findLowestScoringMelds(self, allPossibleMelds, cards):
+    def find_lowest_scoring_melds(self, allPossibleMelds, cards):
         scores = []
         for item in allPossibleMelds:
             if len(item) > 1:
                 for i in range(len(item) - 1):
                     if item[i].isdisjoint(item[i + 1]):
-                        scores = self.findScores(item, i, cards, scores)
+                        scores = self.find_scores(item, i, cards, scores)
             else:
-                remainingCards = cards.difference(item[0])
-                scores.append(sum([x[1] + 1 for x in remainingCards]))
+                remaining_cards = cards.difference(item[0])
+                scores.append(sum([x[1] + 1 for x in remaining_cards]))
         return scores
 
     @staticmethod
-    def findScores(item, i, cards, scores):
+    def find_scores(item, i, cards, scores):
         if item[i].isdisjoint(item[i + 1]):
             items = item[i] | item[i + 1]
-            remainingCards = cards.difference(items)
-            scores.append(sum([x[1] + 1 for x in remainingCards]))
+            remaining_cards = cards.difference(items)
+            scores.append(sum([x[1] + 1 for x in remaining_cards]))
             return scores
         else:
             return []
 
-    def findSets(self, hand):
-        hand = self.sort.sortHandByRank(hand)
-        cards = [self.sort.suitAndRankKey(card) for card in hand]
+    def find_sets(self, hand):
+        hand = self.sort.sort_hand_by_rank(hand)
+        cards = [self.rank.get_suit_and_rank_key(card) for card in hand]
         i = 1
         while i < len(cards):
-            i, meld = self.makeSetMeld(cards, i)
-            self.makeAllMelds(meld)
+            i, meld = self.make_set_meld(cards, i)
+            self.make_all_melds(meld)
             i += 1
 
-    def findRuns(self, hand):
-        hand = self.sort.sortHandBySuitAndRank(hand)
-        cards = [self.sort.suitAndRankKey(card) for card in hand]
+    def find_runs(self, hand):
+        hand = self.sort.sort_hand_by_suit_and_rank(hand)
+        cards = [self.rank.get_suit_and_rank_key(card) for card in hand]
         i = 1
         while i < len(cards):
-            i, meld = self.makeRunMeld(cards, i)
-            self.makeAllMelds(meld)
+            i, meld = self.make_run_meld(cards, i)
+            self.make_all_melds(meld)
             i += 1
 
-    def makeSetMeld(self, cards, i):
+    def make_set_meld(self, cards, i):
         meld = []
         while i < len(cards) and cards[i][1] == cards[i - 1][1]:
             meld.append(cards[i - 1])
@@ -91,7 +95,7 @@ class Melds:
         meld.append(cards[i - 1])
         return i, meld
 
-    def makeRunMeld(self, cards, i):
+    def make_run_meld(self, cards, i):
         meld = []
         while i < len(cards) and cards[i][0] == cards[i - 1][0] and cards[i][1] == cards[i - 1][1] + 1:
             meld.append(cards[i - 1])
@@ -99,7 +103,7 @@ class Melds:
         meld.append(cards[i - 1])
         return i, meld
 
-    def makeAllMelds(self, meld):
+    def make_all_melds(self, meld):
         if len(meld) >= 3:
             self.melds.append(set(meld))
         if len(meld) > 3:
@@ -126,16 +130,16 @@ if __name__ == '__main__':
         ]
         rank = Rank()
         melds = Melds()
-        cards = rank.rankedCards
+        cards = rank.ranked_cards
         while True:
             handString = input('Hand String: ')
             hand = [cards[key.index(card)] for card in handString.split(', ')]
             if len(hand) > 7:
-                scores = melds.findDiscardScores(hand)
+                scores = melds.find_discard_scores(hand)
                 print('Possible Scores: ', scores)
                 print('Discard: ', hand.pop(scores.index(min(scores))))
             print('Hand: ', ', '.join([str(card) for card in hand]))
-            print('Score: ', melds.calculateScore(hand))
+            print('Score: ', melds.calculate_score(hand))
             print("\n==============================\n")
 
 

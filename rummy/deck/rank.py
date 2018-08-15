@@ -1,17 +1,26 @@
 # -*- coding: utf-8 -*-
-from .card import Card
-from ..unicode.check import hasUnicode
+
+from rummy.deck.card import Card
+from rummy.deck.face_values import FaceValues
+from rummy.deck.suits import Suits
 
 
 class Rank:
-    values = ["A"] + [str(d) for d in list(range(2, 10))] + ["T", "J", "Q", "K"]
-    suits = [u"\u2660", u"\u2665", u"\u2666", u"\u2663"]
 
     def __init__(self):
-        if not hasUnicode:
-            self.suits = ["S", "H", "D", "C"]
-        self.rankedCards = [Card(value, suit) for suit in self.suits for value in self.values]
+        self.suits = Suits()
+        self.values = FaceValues()
+        self.ranked_cards = [Card(value, suit) for suit in self.suits.get() for value in self.values.get()]
 
-    def __str__(self):
-        return str([(i, str(card)) for i, card in
-                    enumerate([(Card(value, suit)) for suit in self.suits for value in self.values])])
+    def __repr__(self):
+        return str([(i, str(card)) for i, card in enumerate(self.ranked_cards)])
+
+    def get_suit_and_rank_key(self, card):
+        return self.suits.get().index(card.suit), self.values.get().index(card.value)
+
+    def get_rank_key(self, card):
+        return self.values.get().index(card.value)
+
+
+if __name__ == '__main__':
+    print(Rank().ranked_cards)

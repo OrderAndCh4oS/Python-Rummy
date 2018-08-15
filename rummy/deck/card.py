@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+
 from ansi_colours import AnsiColours as Colour
 
-from ..unicode.check import hasUnicode
+from constants.constants import UNICODE_SUPPORT
 
 
 class Card:
@@ -15,17 +16,20 @@ class Card:
     def __str__(self):
         return "%s%s" % (self.value, self.suit)
 
-    def getCardColour(self):
-        if self.suit in [u"\u2665", u"\u2666", "H", "D"]:
-            return self.redCard()
-        elif self.suit in [u"\u2660", u"\u2663", "C", "S"]:
-            return self.blackCard()
+    def __eq__(self, other):
+        return self.value == other.value and self.suit == other.suit
 
-    def redCard(self):
-        if hasUnicode:
-            return str(self.value) + Colour.red(self.suit) + ", "
+    def get_card_colour(self):
+        if self.suit in (u"♥", u"♦", "H", "D"):
+            return self.red_card()
+        elif self.suit in (u"♠", u"♣", "C", "S"):
+            return self.black_card()
+
+    def red_card(self):
+        if UNICODE_SUPPORT:
+            return str(self.value) + Colour.red(self.suit)
         else:
-            return str(self.value) + self.suit + ", "
+            return str(self.value) + self.suit
 
-    def blackCard(self):
-        return str(self.value) + self.suit + ", "
+    def black_card(self):
+        return str(self.value) + self.suit

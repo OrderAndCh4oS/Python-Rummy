@@ -1,41 +1,44 @@
 # -*- coding: utf-8 -*-
+
 from rummy.player.ai import AI
 from rummy.player.human import Human
 
 
 class SetupPlayers:
     players = []
-    numberOfPlayers = -1
-    numberOfOpponents = -1
+    number_of_players = -1
+    number_of_opponents = -1
 
     def __init__(self):
-        self.choosePlayers()
+        self.choose_players()
 
-    def choosePlayers(self):
-        numberOfPlayers = -1
-        while numberOfPlayers not in [i for i in range(0, 5)]:
-            numberOfPlayers = input("Enter number of players (0-4)? ")
-            numberOfPlayers = self.validNumberCheck(numberOfPlayers)
-        if numberOfPlayers in [0, 1]:
-            self.setupAI(numberOfPlayers)
-        self.numberOfPlayers = numberOfPlayers
+    def choose_players(self):
+        number_of_players = -1
+        while number_of_players not in [i for i in range(0, 5)]:
+            number_of_players = input("Enter number of players (0-4)? ")
+            number_of_players = self.valid_number_check(number_of_players)
+        if number_of_players in [0, 1]:
+            self.setup_ai(number_of_players)
+        self.number_of_players = number_of_players
 
-    def setupAI(self, numberOfPlayers):
+    def setup_ai(self, number_of_players):
         self.ai = True
-        if numberOfPlayers == 0:
-            self.chooseNumberOfAIOpponents(4)
-        elif numberOfPlayers == 1:
-            self.chooseNumberOfAIOpponents(3)
+        if number_of_players == 0:
+            self.choose_number_of_ai_opponents(4)
+        elif number_of_players == 1:
+            self.choose_number_of_ai_opponents(3)
 
-    def chooseNumberOfAIOpponents(self, maxOpponents):
-        numberOfOpponents = -1
-        while numberOfOpponents not in [i for i in range(maxOpponents - 2, maxOpponents + 1)]:
-            numberOfOpponents = input("Enter number of opponents ({0}-{1})? ".format(maxOpponents - 2, maxOpponents))
-            numberOfOpponents = self.validNumberCheck(numberOfOpponents)
-        self.numberOfOpponents = numberOfOpponents
+    def choose_number_of_ai_opponents(self, max_opponents):
+        number_of_opponents = -1
+        while number_of_opponents not in [i for i in range(max_opponents - 2, max_opponents + 1)]:
+            number_of_opponents = input(
+                "Enter number of opponents ({0}-{1})? ".format(max_opponents - 2, max_opponents))
+            number_of_opponents = self.valid_number_check(number_of_opponents)
+        self.number_of_opponents = number_of_opponents
 
+    # Todo: move to a new class
     @staticmethod
-    def validNumberCheck(number):
+    def valid_number_check(number):
         try:
             number = int(number)
         except ValueError:
@@ -43,13 +46,13 @@ class SetupPlayers:
             print("Not a valid number, please try again...")
         return number
 
-    def createPlayers(self):
+    def create_players(self):
         i = 0
         players = []
-        for j in range(self.numberOfPlayers):
+        for j in range(self.number_of_players):
             i += 1
             players.append(Human(i))
-        for j in range(self.numberOfOpponents):
+        for j in range(self.number_of_opponents):
             i += 1
             players.append(AI(i))
         return players

@@ -1,72 +1,59 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Sun Sep 25 14:14:18 2016
 
-@author: Sarcoma
-"""
-import os
 from time import sleep
 
-import colorama
+from ansi_colours import AnsiColours as Colour
 
+from console_config import ConsoleConfig
 from rummy.game.round import Round
 from rummy.game.score import Score
 from rummy.game.setup_players import SetupPlayers
 from rummy.player.human import Human
-from ansi_colours import AnsiColours as Colour
 
 
 class Play():
     def __init__(self):
-        self.coloramaConfig()
+        ConsoleConfig.colorama()
         setup = SetupPlayers()
-        self.players = setup.createPlayers()
-        self.aiOnly = not any(isinstance(x, Human) for x in self.players)
+        self.players = setup.create_players()
+        self.ai_only = not any(isinstance(x, Human) for x in self.players)
         self.score = Score(self.players)
         self.round = Round(self.players)
-        self.round.dealCards(self.players)
-        self.playGame()
+        self.round.deal_cards(self.players)
+        self.play_game()
 
-    def coloramaConfig(self):
-        if 'PYCHARM_HOSTED' in os.environ:
-            convert = False  # in PyCharm, we should disable convert
-            strip = False
-        else:
-            convert = None
-            strip = None
-        colorama.init(convert=convert, strip=strip)
-
-    def playGame(self):
-        while self.round.lastTurn != len(self.players):
-            self.round.prepareTurn()
-            player = self.players[self.round.currentPlayer]
-            player.turn(self.round, self.aiOnly)
-            self.round.endTurn()
-        self.endRound()
+    def play_game(self):
+        while self.round.last_turn != len(self.players):
+            self.round.prepare_turn()
+            player = self.players[self.round.current_player]
+            player.turn(self.round, self.ai_only)
+            self.round.end_turn()
+        self.end_round()
         sleep(1.2)
-        self.startNewRoundOrEndGame()
+        self.start_new_round_or_end_game()
 
-    def startNewRoundOrEndGame(self):
-        if self.score.isEndOfGame():
-            self.score.endGame()
+    def start_new_round_or_end_game(self):
+        if self.score.is_end_of_game():
+            self.score.end_game()
         else:
-            self.round.rotateFirstPlayer()
-            if not self.aiOnly:
-                self.confirmStartNewRound()
-            self.round.prepareNewRound()
-            self.round.dealCards(self.players)
-            self.playGame()
+            self.round.rotate_first_player()
+            if not self.ai_only:
+                self.confirm_start_new_round()
+            self.round.prepare_new_round()
+            self.round.deal_cards(self.players)
+            self.play_game()
 
-    def confirmStartNewRound(self):
-        print("\nReady %s?" % self.players[self.round.currentPlayer].getName())
+    def confirm_start_new_round(self):
+        print("\nReady %s?" % self.players[self.round.current_player])
         ready = ''
         while ready.lower() != 'y':
             ready = input("Enter " + Colour.green('y') + " when you are ready for the next round: ")
 
-    def endRound(self):
-        self.score.updatePlayerScores()
-        self.score.displayThisRoundScore()
+    def end_round(self):
+        self.score.update_player_scores()
+        self.score.display_this_round_score()
+
 
 # start game
 if __name__ == "__main__":

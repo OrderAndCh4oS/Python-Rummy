@@ -18,27 +18,23 @@ class Hand(Rank):
         self.melds = Melds()
 
     def __str__(self):
-        self.hand = self.sort.sortHandBySuitAndRank(self.hand)
-        return ''.join([card.getCardColour() for card in self.hand]).strip(', ')
+        self.hand = self.sort.sort_hand_by_suit_and_rank(self.hand)
+        return ', '.join([card.get_card_colour() for card in self.hand])
 
-    def setHand(self, hand):
+    def set_hand(self, hand):
         self.hand = hand
 
-    def getHand(self):
+    def get_hand(self):
         return self.hand
 
-    def drawCard(self, card):
+    def draw_card(self, card):
         self.hand.append(card)
 
-    def discardCard(self, choice):
+    def discard_card(self, choice):
         return self.hand.pop(choice)
 
-    def getScore(self):
-        return self.melds.calculateScore(self.hand)
+    def get_score(self):
+        return self.melds.calculate_score(self.hand)
 
-    def getHandToPrint(self):
-        self.hand = self.sort.sortHandBySuitAndRank(self.hand)
-        return ''.join([card.getCardColour() for card in self.hand]).strip(', ')
-
-    def getKey(self):
+    def get_key(self):
         return ''.join([" %s, " % Colour.green(str((i + 1))) for i in range(len(self.hand))])

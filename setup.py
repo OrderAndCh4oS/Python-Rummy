@@ -1,3 +1,4 @@
+# coding=utf-8
 from setuptools import setup, find_packages
 
 readme = open('README.md', 'r')
@@ -6,7 +7,7 @@ readme.close()
 
 setup(
     name='rummy',
-    version='1.0.1',
+    version='1.0.4',
     url='https://github.com/sarcoma/Python-Rummy',
     license='MIT',
     author='sarcoma',

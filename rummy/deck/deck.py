@@ -1,20 +1,45 @@
 # -*- coding: utf-8 -*-
+
 from random import shuffle
-from .rank import Rank
+
+from rummy.deck.rank import Rank
+
 
 class Deck(Rank):
     deck = []
-    discard = []
+    discard_pile = []
 
-    def stackDeck(self):
-        self.deck = self.rankedCards[:]
-        self.discard = []
+    def __init__(self):
+        super().__init__()
+        self.deck = self.ranked_cards[:]
+        self.discard_pile = []
         shuffle(self.deck)
 
-    def checkStack(self):
+    def check_stack(self):
         if len(self.deck) == 0:
-            self.deck = self.discard
-            self.discard = []
+            self.deck = self.discard_pile
+            self.discard_pile = []
 
-    def getDiscard(self):
-        return self.discard[-1].getCardColour() if len(self.discard) else 'Empty'
+    def show_discard(self):
+        return self.discard_pile[-1].get_card_colour() if len(self.discard_pile) else 'Empty'
+
+    def get_deck(self):
+        return self.deck
+
+    def get_discard_pile(self):
+        return self.discard_pile
+
+    def has_discard(self):
+        return len(self.discard_pile) > 0
+
+    def take_card(self):
+        return self.deck.pop()
+
+    def take_discard(self):
+        return self.discard_pile.pop()
+
+    def inspect_discard(self):
+        return self.discard_pile[-1]
+
+    def discard_card(self, card):
+        return self.discard_pile.append(card)

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+
 from abc import ABCMeta, abstractmethod
 
 from text_template import TextTemplate as View
 
-from rummy.constants.package_resource_path import TEMPLATE_PATH
+from rummy.constants.constants import TEMPLATE_PATH
 from rummy.deck.melds import Melds
 from rummy.player.hand import Hand
 
@@ -13,65 +14,71 @@ class Player(metaclass=ABCMeta):
 
     def __init__(self, num):
         self.num = num
-        self.gameScore = 0
+        self.game_score = 0
         self.hand = Hand()
         self.melds = Melds()
+        self.round = None
+        self.ai_only = False
 
-    def turn(self, round, aiOnly):
-        self.round = round
-        self.aiOnly = aiOnly
-        self.hasSomeoneKnocked()
-        self.chooseToDiscardOrPickUp()
-        self.discardOrKnock()
-
-    def getName(self):
+    def __str__(self):
         return "Player %i" % self.num
 
-    def updateScore(self):
-        self.gameScore += self.hand.getScore()
+    def turn(self, game_round, ai_only):
+        self.round = game_round
+        self.ai_only = ai_only
+        self.has_someone_knocked()
+        self.choose_to_discard_or_pick_up()
+        self.discard_or_knock()
 
-    def getHand(self):
+    def get_name(self):
+        return "Player %i" % self.num
+
+    def update_score(self):
+        self.game_score += self.hand.get_score()
+
+    def get_hand(self):
         return self.hand
 
-    def getGameScore(self):
-        return self.gameScore
+    def get_game_score(self):
+        return self.game_score
 
-    def displayRoundScore(self):
+    def display_round_score(self):
         return self.hand.score
 
-    def hasSomeoneKnocked(self):
+    def has_someone_knocked(self):
         if self.round.knocked:
             print(View.render(template=TEMPLATE_PATH + '/knocked.txt'))
 
-    def renderPlayerTurnStart(self):
+    # Todo: move to new view class
+    def render_player_turn_start(self):
         print(View.render(
             template=TEMPLATE_PATH + '/player-turn-start.txt',
             turn_number=self.round.turn,
-            player_number=self.round.currentPlayer + 1,
-            score=self.hand.getScore(),
-            hand=self.hand.getHandToPrint(),
-            discard=self.round.getDiscard()
+            player_number=self.round.current_player + 1,
+            score=self.hand.get_score(),
+            hand=str(self.hand),
+            discard=self.round.deck.show_discard()
         ))
 
-    def renderAITurnStart(self):
+    def render_ai_turn_start(self):
         print(View.render(
             template=TEMPLATE_PATH + '/turn-start.txt',
             turn_number=self.round.turn,
-            player_number=self.round.currentPlayer + 1,
-            discard=self.round.getDiscard()
+            player_number=self.round.current_player + 1,
+            discard=self.round.deck.show_discard()
         ))
 
-    def renderPlayerTurnEnd(self):
+    def render_player_turn_end(self):
         print(View.render(
             template=TEMPLATE_PATH + '/player-turn-end.txt',
-            hand=self.hand.getHandToPrint(),
-            key=self.hand.getKey()
+            hand=str(self.hand),
+            key=self.hand.get_key()
         ))
 
     @abstractmethod
-    def chooseToDiscardOrPickUp(self):
+    def choose_to_discard_or_pick_up(self):
         pass
 
     @abstractmethod
-    def discardOrKnock(self):
+    def discard_or_knock(self):
         pass
