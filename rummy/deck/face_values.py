@@ -1,5 +1,5 @@
 # coding=utf-8
-from constants.constants import VALUES
+from rummy.constants.constants import VALUES
 
 
 class FaceValues:

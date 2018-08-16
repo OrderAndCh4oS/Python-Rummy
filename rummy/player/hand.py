@@ -2,9 +2,9 @@
 
 from ansi_colours import AnsiColours as Colour
 
-from game.melds import Melds
 from rummy.deck.rank import Rank
 from rummy.deck.sort import Sort
+from rummy.game.melds import Melds
 
 
 class Hand(Rank):

@@ -5,7 +5,7 @@ from time import sleep
 
 from ansi_colours import AnsiColours as Colour
 
-from console_config import ConsoleConfig
+from rummy.console_config import ConsoleConfig
 from rummy.game.round import Round
 from rummy.game.score import Score
 from rummy.game.setup_players import SetupPlayers

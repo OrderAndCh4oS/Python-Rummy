@@ -2,8 +2,8 @@
 
 from ansi_colours import AnsiColours as Colour
 
-from constants.constants import UNICODE_SUPPORT
-from deck.suits import Suits
+from rummy.constants.constants import UNICODE_SUPPORT
+from rummy.deck.suits import Suits
 
 
 class Card:
