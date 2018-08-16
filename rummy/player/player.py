@@ -50,21 +50,13 @@ class Player(metaclass=ABCMeta):
             print(View.render(template=TEMPLATE_PATH + '/knocked.txt'))
 
     # Todo: move to new view class
-    def render_player_turn_start(self):
+    def render_turn_start(self):
         print(View.render(
             template=TEMPLATE_PATH + '/player-turn-start.txt',
             turn_number=self.round.turn,
             player_number=self.round.current_player + 1,
             score=self.hand.get_score(),
             hand=str(self.hand),
-            discard=self.round.deck.show_discard()
-        ))
-
-    def render_ai_turn_start(self):
-        print(View.render(
-            template=TEMPLATE_PATH + '/turn-start.txt',
-            turn_number=self.round.turn,
-            player_number=self.round.current_player + 1,
             discard=self.round.deck.show_discard()
         ))
 

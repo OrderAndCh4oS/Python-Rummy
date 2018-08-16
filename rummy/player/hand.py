@@ -38,6 +38,3 @@ class Hand(Rank):
 
     def get_key(self):
         return ',  '.join(["%s" % Colour.green(str((i + 1))) for i in range(len(self.hand))])
-
-
-z

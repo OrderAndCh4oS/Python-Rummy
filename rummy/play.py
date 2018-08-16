@@ -52,7 +52,7 @@ class Play():
 
     def end_round(self):
         self.score.update_player_scores()
-        self.score.display_this_round_score()
+        self.score.render_this_round_score()
 
 
 # start game

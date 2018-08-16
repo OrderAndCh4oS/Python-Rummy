@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from time import sleep
 
 from ansi_colours import AnsiColours as Colour
 from text_template import TextTemplate as View
@@ -11,32 +10,19 @@ class Score:
     def __init__(self, players):
         self.players = players
 
-    def display_this_round_score(self):
-        print(View.render(
-            template=TEMPLATE_PATH + '/round-end.txt',
-            round_scores=self.get_end_of_round_scores(),
-            game_scores=self.get_current_game_scores()
-        ))
-
     def get_current_game_scores(self):
         return ''.join(["%s: %s\n" % (p, p.get_game_score()) for p in self.players])
 
     def get_end_of_round_scores(self):
         output = ''
-        less_than_ten = False
         for p in self.players:
             score = p.hand.get_score()
-            if score <= 10:
-                less_than_ten = True
             output += View.render(
                 template=TEMPLATE_PATH + '/hand-score.txt',
                 player=p.get_name(),
                 hand=str(p.hand),
                 score=score
             )
-        if not less_than_ten:
-            print(Colour.red('<+++++++++++++++++++BUG+++++++++++++++++++++++++'))
-            sleep(8)
         return output
 
     def update_player_scores(self):
@@ -68,3 +54,10 @@ class Score:
             elif p.get_game_score() == lowest[0].get_game_score():
                 lowest.append(p)
         return lowest
+
+    def render_this_round_score(self):
+        print(View.render(
+            template=TEMPLATE_PATH + '/round-end.txt',
+            round_scores=self.get_end_of_round_scores(),
+            game_scores=self.get_current_game_scores()
+        ))

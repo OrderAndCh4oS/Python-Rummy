@@ -14,14 +14,14 @@ class AI(Player):
     def choose_to_discard_or_pick_up(self):
         if self.round.deck.has_discard():
             if self.ai_only:
-                self.render_player_turn_start()
+                self.render_turn_start()
                 self.ai_thinking('Choosing pick up')
             else:
                 self.render_ai_turn_start()
             self.choose_pick_up()
         else:
             if self.ai_only:
-                self.render_player_turn_start()
+                self.render_turn_start()
             else:
                 self.render_ai_turn_start()
             self.ai_thinking('Drawing first card from deck')
@@ -69,6 +69,14 @@ class AI(Player):
         ))
         if not self.ai_only:
             sleep(0.8)
+
+    def render_ai_turn_start(self):
+        print(View.render(
+            template=TEMPLATE_PATH + '/turn-start.txt',
+            turn_number=self.round.turn,
+            player_number=self.round.current_player + 1,
+            discard=self.round.deck.show_discard()
+        ))
 
     def render_ai_turn_end(self):
         print(View.render(

@@ -142,6 +142,7 @@ if __name__ == '__main__':
             print('Score: ', melds.calculate_score(hand))
             print("\n==============================\n")
 
+
     try:
         main()
     except KeyboardInterrupt:

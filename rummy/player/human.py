@@ -9,7 +9,7 @@ class Human(Player):
 
     # Todo separate prints and inputs from methods and move to a new class, methods should return data
     def choose_to_discard_or_pick_up(self):
-        self.render_player_turn_start()
+        self.render_turn_start()
         if self.round.deck.has_discard():
             self.choose_pick_up()
         else:
