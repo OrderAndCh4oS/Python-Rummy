@@ -12,7 +12,7 @@ from rummy.game.setup_players import SetupPlayers
 from rummy.player.human import Human
 
 
-class Play():
+class Play:
     def __init__(self):
         ConsoleConfig.colorama()
         setup = SetupPlayers()

@@ -36,16 +36,6 @@ class SetupPlayers:
             number_of_opponents = self.valid_number_check(number_of_opponents)
         self.number_of_opponents = number_of_opponents
 
-    # Todo: move to a new class
-    @staticmethod
-    def valid_number_check(number):
-        try:
-            number = int(number)
-        except ValueError:
-            number = -1
-            print("Not a valid number, please try again...")
-        return number
-
     def create_players(self):
         i = 0
         players = []
@@ -56,3 +46,13 @@ class SetupPlayers:
             i += 1
             players.append(AI(i))
         return players
+
+    # Todo: move to a new class
+    @staticmethod
+    def valid_number_check(number):
+        try:
+            number = int(number)
+        except ValueError:
+            number = -1
+            print("Not a valid number, please try again...")
+        return number
