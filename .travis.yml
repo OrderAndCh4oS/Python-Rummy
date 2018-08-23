@@ -5,7 +5,9 @@ python:
 - "3.6"
 before_install:
 - "pip install -U pip"
+- "python setup.py build"
 - "python setup.py install"
+- "python setup.py clean"
 # command to install dependencies
 install:
 - pip install -r requirements.txt
