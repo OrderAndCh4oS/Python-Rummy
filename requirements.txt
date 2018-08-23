@@ -14,6 +14,7 @@ py==1.5.4
 pytest==3.7.1
 requests==2.18.4
 requests-toolbelt==0.8.0
+-e git+git@github.com:sarcoma/Python-Rummy.git@e7427a3fd0faef07fdfd22606d007db906e6b00f#egg=rummy
 six==1.11.0
 text-template==0.1.2
 tqdm==4.23.0
