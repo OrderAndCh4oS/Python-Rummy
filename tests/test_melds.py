@@ -1,6 +1,6 @@
 # coding=utf-8
-from deck.card import Card
-from game.melds import Melds
+from rummy.deck.card import Card
+from rummy.game.melds import Melds
 
 
 class TestMelds:

@@ -1,0 +1,22 @@
+ansi-colours==0.2.3
+atomicwrites==1.1.5
+attrs==18.1.0
+certifi==2018.4.16
+chardet==3.0.4
+colorama==0.3.9
+coverage==4.5.1
+idna==2.6
+more-itertools==4.3.0
+pathlib2==2.3.2
+pkginfo==1.4.2
+pluggy==0.7.1
+py==1.5.4
+pytest==3.7.1
+requests==2.18.4
+requests-toolbelt==0.8.0
+-e git+git@github.com:sarcoma/Python-Rummy.git@254249f324726a4a8f476db102bd3a629802b1fe#egg=rummy
+six==1.11.0
+text-template==0.1.2
+tqdm==4.23.0
+twine==1.11.0
+urllib3==1.22

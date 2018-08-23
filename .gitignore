@@ -19,3 +19,4 @@ venv/
 *.pyc
 
 .pytest_cache
+.coverage

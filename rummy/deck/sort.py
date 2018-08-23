@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from deck.rank import Rank
+from rummy.deck.rank import Rank
 
 
 class Sort:

@@ -1,4 +1,5 @@
-from deck.suits import Suits
+# coding=utf-8
+from rummy.deck.suits import Suits
 
 
 class TestSuits:
