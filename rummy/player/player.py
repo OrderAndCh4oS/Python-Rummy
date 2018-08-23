@@ -4,7 +4,7 @@ from abc import ABCMeta, abstractmethod
 
 from text_template import TextTemplate as View
 
-from rummy.constants.constants import TEMPLATE_PATH
+from constants.resource_path import TEMPLATE_PATH
 from rummy.game.melds import Melds
 from rummy.player.hand import Hand
 

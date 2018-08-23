@@ -4,7 +4,7 @@ from time import sleep
 
 from text_template import TextTemplate as View
 
-from rummy.constants.constants import TEMPLATE_PATH
+from constants.resource_path import TEMPLATE_PATH
 from rummy.player.player import Player
 
 
