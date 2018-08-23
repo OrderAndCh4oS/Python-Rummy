@@ -12,6 +12,3 @@ install:
 # command to run tests
 script:
 - pytest --cov-config .coveragerc --cov=rummy
-after_script:
-- codecov
-
