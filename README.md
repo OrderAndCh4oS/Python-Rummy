@@ -6,6 +6,10 @@ This is a one to four player command line version of the card game Rummy.
 
 Play against friends or AI
 
+## Demo
+
+[![Python Rummy Demo](rummy-player-vs-ai.gif)]
+
 ## Installation
 
 `pip install rummy`
