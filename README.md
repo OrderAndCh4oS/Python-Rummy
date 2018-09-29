@@ -1,4 +1,4 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Build Status](https://travis-ci.org/sarcoma/Python-Rummy.svg?branch=master)](https://travis-ci.org/sarcoma/Python-Rummy) [![codecov](https://codecov.io/gh/sarcoma/Python-Rummy/branch/master/graph/badge.svg)](https://codecov.io/gh/sarcoma/Python-Rummy)]
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)] [![Build Status](https://travis-ci.org/sarcoma/Python-Rummy.svg?branch=master)](https://travis-ci.org/sarcoma/Python-Rummy) [![codecov](https://codecov.io/gh/sarcoma/Python-Rummy/branch/master/graph/badge.svg)](https://codecov.io/gh/sarcoma/Python-Rummy)]
 
 # Command Line Rummy in Python 3
 
@@ -8,7 +8,7 @@ Play against friends or AI
 
 ## Demo
 
-[![Python Rummy Demo](rummy-player-vs-ai.gif)
+[![Python Rummy Demo](rummy-player-vs-ai.gif)]
 
 ## Installation
 
