@@ -3,7 +3,7 @@
 from ansi_colours import AnsiColours as Colour
 from text_template import TextTemplate as View
 
-from constants.resource_path import TEMPLATE_PATH
+from rummy.constants.resource_path import TEMPLATE_PATH
 
 
 class Score:
