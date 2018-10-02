@@ -1,3 +1,14 @@
-from rummy import command_line
+import sys
 
-command_line.main()
+from rummy.play import Play
+
+
+def main():
+    try:
+        Play()
+    except KeyboardInterrupt:
+        sys.exit()
+
+
+if __name__ == "__main__":
+    main()
