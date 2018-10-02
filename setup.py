@@ -16,7 +16,7 @@ setup(
     long_description=README_TEXT,
     long_description_content_type='text/markdown',
     entry_points={
-        'console_scripts': ['rummy=rummy.command_line:main'],
+        'console_scripts': ['rummy=rummy.__main__:main'],
     },
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     package_data={'rummy':"templates/*.txt"},
