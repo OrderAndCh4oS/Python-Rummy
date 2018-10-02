@@ -1,3 +1,16 @@
-from rummy import command_line
+# -*- coding: utf-8 -*-
 
-command_line.main()
+import sys
+
+from rummy.play import Play
+
+
+def main():
+    try:
+        Play()
+    except KeyboardInterrupt:
+        sys.exit()
+
+
+if __name__ == "__main__":
+    main()
