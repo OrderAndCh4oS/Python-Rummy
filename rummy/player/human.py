@@ -34,7 +34,7 @@ class Human(Player):
             if self.round.knocked:
                 message = "Enter a number to discard a card: "
             player_choice = input(message)
-            if player_choice.lower() == "k" and min(scores) < 10:
+            if player_choice.lower() == "k" and min(scores) <= 10:
                 self.round.knocked = True
         player_choice = int(player_choice) - 1
         self.round.deck.discard_card(self.hand.discard_card(player_choice))
