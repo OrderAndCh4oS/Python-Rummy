@@ -54,7 +54,6 @@ class TestDeck:
 
     def test_inspect_discard(self):
         deck = Deck()
-
         deck.discard_card(deck.take_card())
         assert isinstance(deck.inspect_discard(), Card)
         assert len(deck.get_discard_pile()) == 1
