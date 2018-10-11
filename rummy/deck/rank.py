@@ -13,10 +13,12 @@ class Rank:
     def __repr__(self):
         return str([(i, str(card)) for i, card in enumerate(self.ranked_cards)])
 
-    def get_suit_and_rank_key(self, card):
+    @staticmethod
+    def get_suit_and_rank_key(card):
         return Suits.get().index(card.suit), FaceValues.get().index(card.value)
 
-    def get_rank_key(self, card):
+    @staticmethod
+    def get_rank_key(card):
         return FaceValues.get().index(card.value)
 
 
