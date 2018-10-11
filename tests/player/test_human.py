@@ -14,12 +14,17 @@ class TestHuman:
         mocker.patch('builtins.input', return_value='p')
         human = Human(1)
         human.round = mocker.MagicMock()
-        human.round.deck.has_discard.return_value = lambda: True
+        mocker.patch.object(Hand, 'draw_card', return_value=Card("A", "♥"))
         mocker.spy(Human, 'choose_pick_up')
         mocker.spy(Hand, 'draw_card')
+        human.round.deck.has_discard.return_value = True
         human.choose_to_discard_or_pick_up()
         assert Human.choose_pick_up.call_count == 1
         assert Hand.draw_card.call_count == 1
+        human.round.deck.has_discard.return_value = False
+        human.choose_to_discard_or_pick_up()
+        assert Human.choose_pick_up.call_count == 1
+        assert Hand.draw_card.call_count == 2
 
     def test_choose_pick_up(self, mocker):
         human = Human(1)
