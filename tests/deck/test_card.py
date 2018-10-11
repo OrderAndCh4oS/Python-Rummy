@@ -5,6 +5,27 @@ from rummy.deck.card import Card
 
 class TestCard:
 
+    def test_str(self):
+        card = Card("A", "♥")
+        assert str(card) == "A♥"
+        card = Card("2", "C")
+        assert str(card) == "2♣"
+
+    def test_eq(self):
+        card1 = Card("A", "♥")
+        card2 = Card("A", "♥")
+        card3 = Card("2", "♥")
+        card4 = Card("2", "♣")
+        assert card1 == card2
+        assert not card1 == card3
+        assert not card3 == card4
+
+    def test_get_card_colour(self):
+        card1 = Card("A", "H")
+        card2 = Card("3", "S")
+        assert 'A\x1b[0;31m♥\x1b[0m' == card1.get_card_colour()
+        assert '3♠' == card2.get_card_colour()
+
     def test_value_ace(self):
         card = Card("A", "♥")
         assert "A" == card.value
@@ -36,15 +57,6 @@ class TestCard:
     def test_spade_glyph(self):
         card = Card("A", "♠")
         assert 'A♠' == card.get_card_colour()
-
-    def test_card_equality(self):
-        card1 = Card("A", "♥")
-        card2 = Card("A", "♥")
-        card3 = Card("2", "♥")
-        card4 = Card("2", "♣")
-        assert card1 == card2
-        assert not card1 == card3
-        assert not card3 == card4
 
     def test_red_card_no_unicode(self, mocker):
         mocker.patch('rummy.deck.card.UNICODE_SUPPORT', False)

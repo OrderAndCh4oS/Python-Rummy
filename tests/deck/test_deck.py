@@ -19,6 +19,10 @@ class TestDeck:
 
     def test_check_stack(self):
         deck = Deck()
+        deck.discard_card(deck.take_card())
+        deck.check_stack()
+        assert len(deck.get_discard_pile()) == 1
+        deck = Deck()
         for _ in range(52):
             deck.discard_card(deck.take_card())
         deck.check_stack()
@@ -28,6 +32,17 @@ class TestDeck:
         deck = Deck()
         deck.discard_card(deck.take_card())
         assert re.match(r'[ATJQK2-9].*?[♥♣♦♠]', deck.show_discard())
+        deck = Deck()
+        assert deck.show_discard() == 'Empty'
+
+    def test_get_deck(self):
+        deck = Deck()
+        assert deck.get_deck() == deck.deck
+
+    def test_get_discard_pile(self):
+        deck = Deck()
+        deck.discard_card(deck.take_card())
+        assert deck.get_discard_pile() == deck.discard_pile
 
     def test_has_discard(self):
         deck = Deck()
