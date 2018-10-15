@@ -27,7 +27,6 @@ class Score:
 
     def update_player_scores(self):
         for p in self.players:
-            p.hand.get_score()
             p.update_score()
 
     def is_end_of_game(self):
@@ -41,7 +40,7 @@ class Score:
         if len(winners) == 1:
             print(Colour.green("%s is the Winner!!" % winners[0]))
         else:
-            print(Colour.green(", ".join([w for w in winners]) + " are joint winners!"))
+            print(Colour.green(", ".join([str(w) for w in winners]) + " are joint winners!"))
 
     def find_lowest_scores(self):
         lowest = []

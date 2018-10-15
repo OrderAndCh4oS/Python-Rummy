@@ -30,13 +30,6 @@ class Round(Dealer):
         self.deck.check_stack()
         self.check_knocked()
 
-    def get_turn(self, round):
-        # Todo: find out why round is being passed back to itself
-        return "Turn %i, %s\n" % (round.turn, round.get_current_players_name())
-
-    def get_current_players_hand(self):
-        return self.players[self.current_player].get_hand_to_print()
-
     def end_turn(self):
         self.switch_current_player()
         self.turn += 1

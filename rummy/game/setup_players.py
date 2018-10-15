@@ -22,7 +22,6 @@ class SetupPlayers:
         self.number_of_players = number_of_players
 
     def setup_ai(self, number_of_players):
-        self.ai = True
         if number_of_players == 0:
             self.choose_number_of_ai_opponents(4)
         elif number_of_players == 1:

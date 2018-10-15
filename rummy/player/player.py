@@ -31,7 +31,7 @@ class Player(metaclass=ABCMeta):
         self.discard_or_knock()
 
     def get_name(self):
-        return "Player %i" % self.num
+        return str(self)
 
     def update_score(self):
         self.game_score += self.hand.get_score()
