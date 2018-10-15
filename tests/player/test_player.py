@@ -3,6 +3,8 @@
 from rummy.player.player import Player
 from rummy.player.hand import Hand
 from rummy.deck.card import Card
+from rummy.game.round import Round
+from rummy.game.melds import Melds
 
 
 class DummyPlayer(Player):
@@ -20,6 +22,22 @@ class TestPlayer:
     def test_player_string(self):
         player = DummyPlayer(1)
         assert str(player) == "Player 1"
+
+    def test_turn(self, mocker):
+        mocker.patch('builtins.print')
+        mocker.spy(DummyPlayer, 'has_someone_knocked')
+        mocker.spy(DummyPlayer, 'discard_or_knock')
+        mocker.spy(DummyPlayer, 'choose_to_discard_or_pick_up')
+        round_mock = mocker.MagicMock()
+        player = DummyPlayer(1)
+        player.turn(round_mock, False)
+        assert player.round is not None
+        assert not player.ai_only
+        assert isinstance(player.hand, Hand)
+        assert isinstance(player.melds, Melds)
+        assert DummyPlayer.has_someone_knocked.call_count == 1
+        assert DummyPlayer.choose_to_discard_or_pick_up.call_count == 1
+        assert DummyPlayer.discard_or_knock.call_count == 1
 
     def test_get_name(self):
         player = DummyPlayer(1)
