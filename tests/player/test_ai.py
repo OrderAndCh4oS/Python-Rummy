@@ -55,7 +55,8 @@ class TestAI:
         mocker.patch('builtins.print')
         # Mock random.choice to assure that the last item from our array of scores is chosen,
         # to make this test predictable/consistent
-        mocker.patch('random.choice', side_effect=(2, 8))
+        mocker.patch('rummy.player.ai.choice',
+                     return_value=(2, 8))
         mocker.patch.object(Melds, 'find_discard_scores', side_effect=[[10, 8, 8], [11]])
         mocker.patch.object(Hand, 'discard_card')
         mocker.patch.object(Deck, 'discard_card')
@@ -71,5 +72,3 @@ class TestAI:
         assert ai.round.knocked
         ai.hand.discard_card.assert_called_with(0)
         assert ai.round.deck.discard_card.call_count == 2
-
-
