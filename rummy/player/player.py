@@ -2,11 +2,9 @@
 
 from abc import ABCMeta, abstractmethod
 
-from text_template import TextTemplate as View
-
-from rummy.constants.resource_path import TEMPLATE_PATH
 from rummy.game.melds import Melds
 from rummy.player.hand import Hand
+from rummy.game.view import View
 
 
 class Player(metaclass=ABCMeta):
@@ -47,25 +45,7 @@ class Player(metaclass=ABCMeta):
 
     def has_someone_knocked(self):
         if self.round.knocked:
-            print(View.render(template=TEMPLATE_PATH + '/knocked.txt'))
-
-    # Todo: move to new view class
-    def render_turn_start(self):
-        print(View.render(
-            template=TEMPLATE_PATH + '/player-turn-start.txt',
-            turn_number=self.round.turn,
-            player_number=self.round.current_player + 1,
-            score=self.hand.get_score(),
-            hand=str(self.hand),
-            discard=self.round.deck.show_discard()
-        ))
-
-    def render_player_turn_end(self):
-        print(View.render(
-            template=TEMPLATE_PATH + '/player-turn-end.txt',
-            hand=str(self.hand),
-            key=self.hand.get_key()
-        ))
+            View.render_template('/knocked.txt')
 
     @abstractmethod
     def choose_to_discard_or_pick_up(self):
