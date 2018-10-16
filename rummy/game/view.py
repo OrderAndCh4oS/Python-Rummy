@@ -12,13 +12,16 @@ class View:
     @staticmethod
     def render(*args, **kwargs):
         # Just a wrapper/abstraction layer for builtins.print
+        # Outputs will go through this class, so that if any
+        # complete transformations need to be applied,
+        # they can be applied in once place.
         print(*args, **kwargs)
 
     @staticmethod
     def render_template(template, **kwargs):
         complete_template = TEMPLATE_PATH + template
         output_message = TextTemplate.render(complete_template, **kwargs)
-        print(output_message)
+        View.render(output_message)
         return output_message
 
     @staticmethod
@@ -30,7 +33,7 @@ class View:
                                              hand=str(player.hand),
                                              discard=player.round.deck.show_discard()
                                              )
-        print(output_message)
+        View.render(output_message)
         return output_message
 
     @staticmethod
@@ -39,13 +42,13 @@ class View:
                                              hand=str(player.hand),
                                              key=player.hand.get_key()
                                              )
-        print(output_message)
+        View.render(output_message)
         return output_message
 
     @staticmethod
     def render_ai_thought(ai, action):
         ai_output_message = TextTemplate.render(TEMPLATE_PATH + '/ai-thinking.txt', action=action)
-        print(ai_output_message)
+        View.render(ai_output_message)
         if not ai.ai_only:
             sleep(0.8)
         return ai_output_message
@@ -57,12 +60,12 @@ class View:
                                                 player_number=ai.round.current_player + 1,
                                                 discard=ai.round.deck.show_discard()
                                                 )
-        print(ai_output_message)
+        View.render(ai_output_message)
         return ai_output_message
 
     @staticmethod
     def render_ai_turn_end(ai):
         ai_output_message = TextTemplate.render(TEMPLATE_PATH + '/ai-turn-end.txt',
                                                 hand=str(ai.hand))
-        print(ai_output_message)
+        View.render(ai_output_message)
         return ai_output_message
