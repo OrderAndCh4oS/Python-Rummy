@@ -11,6 +11,8 @@ from rummy.game.round import Round
 from rummy.game.score import Score
 from rummy.game.setup_players import SetupPlayers
 from rummy.player.human import Human
+from rummy.game.view import View
+from rummy.game.user_input import UserInput
 
 
 class Play:
@@ -56,10 +58,10 @@ class Play:
             self.play_game()
 
     def confirm_start_new_round(self):
-        print("\nReady %s?" % self.players[self.round.current_player])
+        View.render("\nReady %s?" % self.players[self.round.current_player])
         ready = ''
         while ready.lower() != 'y':
-            ready = input("Enter " + Colour.green('y') + " when you are ready for the next round: ")
+            ready = UserInput.get_input("Enter " + Colour.green('y') + " when you are ready for the next round: ")
 
     def end_round(self):
         self.score.update_player_scores()
