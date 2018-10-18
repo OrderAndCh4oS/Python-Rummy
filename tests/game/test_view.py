@@ -55,9 +55,15 @@ class TestView:
 
     def test_render_ai_thought(self, mocker):
         mocker.patch('builtins.print')
+        sleep = mocker.patch('rummy.game.view.sleep')
         ai = AI(2)
         expected = "Drawing from deck\nPlayer is thinking...\n"
         output_message = View.render_ai_thought(ai, 'Drawing from deck')
+        assert output_message == expected
+        assert sleep.call_count == 1
+        ai.ai_only = True
+        output_message = View.render_ai_thought(ai, 'Drawing from deck')
+        assert sleep.call_count == 1
         assert output_message == expected
 
     def test_render_ai_turn_start(self, mocker):
