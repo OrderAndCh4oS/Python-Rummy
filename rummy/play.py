@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
 from time import sleep
 
+import colorama
 from ansi_colours import AnsiColours as Colour
 
-from rummy.console_config import ConsoleConfig
 from rummy.game.round import Round
 from rummy.game.score import Score
 from rummy.game.setup_players import SetupPlayers
@@ -14,7 +15,7 @@ from rummy.player.human import Human
 
 class Play:
     def __init__(self):
-        ConsoleConfig.colorama()
+        self.colorama()
         setup = SetupPlayers()
         self.players = setup.create_players()
         self.ai_only = not any(isinstance(x, Human) for x in self.players)
@@ -22,6 +23,16 @@ class Play:
         self.round = Round(self.players)
         self.round.deal_cards(self.players)
         self.play_game()
+
+    @staticmethod
+    def colorama():
+        if 'PYCHARM_HOSTED' in os.environ:
+            convert = False  # in PyCharm, we should disable convert
+            strip = False
+        else:
+            convert = None
+            strip = None
+        colorama.init(convert=convert, strip=strip)
 
     def play_game(self):
         while self.round.last_turn != len(self.players):
