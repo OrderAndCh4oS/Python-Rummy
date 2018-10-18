@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from ansi_colours import AnsiColours as Colour
-from text_template import TextTemplate as View
 
-from rummy.constants.resource_path import TEMPLATE_PATH
+from rummy.game.view import View
 
 
 class Score:
@@ -16,13 +15,7 @@ class Score:
     def get_end_of_round_scores(self):
         output = ''
         for p in self.players:
-            score = p.hand.get_score()
-            output += View.render(
-                template=TEMPLATE_PATH + '/hand-score.txt',
-                player=p.get_name(),
-                hand=str(p.hand),
-                score=score
-            )
+            output += View.template_end_of_round_scores(p)
         return output
 
     def update_player_scores(self):
@@ -38,9 +31,9 @@ class Score:
     def end_game(self):
         winners = self.find_lowest_scores()
         if len(winners) == 1:
-            print(Colour.green("%s is the Winner!!" % winners[0]))
+            View.render(Colour.green("%s is the Winner!!" % winners[0]))
         else:
-            print(Colour.green(", ".join([str(w) for w in winners]) + " are joint winners!"))
+            View.render(Colour.green(", ".join([str(w) for w in winners]) + " are joint winners!"))
 
     def find_lowest_scores(self):
         lowest = []
@@ -55,8 +48,4 @@ class Score:
         return lowest
 
     def render_this_round_score(self):
-        print(View.render(
-            template=TEMPLATE_PATH + '/round-end.txt',
-            round_scores=self.get_end_of_round_scores(),
-            game_scores=self.get_current_game_scores()
-        ))
+        View.render(View.template_this_round_score(self.get_end_of_round_scores(), self.get_current_game_scores()))

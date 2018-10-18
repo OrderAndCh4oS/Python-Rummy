@@ -11,7 +11,7 @@ class Human(Player):
 
     # Todo separate prints and inputs from methods and move to a new class, methods should return data
     def choose_to_discard_or_pick_up(self):
-        View.render_turn_start(self)
+        View.render(View.template_turn_start(self))
         if self.round.deck.has_discard():
             self.choose_pick_up()
         else:
@@ -25,7 +25,7 @@ class Human(Player):
             self.hand.draw_card(self.round.deck.take_card())
 
     def discard_or_knock(self):
-        View.render_player_turn_end(self)
+        View.render(View.template_player_turn_end(self))
         scores = self.melds.find_discard_scores(self.hand.get_hand())
         if min(scores) <= 10 and not self.round.knocked:
             message = "Enter a number to discard a card or " + Colour.green('k') + " to Knock: "

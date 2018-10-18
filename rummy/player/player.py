@@ -45,7 +45,7 @@ class Player(metaclass=ABCMeta):
 
     def has_someone_knocked(self):
         if self.round.knocked:
-            View.render_template('/knocked.txt')
+            View.render(View.prepare_template('/knocked.txt'))
 
     @abstractmethod
     def choose_to_discard_or_pick_up(self):
