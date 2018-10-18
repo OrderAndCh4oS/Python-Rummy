@@ -7,6 +7,7 @@ class UserInput:
 
     @staticmethod
     def get_input(*args, **kwargs):
+        # Wrapper/abstraction layer for builtins.input
         player_input = input(*args, **kwargs)
         return player_input
 
