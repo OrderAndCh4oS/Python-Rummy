@@ -65,7 +65,7 @@ class Play:
 
     def end_round(self):
         self.score.update_player_scores()
-        self.score.render_this_round_score()
+        View.render(View.template_this_round_score(self.score.get_end_of_round_scores(), self.score.get_current_game_scores()))
 
 
 # start game

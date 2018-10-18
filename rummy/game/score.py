@@ -46,6 +46,3 @@ class Score:
             elif p.get_game_score() == lowest[0].get_game_score():
                 lowest.append(p)
         return lowest
-
-    def render_this_round_score(self):
-        View.render(View.template_this_round_score(self.get_end_of_round_scores(), self.get_current_game_scores()))
