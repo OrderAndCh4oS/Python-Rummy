@@ -2,7 +2,7 @@
 
 from ansi_colours import AnsiColours as Colour
 
-from rummy.game.view import View
+from ui.view import View
 
 
 class Score:

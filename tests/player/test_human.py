@@ -4,7 +4,7 @@ from rummy.player.human import Human
 from rummy.player.hand import Hand
 from rummy.deck.card import Card
 from rummy.game.melds import Melds
-from rummy.game.user_input import UserInput
+from ui.user_input import UserInput
 
 
 class TestHuman:

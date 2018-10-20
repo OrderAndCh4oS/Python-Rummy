@@ -11,8 +11,8 @@ from rummy.game.round import Round
 from rummy.game.score import Score
 from rummy.game.setup_players import SetupPlayers
 from rummy.player.human import Human
-from rummy.game.view import View
-from rummy.game.user_input import UserInput
+from ui.view import View
+from ui.user_input import UserInput
 
 
 class Play:

@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from rummy.game.view import View
+from ui.view import View
 
 
 class Validator:

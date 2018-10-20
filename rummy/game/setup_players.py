@@ -2,8 +2,8 @@
 
 from rummy.player.ai import AI
 from rummy.player.human import Human
-from rummy.game.validator import Validator
-from rummy.game.user_input import UserInput
+from ui.validator import Validator
+from ui.user_input import UserInput
 
 
 class SetupPlayers:

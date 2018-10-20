@@ -3,8 +3,8 @@
 from ansi_colours import AnsiColours as Colour
 
 from rummy.player.player import Player
-from rummy.game.view import View
-from rummy.game.user_input import UserInput
+from ui.view import View
+from ui.user_input import UserInput
 
 
 class Human(Player):

@@ -1,7 +1,7 @@
 # coding=utf-8
 
-from rummy.game.validator import Validator
-from rummy.game.view import View
+from ui.validator import Validator
+from ui.view import View
 
 
 class TestValidator:

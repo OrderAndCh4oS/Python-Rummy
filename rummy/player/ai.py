@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from random import choice
 
-from rummy.game.view import View
+from ui.view import View
 from rummy.player.player import Player
 
 

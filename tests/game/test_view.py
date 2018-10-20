@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from rummy.game.view import View
+from ui.view import View
 from rummy.player.human import Human
 from rummy.player.ai import AI
 from rummy.deck.card import Card
@@ -52,15 +52,12 @@ class TestView:
         assert output_message == expected
 
     def test_render_ai_thought(self, mocker):
-        sleep = mocker.patch('rummy.game.view.sleep')
         ai = AI(2)
         expected = "Drawing from deck\nPlayer is thinking...\n"
         output_message = View.template_ai_thought(ai, 'Drawing from deck')
         assert output_message == expected
-        assert sleep.call_count == 1
         ai.ai_only = True
         output_message = View.template_ai_thought(ai, 'Drawing from deck')
-        assert sleep.call_count == 1
         assert output_message == expected
 
     def test_render_ai_turn_start(self, mocker):
