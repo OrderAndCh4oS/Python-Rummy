@@ -1,9 +1,9 @@
 # coding=utf-8
 
-from rummy.player.human import Human
-from rummy.player.hand import Hand
 from rummy.deck.card import Card
 from rummy.game.melds import Melds
+from rummy.player.hand import Hand
+from rummy.player.human import Human
 from ui.user_input import UserInput
 
 
@@ -20,11 +20,11 @@ class TestHuman:
         mocker.spy(Hand, 'draw_card')
         human.round.deck.has_discard.return_value = True
         human.choose_to_discard_or_pick_up()
-        assert Human.choose_pick_up.call_count == 1
+        assert Human._choose_pick_up.call_count == 1
         assert Hand.draw_card.call_count == 1
         human.round.deck.has_discard.return_value = False
         human.choose_to_discard_or_pick_up()
-        assert Human.choose_pick_up.call_count == 1
+        assert Human._choose_pick_up.call_count == 1
         assert Hand.draw_card.call_count == 2
 
     def test_choose_pick_up(self, mocker):
@@ -35,9 +35,9 @@ class TestHuman:
         mocker.patch.object(human.round.deck, 'take_discard', return_value=Card("2", "♥"))
         mocker.spy(Hand, 'draw_card')
         # player_choice = 'p'
-        human.choose_pick_up()
+        human._choose_pick_up()
         # player_choice = 'd'
-        human.choose_pick_up()
+        human._choose_pick_up()
         assert Hand.draw_card.call_count == 2
         assert human.round.deck.take_card.call_count == 1
         assert human.round.deck.take_discard.call_count == 1

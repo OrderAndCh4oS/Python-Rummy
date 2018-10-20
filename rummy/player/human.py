@@ -16,22 +16,25 @@ class Human(Player):
 
     def draw_from_deck_or_discard_pile(self):
         if self.round.deck.has_discard():
-            self.choose_pick_up()
+            return self._choose_pick_up()
+        else:
+            return self.take_from_deck()
+
+    def _choose_pick_up(self):
+        user_input = UserInput.create_input(PlayerActionDialogs.pick_up_or_draw())
+        if user_input == 'p':
+            self.take_from_discard()
             return 'Drawing from discard'
         else:
             self.take_from_deck()
             return 'Drawing from deck'
 
-    def choose_pick_up(self):
-        user_input = UserInput.create_input(PlayerActionDialogs.pick_up_or_draw())
-        if user_input == 'p':
-            self.take_from_discard()
-        else:
-            self.take_from_deck()
-
     def discard_or_knock(self):
-        scores = self.melds.find_discard_scores(self.hand.get_hand())
+        self.discard(self._choose_discard())
+
+    def _choose_discard(self):
         user_input = ''
+        scores = self.melds.find_discard_scores(self.hand.get_hand())
         while user_input not in [str(i) for i in range(1, 9)]:
             if min(scores) <= 10 and not self.round.knocked:
                 user_input = UserInput.create_input(PlayerActionDialogs.choose_discard_or_knock())
@@ -40,7 +43,7 @@ class Human(Player):
                     continue
             else:
                 user_input = UserInput.create_input(PlayerActionDialogs.choose_discard())
-        self.discard(user_input)
+        return user_input
 
     def show_discard(self):
         return 'Discarded: %s' % self.round.deck.inspect_discard()
