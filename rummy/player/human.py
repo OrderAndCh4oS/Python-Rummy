@@ -8,24 +8,20 @@ from ui.view import View
 
 class Human(Player):
 
-    # Todo separate prints and inputs from methods and move to a new class, methods should return data
-    def choose_to_discard_or_pick_up(self):
-        if self.round.deck.has_discard():
-            self.choose_pick_up()
-        else:
-            self.take_from_deck()
-
     def show_turn_start(self):
         return View.template_turn_start(self)
 
     def show_turn_end(self):
         return View.template_player_turn_end(self)
 
+    def draw_from_deck_or_pick_up(self):
+        if self.round.deck.has_discard():
+            self.choose_pick_up()
+        else:
+            self.take_from_deck()
+
     def choose_pick_up(self):
         user_input = UserInput.create_input(PlayerActionDialogs.pick_up_or_draw())
-        self.take_card(user_input)
-
-    def take_card(self, user_input):
         if user_input == 'p':
             self.take_from_discard()
         else:
@@ -42,9 +38,7 @@ class Human(Player):
                     continue
             else:
                 user_input = UserInput.create_input(PlayerActionDialogs.choose_discard())
-        self.discard(user_input, )
-
-        return self.show_discard()
+        self.discard(user_input)
 
     def show_discard(self):
         return 'Discarded: %s' % self.round.deck.inspect_discard()

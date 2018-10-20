@@ -28,9 +28,10 @@ class Player(metaclass=ABCMeta):
         # Todo: the methods used below should only return the data,
         # Todo: the data should be passed to the render method with the view to use.
         View.render(self.show_turn_start())
-        View.render(self.choose_to_discard_or_pick_up())
+        self.draw_from_deck_or_discard_pile()
         View.render(self.show_turn_end())
-        View.render(self.discard_or_knock())
+        self.discard_or_knock()
+        View.render(self.show_discard())
 
     def take_from_deck(self):
         self.hand.draw_card(self.round.deck.take_card())
@@ -73,7 +74,11 @@ class Player(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def choose_to_discard_or_pick_up(self):
+    def show_discard(self):
+        pass
+
+    @abstractmethod
+    def draw_from_deck_or_discard_pile(self):
         pass
 
     @abstractmethod
