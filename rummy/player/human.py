@@ -2,6 +2,8 @@
 
 from ansi_colours import AnsiColours as Colour
 
+from player.player_action_dialogs import PlayerActionDialogs
+from player.player_actions import PlayerActions
 from rummy.player.player import Player
 from ui.view import View
 from ui.user_input import UserInput
@@ -11,32 +13,39 @@ class Human(Player):
 
     # Todo separate prints and inputs from methods and move to a new class, methods should return data
     def choose_to_discard_or_pick_up(self):
-        View.render(View.template_turn_start(self))
         if self.round.deck.has_discard():
             self.choose_pick_up()
         else:
-            self.hand.draw_card(self.round.deck.take_card())
+            PlayerActions.take_from_deck(self.hand, self.round.deck)
+
+    # Todo: Remove render, return string
+    def show_turn_start(self):
+        View.render(View.template_turn_start(self))
+
+    # Todo: Remove render, return string
+    def show_turn_end(self):
+        View.render(View.template_player_turn_end(self))
 
     def choose_pick_up(self):
-        player_choice = UserInput.get_pick_up_input()
-        if player_choice == 'p':
-            self.hand.draw_card(self.round.deck.take_discard())
+        user_input = UserInput.create_input(PlayerActionDialogs.pick_up_or_draw())
+        self.take_card(user_input)
+
+    def take_card(self, user_input):
+        if user_input == 'p':
+            PlayerActions.take_from_discard(self.hand, self.round.deck)
         else:
-            self.hand.draw_card(self.round.deck.take_card())
+            PlayerActions.take_from_deck(self.hand, self.round.deck)
 
     def discard_or_knock(self):
-        View.render(View.template_player_turn_end(self))
         scores = self.melds.find_discard_scores(self.hand.get_hand())
-        if min(scores) <= 10 and not self.round.knocked:
-            message = "Enter a number to discard a card or " + Colour.green('k') + " to Knock: "
-        else:
-            message = "Enter a number to discard a card: "
-        player_choice = ""
-        while player_choice not in [str(i) for i in range(1, 9)]:
-            if self.round.knocked:
-                message = "Enter a number to discard a card: "
-            player_choice = UserInput.get_input(message)
-            if player_choice.lower() == "k" and min(scores) <= 10:
-                self.round.knocked = True
-        player_choice = int(player_choice) - 1
-        self.round.deck.discard_card(self.hand.discard_card(player_choice))
+        user_input = ''
+        while user_input not in [str(i) for i in range(1, 9)]:
+            if min(scores) <= 10 and not self.round.knocked:
+                user_input = UserInput.create_input(PlayerActionDialogs.choose_discard_or_knock())
+                if user_input == "k":
+                    PlayerActions.knock(self.round)
+                    continue
+            else:
+                user_input = UserInput.create_input(PlayerActionDialogs.choose_discard())
+
+        PlayerActions.discard(user_input, self.hand, self.round.deck)

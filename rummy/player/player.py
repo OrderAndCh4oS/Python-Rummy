@@ -25,7 +25,9 @@ class Player(metaclass=ABCMeta):
         self.round = game_round
         self.ai_only = ai_only
         self.has_someone_knocked()
+        self.show_turn_start()
         self.choose_to_discard_or_pick_up()
+        self.show_turn_end()
         self.discard_or_knock()
 
     def get_name(self):
@@ -46,6 +48,14 @@ class Player(metaclass=ABCMeta):
     def has_someone_knocked(self):
         if self.round.knocked:
             View.render(View.prepare_template('/knocked.txt'))
+
+    @abstractmethod
+    def show_turn_start(self):
+        pass
+
+    @abstractmethod
+    def show_turn_end(self):
+        pass
 
     @abstractmethod
     def choose_to_discard_or_pick_up(self):
