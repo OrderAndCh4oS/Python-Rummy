@@ -30,6 +30,19 @@ class Player(metaclass=ABCMeta):
         View.render(self.show_turn_end())
         View.render(self.discard_or_knock())
 
+    def take_from_deck(self):
+        self.hand.draw_card(self.round.deck.take_card())
+
+    def take_from_discard(self):
+        self.hand.draw_card(self.round.deck.take_discard())
+
+    def discard(self, user_input):
+        user_input = int(user_input) - 1
+        self.round.deck.discard_card(self.hand.discard_card(user_input))
+
+    def knock(self):
+        self.round.knocked = True
+
     def get_name(self):
         return str(self)
 

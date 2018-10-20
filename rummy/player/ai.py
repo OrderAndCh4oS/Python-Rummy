@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from random import choice
 
-from player.player_actions import PlayerActions
 from rummy.player.player import Player
 from ui.view import View
 
@@ -33,17 +32,17 @@ class AI(Player):
                 output += View.template_ai_discard_data(current_score, scores)
             output += self.choose_pickup(current_score, scores)
         else:
-            PlayerActions.take_from_deck(self.hand, self.round.deck)
+            self.take_from_deck()
             output += View.template_ai_thought(self, 'Drawing from deck')
         return output
 
     def choose_pickup(self, current_score, scores):
         output = ''
         if min(scores) < current_score - 4 or min(scores) <= 10:
-            PlayerActions.take_from_discard(self.hand, self.round.deck)
+            self.take_from_discard()
             output += View.template_ai_thought(self, 'Drawing from discard')
         else:
-            PlayerActions.take_from_deck(self.hand, self.round.deck)
+            self.take_from_deck()
             output += View.template_ai_thought(self, 'Drawing from deck')
         return output
 

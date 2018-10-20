@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from player.player_action_dialogs import PlayerActionDialogs
-from player.player_actions import PlayerActions
 from rummy.player.player import Player
 from ui.user_input import UserInput
 from ui.view import View
@@ -14,7 +13,7 @@ class Human(Player):
         if self.round.deck.has_discard():
             self.choose_pick_up()
         else:
-            PlayerActions.take_from_deck(self.hand, self.round.deck)
+            self.take_from_deck()
 
     def show_turn_start(self):
         return View.template_turn_start(self)
@@ -28,9 +27,9 @@ class Human(Player):
 
     def take_card(self, user_input):
         if user_input == 'p':
-            PlayerActions.take_from_discard(self.hand, self.round.deck)
+            self.take_from_discard()
         else:
-            PlayerActions.take_from_deck(self.hand, self.round.deck)
+            self.take_from_deck()
 
     def discard_or_knock(self):
         scores = self.melds.find_discard_scores(self.hand.get_hand())
@@ -39,11 +38,11 @@ class Human(Player):
             if min(scores) <= 10 and not self.round.knocked:
                 user_input = UserInput.create_input(PlayerActionDialogs.choose_discard_or_knock())
                 if user_input == "k":
-                    PlayerActions.knock(self.round)
+                    self.knock()
                     continue
             else:
                 user_input = UserInput.create_input(PlayerActionDialogs.choose_discard())
-        PlayerActions.discard(user_input, self.hand, self.round.deck)
+        self.discard(user_input, )
 
         return self.show_discard()
 

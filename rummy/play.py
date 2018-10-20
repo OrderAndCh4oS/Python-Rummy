@@ -11,8 +11,8 @@ from rummy.game.round import Round
 from rummy.game.score import Score
 from rummy.game.setup_players import SetupPlayers
 from rummy.player.human import Human
-from ui.view import View
 from ui.user_input import UserInput
+from ui.view import View
 
 
 class Play:
@@ -65,7 +65,9 @@ class Play:
 
     def end_round(self):
         self.score.update_player_scores()
-        View.render(View.template_this_round_score(self.score.get_end_of_round_scores(), self.score.get_current_game_scores()))
+        View.render(
+            View.template_this_round_score(self.score.get_end_of_round_scores(), self.score.get_current_game_scores())
+        )
 
 
 # start game
