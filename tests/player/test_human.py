@@ -4,6 +4,7 @@ from rummy.player.human import Human
 from rummy.player.hand import Hand
 from rummy.deck.card import Card
 from rummy.game.melds import Melds
+from ui.user_input import UserInput
 
 
 class TestHuman:
@@ -28,7 +29,7 @@ class TestHuman:
 
     def test_choose_pick_up(self, mocker):
         human = Human(1)
-        mocker.patch.object(Human, 'get_user_pick_up_input', side_effect=['p', 'd'])
+        mocker.patch.object(UserInput, 'get_pick_up_input', side_effect=['p', 'd'])
         human.round = mocker.MagicMock()
         mocker.patch.object(human.round.deck, 'take_card', return_value=Card("A", "♥"))
         mocker.patch.object(human.round.deck, 'take_discard', return_value=Card("2", "♥"))
