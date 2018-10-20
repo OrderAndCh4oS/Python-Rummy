@@ -14,11 +14,13 @@ class Human(Player):
     def show_turn_end(self):
         return View.template_player_turn_end(self)
 
-    def draw_from_deck_or_pick_up(self):
+    def draw_from_deck_or_discard_pile(self):
         if self.round.deck.has_discard():
             self.choose_pick_up()
+            return 'Drawing from discard'
         else:
             self.take_from_deck()
+            return 'Drawing from deck'
 
     def choose_pick_up(self):
         user_input = UserInput.create_input(PlayerActionDialogs.pick_up_or_draw())
