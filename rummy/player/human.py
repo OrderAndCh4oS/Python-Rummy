@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from ansi_colours import AnsiColours as Colour
-
 from player.player_action_dialogs import PlayerActionDialogs
 from player.player_actions import PlayerActions
 from rummy.player.player import Player
-from ui.view import View
 from ui.user_input import UserInput
+from ui.view import View
 
 
 class Human(Player):
@@ -18,13 +16,11 @@ class Human(Player):
         else:
             PlayerActions.take_from_deck(self.hand, self.round.deck)
 
-    # Todo: Remove render, return string
     def show_turn_start(self):
-        View.render(View.template_turn_start(self))
+        return View.template_turn_start(self)
 
-    # Todo: Remove render, return string
     def show_turn_end(self):
-        View.render(View.template_player_turn_end(self))
+        return View.template_player_turn_end(self)
 
     def choose_pick_up(self):
         user_input = UserInput.create_input(PlayerActionDialogs.pick_up_or_draw())
@@ -47,5 +43,9 @@ class Human(Player):
                     continue
             else:
                 user_input = UserInput.create_input(PlayerActionDialogs.choose_discard())
-
         PlayerActions.discard(user_input, self.hand, self.round.deck)
+
+        return self.show_discard()
+
+    def show_discard(self):
+        return 'Discarded: %s' % self.round.deck.inspect_discard()

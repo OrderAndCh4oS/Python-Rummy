@@ -1,7 +1,4 @@
 ${light_grey}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${colour_end}
-
-Current Score: ${blue}$current_score${colour_end}
-Possible Hand Scores: ${blue}$scores${colour_end}
-Min Score: ${blue}$min_score${colour_end}
-
+Discarding: ${discard}
+Hand Score: ${green}${score}${colour_end}
 ${light_grey}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${colour_end}

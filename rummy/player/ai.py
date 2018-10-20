@@ -1,50 +1,51 @@
 # -*- coding: utf-8 -*-
 from random import choice
 
-from ui.view import View
+from player.player_actions import PlayerActions
 from rummy.player.player import Player
+from ui.view import View
 
 
 class AI(Player):
 
-    # ToDo: Combine views to return single string
     def show_turn_start(self):
+        output = ''
         if self.ai_only:
-            View.render(View.template_turn_start(self))
+            output += View.template_turn_start(self)
         else:
-            View.render(View.template_ai_turn_start(self))
-        View.render(View.template_ai_thought(self, 'Choosing pick up'))
+            output += View.template_ai_turn_start(self)
+        output += View.template_ai_thought(self, 'Choosing pick up')
+        return output
 
-    # ToDo: Combine views to return single string
     def show_turn_end(self):
+        output = ''
         if self.ai_only:
-            View.render(View.template_ai_turn_end(self))
-        View.render(View.template_ai_thought(self, 'Choosing card to discard'))
+            output += View.template_ai_turn_end(self)
+        output += View.template_ai_thought(self, 'Choosing card to discard')
+        return output
 
     def choose_to_discard_or_pick_up(self):
-        if self.round.deck.has_discard():
-            self.choose_pick_up()
-        else:
-            self.hand.draw_card(self.round.deck.take_card())
-
-    def choose_pick_up(self):
         output = ''
-        current_score = self.hand.get_score()
-        scores = self.melds.find_discard_scores(self.hand.get_hand(), self.round.deck.inspect_discard())
-        self.show_ai_data(current_score, scores)
-        if min(scores) < current_score - 4 or min(scores) <= 10:
-            View.render(View.template_ai_thought(self, 'Drawing from discard'))
-            self.hand.draw_card(self.round.deck.take_discard())
+        if self.round.deck.has_discard():
+            current_score = self.hand.get_score()
+            scores = self.melds.find_discard_scores(self.hand.get_hand(), self.round.deck.inspect_discard())
+            if self.ai_only:
+                output += View.template_ai_discard_data(current_score, scores)
+            output += self.choose_pickup(current_score, scores)
         else:
-            View.render(View.template_ai_thought(self, 'Drawing from deck'))
-            self.hand.draw_card(self.round.deck.take_card())
+            PlayerActions.take_from_deck(self.hand, self.round.deck)
+            output += View.template_ai_thought(self, 'Drawing from deck')
+        return output
 
-    def show_ai_data(self, current_score, scores):
-        if self.ai_only:
-            output = ''
-            output += ('Current Score: ', current_score)
-            View.render('Possible Hand Scores: ', scores)
-            View.render('Min Score: ', min(scores))
+    def choose_pickup(self, current_score, scores):
+        output = ''
+        if min(scores) < current_score - 4 or min(scores) <= 10:
+            PlayerActions.take_from_discard(self.hand, self.round.deck)
+            output += View.template_ai_thought(self, 'Drawing from discard')
+        else:
+            PlayerActions.take_from_deck(self.hand, self.round.deck)
+            output += View.template_ai_thought(self, 'Drawing from deck')
+        return output
 
     def discard_or_knock(self):
         scores = self.melds.find_discard_scores(self.hand.get_hand())
@@ -57,7 +58,13 @@ class AI(Player):
         else:
             discard = scores.index(score)
         discard = self.hand.discard_card(discard)
-        if self.ai_only:
-            View.render('Discarding: ', discard)
-            View.render('Hand Score: ', score)
         self.round.deck.discard_card(discard)
+
+        return self.show_discard()
+
+    def show_discard(self):
+        output = ''
+        if self.ai_only:
+            output += View.template_ai_hand_data(self.round.deck.inspect_discard(), self.hand.get_score())
+        output += 'Discarded: %s' % self.round.deck.inspect_discard()
+        return output

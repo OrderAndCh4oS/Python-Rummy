@@ -25,10 +25,10 @@ class Player(metaclass=ABCMeta):
         self.round = game_round
         self.ai_only = ai_only
         self.has_someone_knocked()
-        self.show_turn_start()
-        self.choose_to_discard_or_pick_up()
-        self.show_turn_end()
-        self.discard_or_knock()
+        View.render(self.show_turn_start())
+        View.render(self.choose_to_discard_or_pick_up())
+        View.render(self.show_turn_end())
+        View.render(self.discard_or_knock())
 
     def get_name(self):
         return str(self)
