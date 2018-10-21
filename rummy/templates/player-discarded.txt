@@ -1,0 +1,2 @@
+${light_grey}.............................${colour_end}
+Discarded: $discard

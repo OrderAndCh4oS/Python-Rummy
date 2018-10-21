@@ -66,6 +66,13 @@ class View:
         )
 
     @staticmethod
+    def template_player_discarded(discard):
+        return TextTemplate.render(
+            TEMPLATE_PATH + '/player-discarded.txt',
+            discard=discard
+        )
+
+    @staticmethod
     def template_ai_discard_data(current_score, scores):
         return TextTemplate.render(
             TEMPLATE_PATH + '/ai-discard-data.txt',
@@ -75,10 +82,9 @@ class View:
         )
 
     @staticmethod
-    def template_ai_hand_data(discard, score):
+    def template_ai_hand_data(score):
         return TextTemplate.render(
             TEMPLATE_PATH + '/ai-hand-data.txt',
-            discard=discard,
             score=str(score)
         )
 

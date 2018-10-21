@@ -14,6 +14,9 @@ class Human(Player):
     def show_turn_end(self):
         return View.template_player_turn_end(self)
 
+    def show_discard(self):
+        return View.template_player_discarded(self.round.deck.inspect_discard())
+
     def draw_from_deck_or_discard_pile(self):
         if self.round.deck.has_discard():
             return self._choose_pick_up()
@@ -44,6 +47,3 @@ class Human(Player):
             else:
                 user_input = UserInput.create_input(PlayerActionDialogs.choose_discard())
         return user_input
-
-    def show_discard(self):
-        return 'Discarded: %s' % self.round.deck.inspect_discard()
