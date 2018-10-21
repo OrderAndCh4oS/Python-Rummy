@@ -5,12 +5,12 @@ import os
 from time import sleep
 
 import colorama
-from ansi_colours import AnsiColours as Colour
 
 from rummy.game.round import Round
 from rummy.game.score import Score
 from rummy.game.setup_players import SetupPlayers
 from rummy.player.human import Human
+from ui.menu_action_dialog import MenuActionDialog
 from ui.user_input import UserInput
 from ui.view import View
 
@@ -58,10 +58,7 @@ class Play:
             self.play_game()
 
     def confirm_start_new_round(self):
-        View.render("\nReady %s?" % self.players[self.round.current_player])
-        ready = ''
-        while ready.lower() != 'y':
-            ready = UserInput.get_input("Enter " + Colour.green('y') + " when you are ready for the next round: ")
+        UserInput.create_input(MenuActionDialog.next_round())
 
     def end_round(self):
         self.score.update_player_scores()

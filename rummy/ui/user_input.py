@@ -15,11 +15,11 @@ class UserInput:
         while True:
             for action in action_collection.actions:
                 if isinstance(action.key, range):
-                    output += "%s: %s\n" % (', '.join([Colour.green(str(key)) for key in action.key]), str(action))
+                    output += "%s: %s\n" % (str(action), ', '.join([Colour.green(str(key)) for key in action.key]))
                     keys.extend([str(key) for key in action.key])
                 else:
-                    output += "%s: %s\n" % (Colour.green(action.key), str(action))
-                    keys.append(action.key)
+                    output += "%s: %s\n" % (str(action), Colour.green(action.key))
+                    keys.append(str(action.key))
             View.render(output)
             while user_input not in keys:
                 user_input = UserInput.get_input('Select an option: ')

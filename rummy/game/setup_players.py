@@ -2,7 +2,7 @@
 
 from rummy.player.ai import AI
 from rummy.player.human import Human
-from rummy.ui.validator import Validator
+from rummy.ui.menu_action_dialog import MenuActionDialog
 from rummy.ui.user_input import UserInput
 
 
@@ -15,35 +15,17 @@ class SetupPlayers:
         self.choose_players()
 
     def choose_players(self):
-        number_of_players = -1
-        while number_of_players not in [i for i in range(0, 5)]:
-            number_of_players = UserInput.get_input("Enter number of players (0-4)? ")
-            number_of_players = Validator.valid_number_check(number_of_players)
-        if number_of_players in [0, 1]:
-            self.setup_ai(number_of_players)
-        self.number_of_players = number_of_players
-
-    def setup_ai(self, number_of_players):
-        if number_of_players == 0:
-            self.choose_number_of_ai_opponents(4)
-        elif number_of_players == 1:
-            self.choose_number_of_ai_opponents(3)
-
-    def choose_number_of_ai_opponents(self, max_opponents):
-        number_of_opponents = -1
-        while number_of_opponents not in [i for i in range(max_opponents - 2, max_opponents + 1)]:
-            number_of_opponents = UserInput.get_input(
-                "Enter number of opponents ({0}-{1})? ".format(max_opponents - 2, max_opponents))
-            number_of_opponents = Validator.valid_number_check(number_of_opponents)
-        self.number_of_opponents = number_of_opponents
+        self.number_of_players = UserInput.create_input(MenuActionDialog.human_players())
+        if self.number_of_players in ['0', '1']:
+            self.number_of_opponents = UserInput.create_input(MenuActionDialog.ai_players(self.number_of_players))
 
     def create_players(self):
         i = 0
         players = []
-        for j in range(self.number_of_players):
+        for j in range(int(self.number_of_players)):
             i += 1
             players.append(Human(i))
-        for j in range(self.number_of_opponents):
+        for j in range(int(self.number_of_opponents)):
             i += 1
             players.append(AI(i))
         return players

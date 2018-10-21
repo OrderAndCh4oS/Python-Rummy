@@ -1,4 +1,3 @@
 ${light_grey}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${colour_end}
-Discarding: ${discard}
 Hand Score: ${green}${score}${colour_end}
 ${light_grey}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${colour_end}

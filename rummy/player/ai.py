@@ -65,6 +65,6 @@ class AI(Player):
     def show_discard(self):
         output = ''
         if self.ai_only:
-            output += View.template_ai_hand_data(self.round.deck.inspect_discard(), self.hand.get_score())
-        output += 'Discarded: %s' % self.round.deck.inspect_discard()
+            output += View.template_ai_hand_data(self.hand.get_score())
+        output += View.template_player_discarded(self.round.deck.inspect_discard())
         return output
