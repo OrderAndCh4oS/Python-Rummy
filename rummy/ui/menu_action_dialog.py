@@ -3,7 +3,7 @@ from ui.action_collection import ActionCollection
 from ui.user_input import UserInput
 
 
-class MenuActionDialogs:
+class MenuActionDialog:
 
     @staticmethod
     def human_players():
@@ -20,6 +20,12 @@ class MenuActionDialogs:
             ), 'Choose number of AI players'),
         )
 
+    @staticmethod
+    def next_round():
+        return ActionCollection(
+            Action('y', 'Ready for the next round'),
+        )
+
 
 if __name__ == '__main__':
-    UserInput.create_input(MenuActionDialogs.ai_players(UserInput.create_input(MenuActionDialogs.human_players())))
+    UserInput.create_input(MenuActionDialog.ai_players(UserInput.create_input(MenuActionDialog.human_players())))

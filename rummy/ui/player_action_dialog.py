@@ -3,7 +3,7 @@ from ui.action_collection import ActionCollection
 from ui.user_input import UserInput
 
 
-class PlayerActionDialogs:
+class PlayerActionDialog:
 
     @staticmethod
     def pick_up_or_draw():
@@ -27,5 +27,5 @@ class PlayerActionDialogs:
 
 
 if __name__ == '__main__':
-    UserInput.create_input(PlayerActionDialogs.choose_discard())
-    UserInput.create_input(PlayerActionDialogs.choose_discard_or_knock())
+    UserInput.create_input(PlayerActionDialog.choose_discard())
+    UserInput.create_input(PlayerActionDialog.choose_discard_or_knock())

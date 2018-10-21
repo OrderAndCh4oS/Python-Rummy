@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from game.menu_action_dialogs import MenuActionDialogs
 from rummy.player.ai import AI
 from rummy.player.human import Human
+from ui.menu_action_dialog import MenuActionDialog
 from ui.user_input import UserInput
 
 
@@ -14,9 +14,9 @@ class SetupPlayers:
         self.choose_players()
 
     def choose_players(self):
-        self.number_of_players = UserInput.create_input(MenuActionDialogs.human_players())
+        self.number_of_players = UserInput.create_input(MenuActionDialog.human_players())
         if self.number_of_players in ['0', '1']:
-            self.number_of_opponents = UserInput.create_input(MenuActionDialogs.ai_players(self.number_of_players))
+            self.number_of_opponents = UserInput.create_input(MenuActionDialog.ai_players(self.number_of_players))
 
     def create_players(self):
         i = 0
