@@ -10,23 +10,24 @@ from rummy.game.melds import Melds
 class TestAI:
     # This test suite leaves out functions that primarily serve to render templates/text
 
-    def test_choose_to_discard_or_pick_up(self, mocker):
+    def test_draw_from_deck_or_discard_pile(self, mocker):
+        # TODO: Rewrite this test for new action separation
         mocker.patch('builtins.print')
-        mocker.spy(AI, 'choose_pick_up')
+        mocker.spy(AI, '_choose_pick_up')
         mocker.spy(Hand, 'draw_card')
         ai = AI(1)
         ai.round = mocker.MagicMock()
         ai.round.deck.take_card.return_value = Card("A", "♥")
         ai.round.deck.has_discard.return_value = True
-        ai.choose_to_discard_or_pick_up()
-        assert AI.choose_pick_up.call_count == 1
+        ai.draw_from_deck_or_discard_pile()
+        assert AI._choose_pick_up.call_count == 1
         assert Hand.draw_card.call_count == 1
         ai.round.deck.has_discard.return_value = False
-        ai.choose_to_discard_or_pick_up()
-        assert AI.choose_pick_up.call_count == 1
+        ai.draw_from_deck_or_discard_pile()
+        assert AI._choose_pick_up.call_count == 1
         assert Hand.draw_card.call_count == 2
 
-    def test_choose_pick_up(self, mocker):
+    def test__choose_pick_up(self, mocker):
         mocker.patch('builtins.print')
         mocker.patch.object(Hand, 'get_score', return_value=45)
         mocker.patch.object(Hand, 'draw_card')
@@ -36,17 +37,17 @@ class TestAI:
         ai.round.deck.take_discard.return_value = Card("A", "♥")
         ai.round.deck.take_card.return_value = Card("2", "♥")
         # Test for min(scores) < current score, but > 10
-        ai.choose_pick_up()
+        ai._choose_pickup(ai.hand.get_score(), ai.hand.melds.find_discard_scores(ai.hand.hand))
         assert ai.round.deck.take_discard.call_count == 1
         assert ai.round.deck.take_card.call_count == 0
         assert ai.hand.draw_card.call_count == 1
         # Test for min(scores) < current_score - 4 and <=10
-        ai.choose_pick_up()
+        ai._choose_pickup(ai.hand.get_score(), ai.hand.melds.find_discard_scores(ai.hand.hand))
         assert ai.round.deck.take_discard.call_count == 2
         assert ai.round.deck.take_card.call_count == 0
         assert ai.hand.draw_card.call_count == 2
         # Test for min(scores) >= current_score - 4 and > 10
-        ai.choose_pick_up()
+        ai._choose_pickup(ai.hand.get_score(), ai.hand.melds.find_discard_scores(ai.hand.hand))
         assert ai.round.deck.take_discard.call_count == 2
         assert ai.round.deck.take_card.call_count == 1
         assert ai.hand.draw_card.call_count == 3
