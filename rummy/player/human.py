@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from player.player_action_dialogs import PlayerActionDialogs
+from rummy.player.player_action_dialogs import PlayerActionDialogs
 from rummy.player.player import Player
-from ui.user_input import UserInput
-from ui.view import View
+from rummy.ui.user_input import UserInput
+from rummy.ui.view import View
 
 
 class Human(Player):

@@ -4,7 +4,7 @@ from abc import ABCMeta, abstractmethod
 
 from rummy.game.melds import Melds
 from rummy.player.hand import Hand
-from ui.view import View
+from rummy.ui.view import View
 
 
 class Player(metaclass=ABCMeta):
