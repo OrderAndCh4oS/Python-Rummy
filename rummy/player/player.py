@@ -21,9 +21,8 @@ class Player(metaclass=ABCMeta):
     def __str__(self):
         return "Player %i" % self.num
 
-    def turn(self, game_round, ai_only):
+    def turn(self, game_round):
         self.round = game_round
-        self.ai_only = ai_only
         self.has_someone_knocked()
         # Todo: the methods used below should only return the data,
         # Todo: the data should be passed to the render method with the view to use.

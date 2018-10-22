@@ -1,10 +1,10 @@
 # coding=utf-8
 
-from rummy.ui.view import View
-from rummy.player.human import Human
-from rummy.player.ai import AI
 from rummy.deck.card import Card
 from rummy.game.score import Score
+from rummy.player.ai import AI
+from rummy.player.human import Human
+from rummy.ui.view import View
 
 
 class TestView:
@@ -52,7 +52,7 @@ class TestView:
         assert output_message == expected
 
     def test_render_ai_thought(self, mocker):
-        ai = AI(2)
+        ai = AI(2, False)
         expected = "Drawing from deck\nPlayer is thinking...\n"
         output_message = View.template_ai_thought(ai, 'Drawing from deck')
         assert output_message == expected
@@ -61,7 +61,7 @@ class TestView:
         assert output_message == expected
 
     def test_render_ai_turn_start(self, mocker):
-        ai = AI(2)
+        ai = AI(2, False)
         ai.round = mocker.MagicMock()
         ai.round.turn = 2
         ai.round.current_player = 1
@@ -76,7 +76,7 @@ class TestView:
         assert output_message == expected
 
     def test_render_ai_turn_end(self):
-        ai = AI(2)
+        ai = AI(2, False)
         ai.hand.hand = [Card(x, y) for x, y in [("A", "H"), ("A", "S"), ("A", "C"), ("A", "D")]]
         expected = "\x1b[0;37m.............................\x1b[0m\n" \
                    "A♠, A\x1b[0;31m♥\x1b[0m, A\x1b[0;31m♦\x1b[0m, A♣\n" \

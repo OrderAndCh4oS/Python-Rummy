@@ -21,10 +21,11 @@ class SetupPlayers:
     def create_players():
         i = 0
         SetupPlayers.players = []
+        ai_only = True if SetupPlayers.number_of_players is 0 else False
         for j in range(int(SetupPlayers.number_of_players)):
             i += 1
             SetupPlayers.players.append(Human(i))
         for j in range(int(SetupPlayers.number_of_opponents)):
             i += 1
-            SetupPlayers.players.append(AI(i))
+            SetupPlayers.players.append(AI(i, ai_only))
         return SetupPlayers.players

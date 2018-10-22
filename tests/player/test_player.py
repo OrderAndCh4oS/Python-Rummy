@@ -1,10 +1,9 @@
 # coding=utf-8
 
-from rummy.player.player import Player
-from rummy.player.hand import Hand
 from rummy.deck.card import Card
-from rummy.game.round import Round
 from rummy.game.melds import Melds
+from rummy.player.hand import Hand
+from rummy.player.player import Player
 
 
 class DummyPlayer(Player):
@@ -38,7 +37,7 @@ class TestPlayer:
         mocker.spy(DummyPlayer, 'discard_or_knock')
         round_mock = mocker.MagicMock()
         player = DummyPlayer(1)
-        player.turn(round_mock, False)
+        player.turn(round_mock)
         assert player.round is not None
         assert not player.ai_only
         assert isinstance(player.hand, Hand)

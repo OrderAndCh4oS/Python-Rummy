@@ -40,7 +40,7 @@ class Play:
         while self.round.last_turn != len(self.players):
             self.round.prepare_turn()
             player = self.players[self.round.current_player]
-            player.turn(self.round, self.ai_only)
+            player.turn(self.round)
             self.round.end_turn()
         self.end_round()
         sleep(1.2)

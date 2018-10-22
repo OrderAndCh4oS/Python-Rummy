@@ -1,10 +1,10 @@
 # coding=utf-8
 
-from rummy.player.ai import AI
-from rummy.player.hand import Hand
 from rummy.deck.card import Card
 from rummy.deck.deck import Deck
 from rummy.game.melds import Melds
+from rummy.player.ai import AI
+from rummy.player.hand import Hand
 
 
 class TestAI:
@@ -15,7 +15,7 @@ class TestAI:
         mocker.patch('builtins.print')
         mocker.spy(AI, '_choose_pickup')
         mocker.spy(Hand, 'draw_card')
-        ai = AI(1)
+        ai = AI(1, False)
         ai.round = mocker.MagicMock()
         ai.round.deck.take_card.return_value = Card("A", "♥")
         ai.round.deck.has_discard.return_value = True
@@ -33,7 +33,7 @@ class TestAI:
         mocker.patch.object(Hand, 'get_score', return_value=45)
         mocker.patch.object(Hand, 'draw_card')
         mocker.patch.object(Melds, 'find_discard_scores', side_effect=[[50, 60, 30], [12, 9, 15], [70]])
-        ai = AI(1)
+        ai = AI(1, False)
         ai.round = mocker.MagicMock()
         ai.round.deck.take_discard.return_value = Card("A", "♥")
         ai.round.deck.take_card.return_value = Card("2", "♥")
@@ -63,7 +63,7 @@ class TestAI:
         mocker.patch.object(Melds, 'find_discard_scores', side_effect=[[10, 8, 8], [11]])
         mocker.patch.object(Hand, 'discard_card')
         mocker.patch.object(Deck, 'discard_card')
-        ai = AI(1)
+        ai = AI(1, False)
         ai.round = mocker.MagicMock()
         ai.hand.hand = [Card("A", "♥"), Card("2", "♥")]
         ai.round.knocked = False

@@ -7,6 +7,10 @@ from rummy.ui.view import View
 
 class AI(Player):
 
+    def __init__(self, num, ai_only=False):
+        super().__init__(num)
+        self.ai_only = ai_only
+
     def show_turn_start(self):
         output = ''
         if self.ai_only:
