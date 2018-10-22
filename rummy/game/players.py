@@ -15,7 +15,7 @@ class Players:
     def choose_players(self):
         self.number_of_players = int(UserInput.create_input(MenuActionDialog.human_players()))
         for _ in range(int(self.number_of_players)):
-            self.players.append(Human(len(self.players)))
+            self.players.append(Human(len(self.players) + 1))
 
     def choose_opponents(self):
         if self.number_of_players in [-1, 0, 1]:
@@ -23,7 +23,7 @@ class Players:
                 UserInput.create_input(MenuActionDialog.ai_players(self.number_of_players)))
             ai_only = self.is_ai_only()
             for _ in range(int(self.number_of_opponents)):
-                self.players.append(AI(len(self.players), ai_only))
+                self.players.append(AI(len(self.players) + 1, ai_only))
 
     def is_ai_only(self):
         return True if self.number_of_players is 0 else False

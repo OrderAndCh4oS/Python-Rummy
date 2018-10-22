@@ -42,21 +42,27 @@ class Play:
             self.round.prepare_turn()
             player = self.players[self.round.current_player]
             player.turn(self.round)
+            View.render(player.show_turn_start())
+            View.render(player.has_someone_knocked())
+            View.render(player.draw_from_deck_or_discard_pile())
+            View.render(player.show_turn_end())
+            player.discard_or_knock()
+            View.render(player.show_discard())
             self.round.end_turn()
-        self.end_round()
+        View.render(self.end_round())
         sleep(1.2)
-        self.start_new_round_or_end_game()
-
-    def start_new_round_or_end_game(self):
         if self.score.is_end_of_game():
-            self.score.end_game()
+            View.render(self.score.show_winners())
         else:
-            self.round.rotate_first_player()
-            if not self.ai_only:
-                self.confirm_start_new_round()
-            self.round.prepare_new_round()
-            self.round.deal_cards(self.players)
-            self.play_game()
+            self.start_new_round()
+
+    def start_new_round(self):
+        self.round.rotate_first_player()
+        if not self.ai_only:
+            self.confirm_start_new_round()
+        self.round.prepare_new_round()
+        self.round.deal_cards(self.players)
+        self.play_game()
 
     @staticmethod
     def confirm_start_new_round():
@@ -64,9 +70,8 @@ class Play:
 
     def end_round(self):
         self.score.update_player_scores()
-        View.render(
-            View.template_this_round_score(self.score.get_end_of_round_scores(), self.score.get_current_game_scores())
-        )
+        return View.template_this_round_score(self.score.get_end_of_round_scores(),
+                                              self.score.get_current_game_scores())
 
 
 # start game
