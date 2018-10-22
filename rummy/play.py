@@ -10,16 +10,16 @@ from rummy.game.round import Round
 from rummy.game.score import Score
 from rummy.game.setup_players import SetupPlayers
 from rummy.player.human import Human
-from ui.menu_action_dialog import MenuActionDialog
-from ui.user_input import UserInput
-from ui.view import View
+from rummy.ui.menu_action_dialog import MenuActionDialog
+from rummy.ui.user_input import UserInput
+from rummy.ui.view import View
 
 
 class Play:
     def __init__(self):
         self.colorama()
-        setup = SetupPlayers()
-        self.players = setup.create_players()
+        SetupPlayers.choose_players()
+        self.players = SetupPlayers.create_players()
         self.ai_only = not any(isinstance(x, Human) for x in self.players)
         self.score = Score(self.players)
         self.round = Round(self.players)

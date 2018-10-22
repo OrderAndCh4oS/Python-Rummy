@@ -11,21 +11,20 @@ class SetupPlayers:
     number_of_players = -1
     number_of_opponents = -1
 
-    def __init__(self):
-        self.choose_players()
+    @staticmethod
+    def choose_players():
+        SetupPlayers.number_of_players = int(UserInput.create_input(MenuActionDialog.human_players()))
+        if SetupPlayers.number_of_players in [0, 1]:
+            SetupPlayers.number_of_opponents = int(UserInput.create_input(MenuActionDialog.ai_players(SetupPlayers.number_of_players)))
 
-    def choose_players(self):
-        self.number_of_players = UserInput.create_input(MenuActionDialog.human_players())
-        if self.number_of_players in ['0', '1']:
-            self.number_of_opponents = UserInput.create_input(MenuActionDialog.ai_players(self.number_of_players))
-
-    def create_players(self):
+    @staticmethod
+    def create_players():
         i = 0
-        players = []
-        for j in range(int(self.number_of_players)):
+        SetupPlayers.players = []
+        for j in range(int(SetupPlayers.number_of_players)):
             i += 1
-            players.append(Human(i))
-        for j in range(int(self.number_of_opponents)):
+            SetupPlayers.players.append(Human(i))
+        for j in range(int(SetupPlayers.number_of_opponents)):
             i += 1
-            players.append(AI(i))
-        return players
+            SetupPlayers.players.append(AI(i))
+        return SetupPlayers.players
