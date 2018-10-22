@@ -2,8 +2,8 @@
 
 from ansi_colours import AnsiColours as Colour
 
-from ui.action_collection import ActionCollection
-from ui.view import View
+from rummy.ui.action_collection import ActionCollection
+from rummy.ui.view import View
 
 
 class UserInput:

@@ -4,13 +4,13 @@ from rummy.deck.card import Card
 from rummy.game.melds import Melds
 from rummy.player.hand import Hand
 from rummy.player.human import Human
-from ui.user_input import UserInput
+from rummy.ui.user_input import UserInput
 
 
 class TestHuman:
 
-    def test_choose_to_discard_or_pick_up(self, mocker):
-        # When input and view methods are separated, these two mocks can likely be removed.
+    def test_draw_from_deck_or_discard_pile(self, mocker):
+        # TODO: Rewrite this test for new action separation
         mocker.patch('builtins.print')
         mocker.patch('builtins.input', return_value='p')
         human = Human(1)
@@ -27,9 +27,9 @@ class TestHuman:
         assert Human._choose_pick_up.call_count == 1
         assert Hand.draw_card.call_count == 2
 
-    def test_choose_pick_up(self, mocker):
+    def test__choose_pick_up(self, mocker):
         human = Human(1)
-        mocker.patch.object(UserInput, 'get_pick_up_input', side_effect=['p', 'd'])
+        mocker.patch.object(UserInput, 'create_input', side_effect=['p', 'd'])
         human.round = mocker.MagicMock()
         mocker.patch.object(human.round.deck, 'take_card', return_value=Card("A", "♥"))
         mocker.patch.object(human.round.deck, 'take_discard', return_value=Card("2", "♥"))

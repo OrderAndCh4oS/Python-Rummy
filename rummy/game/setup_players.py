@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+
 from rummy.player.ai import AI
 from rummy.player.human import Human
-from ui.menu_action_dialog import MenuActionDialog
-from ui.user_input import UserInput
+from rummy.ui.menu_action_dialog import MenuActionDialog
+from rummy.ui.user_input import UserInput
 
 
 class SetupPlayers:
