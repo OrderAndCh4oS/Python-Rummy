@@ -1,6 +1,6 @@
-from ui.action import Action
-from ui.action_collection import ActionCollection
-from ui.user_input import UserInput
+from rummy.ui.action import Action
+from rummy.ui.action_collection import ActionCollection
+from rummy.ui.user_input import UserInput
 
 
 class MenuActionDialog:

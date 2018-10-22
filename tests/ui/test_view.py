@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from ui.view import View
+from rummy.ui.view import View
 from rummy.player.human import Human
 from rummy.player.ai import AI
 from rummy.deck.card import Card
