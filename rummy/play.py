@@ -6,10 +6,9 @@ from time import sleep
 
 import colorama
 
+from rummy.game.players import Players
 from rummy.game.round import Round
 from rummy.game.score import Score
-from rummy.game.setup_players import SetupPlayers
-from rummy.player.human import Human
 from rummy.ui.menu_action_dialog import MenuActionDialog
 from rummy.ui.user_input import UserInput
 from rummy.ui.view import View
@@ -18,9 +17,11 @@ from rummy.ui.view import View
 class Play:
     def __init__(self):
         self.colorama()
-        SetupPlayers.choose_players()
-        self.players = SetupPlayers.create_players()
-        self.ai_only = not any(isinstance(x, Human) for x in self.players)
+        players = Players()
+        players.choose_players()
+        players.choose_opponents()
+        self.players = players.get_players()
+        self.ai_only = players.is_ai_only()
         self.score = Score(self.players)
         self.round = Round(self.players)
         self.round.deal_cards(self.players)
@@ -57,7 +58,8 @@ class Play:
             self.round.deal_cards(self.players)
             self.play_game()
 
-    def confirm_start_new_round(self):
+    @staticmethod
+    def confirm_start_new_round():
         UserInput.create_input(MenuActionDialog.next_round())
 
     def end_round(self):
