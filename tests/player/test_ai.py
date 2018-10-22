@@ -13,21 +13,22 @@ class TestAI:
     def test_draw_from_deck_or_discard_pile(self, mocker):
         # TODO: Rewrite this test for new action separation
         mocker.patch('builtins.print')
-        mocker.spy(AI, '_choose_pick_up')
+        mocker.spy(AI, '_choose_pickup')
         mocker.spy(Hand, 'draw_card')
         ai = AI(1)
         ai.round = mocker.MagicMock()
         ai.round.deck.take_card.return_value = Card("A", "♥")
         ai.round.deck.has_discard.return_value = True
         ai.draw_from_deck_or_discard_pile()
-        assert AI._choose_pick_up.call_count == 1
+        assert AI._choose_pickup.call_count == 1
         assert Hand.draw_card.call_count == 1
         ai.round.deck.has_discard.return_value = False
         ai.draw_from_deck_or_discard_pile()
-        assert AI._choose_pick_up.call_count == 1
+        assert AI._choose_pickup.call_count == 1
         assert Hand.draw_card.call_count == 2
 
     def test__choose_pick_up(self, mocker):
+        # TODO: Rewrite this test for new action separation
         mocker.patch('builtins.print')
         mocker.patch.object(Hand, 'get_score', return_value=45)
         mocker.patch.object(Hand, 'draw_card')
@@ -53,6 +54,7 @@ class TestAI:
         assert ai.hand.draw_card.call_count == 3
 
     def test_discard_or_knock(self, mocker):
+        # TODO: Rewrite this test for new action separation
         mocker.patch('builtins.print')
         # Mock random.choice to assure that the last item from our array of scores is chosen,
         # to make this test predictable/consistent

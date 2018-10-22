@@ -10,24 +10,21 @@ from rummy.ui.user_input import UserInput
 class TestHuman:
 
     def test_draw_from_deck_or_discard_pile(self, mocker):
-        # TODO: Rewrite this test for new action separation
-        mocker.patch('builtins.print')
-        mocker.patch('builtins.input', return_value='p')
+        mocker.patch.object(Human, '_choose_pick_up')
+        mocker.patch.object(Human, 'take_from_deck')
         human = Human(1)
         human.round = mocker.MagicMock()
-        mocker.patch.object(Hand, 'draw_card', return_value=Card("A", "♥"))
-        mocker.spy(Human, 'choose_pick_up')
-        mocker.spy(Hand, 'draw_card')
-        human.round.deck.has_discard.return_value = True
-        human.choose_to_discard_or_pick_up()
-        assert Human._choose_pick_up.call_count == 1
-        assert Hand.draw_card.call_count == 1
         human.round.deck.has_discard.return_value = False
-        human.choose_to_discard_or_pick_up()
-        assert Human._choose_pick_up.call_count == 1
-        assert Hand.draw_card.call_count == 2
+        human.draw_from_deck_or_discard_pile()
+        assert human._choose_pick_up.call_count == 0
+        assert human.take_from_deck.call_count == 1
+        human.round.deck.has_discard.return_value = True
+        human.draw_from_deck_or_discard_pile()
+        assert human._choose_pick_up.call_count == 1
+        assert human.take_from_deck.call_count == 1
 
     def test__choose_pick_up(self, mocker):
+        # TODO: Rewrite this test for new action separation
         human = Human(1)
         mocker.patch.object(UserInput, 'create_input', side_effect=['p', 'd'])
         human.round = mocker.MagicMock()
@@ -43,6 +40,7 @@ class TestHuman:
         assert human.round.deck.take_discard.call_count == 1
 
     def test_discard_or_knock(self, mocker):
+        # TODO: Rewrite this test for new action separation
         mocker.patch('builtins.print')
         mocker.patch('builtins.input', side_effect=['k', '1', '3', '5', '3', '4'])
         mocker.patch.object(Melds, 'find_discard_scores', side_effect=[[9, 12], [9, 12], [9, 12], [11, 12], [11, 12]])
