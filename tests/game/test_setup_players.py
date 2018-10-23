@@ -1,5 +1,5 @@
 # coding=utf-8
-from game.players import Players
+from rummy.game.players import Players
 from rummy.ui.user_input import UserInput
 
 
