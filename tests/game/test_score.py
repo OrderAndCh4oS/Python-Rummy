@@ -1,8 +1,8 @@
 # coding=utf-8
 
 from rummy.game.score import Score
-from rummy.player.player import Player
 from rummy.player.human import Human
+from rummy.player.player import Player
 
 
 class TestScore:
@@ -29,14 +29,13 @@ class TestScore:
         mocker.patch.object(Player, 'get_game_score', side_effect=[80, 85, 90, 99])
         assert not score.is_end_of_game()
 
+    # ToDo: End game is now handled in Play, not sure how to fix this test
     def test_end_game(self, mocker):
         mocker.patch('builtins.print')
         mocker.patch.object(Score, 'find_lowest_scores', side_effect=[[Human(1)], [Human(1), Human(2)]])
         score = Score([Human(1), Human(2)])
-        score.end_game()
-        print.assert_called_with('\x1b[0;32mPlayer 1 is the Winner!!\x1b[0m')
-        score.end_game()
-        print.assert_called_with('\x1b[0;32mPlayer 1, Player 2 are joint winners!\x1b[0m')
+        assert '\x1b[0;32mPlayer 1 is the Winner!!\x1b[0m' == score.show_winners()
+        assert '\x1b[0;32mPlayer 1, Player 2 are joint winners!\x1b[0m' == score.show_winners()
 
     def test_find_lowest_scores(self, mocker):
         human1 = mocker.MagicMock()
