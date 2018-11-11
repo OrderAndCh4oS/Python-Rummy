@@ -25,5 +25,5 @@ setup(
     project_urls={
         'Order & Chaos Creative': 'https://orderandchaoscreative.com',
     },
-    python_requires='>=3.5'
+    python_requires='>=3.4'
 )
