@@ -2,7 +2,7 @@
 
 from ansi_colours import AnsiColours as Colour
 
-from ui.view import View
+from rummy.ui.view import View
 
 
 class Score:
@@ -28,12 +28,12 @@ class Score:
                 return True
         return False
 
-    def end_game(self):
+    def show_winners(self):
         winners = self.find_lowest_scores()
         if len(winners) == 1:
-            View.render(Colour.green("%s is the Winner!!" % winners[0]))
+            return Colour.green("%s is the Winner!!" % winners[0])
         else:
-            View.render(Colour.green(", ".join([str(w) for w in winners]) + " are joint winners!"))
+            return Colour.green(", ".join([str(w) for w in winners]) + " are joint winners!")
 
     def find_lowest_scores(self):
         lowest = []

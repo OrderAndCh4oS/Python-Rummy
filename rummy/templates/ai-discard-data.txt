@@ -1,0 +1,5 @@
+${light_grey}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${colour_end}
+Current Score: ${green}${current_score}${colour_end}
+Possible Hand Scores: ${green}${scores}${colour_end}
+Min Score: ${green}${min_score}${colour_end}
+${light_grey}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${colour_end}
