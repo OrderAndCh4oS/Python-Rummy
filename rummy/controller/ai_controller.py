@@ -70,7 +70,6 @@ class AiController:
             player.round.knocked = True
         discard = cls._choose_discard(player, score, scores)
         player.round.deck.discard_card(discard)
-        View.render('Discarded: %s' % discard)
 
     @staticmethod
     def _choose_discard(player, score, scores):

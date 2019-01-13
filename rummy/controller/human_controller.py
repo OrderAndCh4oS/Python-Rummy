@@ -48,7 +48,6 @@ class HumanController:
     @classmethod
     def discard_or_knock(cls, player):
         player.discard(cls._choose_discard(player))
-        View.render('Discarded')
 
     @staticmethod
     def _choose_discard(player):
