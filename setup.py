@@ -7,7 +7,7 @@ readme.close()
 
 setup(
     name='rummy',
-    version='1.2.0',
+    version='1.2.1',
     url='https://github.com/sarcoma/Python-Rummy',
     license='MIT',
     author='sarcoma',
