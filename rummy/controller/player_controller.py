@@ -26,19 +26,9 @@ class PlayerController(metaclass=ABCMeta):
     def draw_card(cls, player):
         pass
 
-    @staticmethod
-    @abstractmethod
-    def _choose_pick_up(player):
-        pass
-
     @classmethod
     @abstractmethod
     def discard_or_knock(cls, player):
-        pass
-
-    @staticmethod
-    @abstractmethod
-    def _choose_discard(player):
         pass
 
     @staticmethod

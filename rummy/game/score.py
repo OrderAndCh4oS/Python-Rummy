@@ -2,7 +2,7 @@
 
 from ansi_colours import AnsiColours as Colour
 
-from rummy.ui.view import View
+from rummy.view.round_view import RoundView
 
 
 class Score:
@@ -15,7 +15,7 @@ class Score:
     def get_end_of_round_scores(self):
         output = ''
         for p in self.players:
-            output += View.template_end_of_round_scores(p)
+            output += RoundView.end_of_round_scores(p)
         return output
 
     def update_player_scores(self):

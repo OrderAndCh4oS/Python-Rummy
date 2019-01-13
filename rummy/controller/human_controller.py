@@ -1,31 +1,29 @@
-from rummy.player.human import Human
+from rummy.controller.player_controller import PlayerController
 from rummy.player.player import Player
 from rummy.ui.player_action_dialog import PlayerActionDialog
 from rummy.ui.user_input import UserInput
 from rummy.ui.view import View
+from rummy.view.human_view import HumanView
 
 
-class HumanController:
+class HumanController(PlayerController):
 
     @staticmethod
     def show_start_turn(player: Player):
-        if isinstance(player, Human):
-            View.render(View.template_turn_start(player))
+        View.render(HumanView.turn_start(player))
 
     @staticmethod
     def show_end_turn(player: Player):
-        if isinstance(player, Human):
-            View.render(View.template_player_turn_end(player))
+        View.render(HumanView.turn_end(player))
 
     @staticmethod
     def show_knocked(player):
         if player.has_someone_knocked():
-            View.render(View.prepare_template('/knocked.txt'))
+            View.render(HumanView.knocked())
 
     @staticmethod
     def show_discard(player: Player):
-        if isinstance(player, Human):
-            View.render(View.template_player_discarded(player.round.deck.inspect_discard()))
+        View.render(HumanView.discarded(player))
 
     @classmethod
     def draw_card(cls, player):

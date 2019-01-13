@@ -1,40 +1,42 @@
 from random import choice
 
+from rummy.controller.player_controller import PlayerController
 from rummy.player.player import Player
 from rummy.ui.view import View
+from rummy.view.ai_view import AiView
 
 
-class AiController:
+class AiController(PlayerController):
 
     @staticmethod
     def show_start_turn(player: Player):
         output = ''
         if player.ai_only:
-            output += View.template_turn_start(player)
+            output += AiView.turn_start(player)
         else:
-            output += View.template_ai_turn_start(player)
-        output += View.template_ai_thought(player, 'Choosing pick up')
+            output += AiView.turn_start(player)
+        output += AiView.thinking(player, 'Choosing pick up')
         View.render(output)
 
     @staticmethod
     def show_end_turn(player: Player):
         output = ''
         if player.ai_only:
-            output += View.template_ai_turn_end(player)
-        output += View.template_ai_thought(player, 'Choosing card to discard')
+            output += AiView.turn_end(player)
+        output += AiView.thinking(player, 'Choosing card to discard')
         View.render(output)
 
     @staticmethod
     def show_knocked(player):
         if player.has_someone_knocked():
-            View.render(View.prepare_template('/knocked.txt'))
+            View.render(AiView.knocked())
 
     @staticmethod
     def show_discard(player: Player):
         output = ''
         if player.ai_only:
-            output += View.template_ai_hand_data(player.hand.get_score())
-        output += View.template_player_discarded(player.round.deck.inspect_discard())
+            output += AiView.hand_data(player.hand.get_score())
+        output += AiView.discarded(player.round.deck.inspect_discard())
         View.render(output)
 
     @classmethod
@@ -44,11 +46,11 @@ class AiController:
             current_score = player.hand.get_score()
             scores = player.melds.find_discard_scores(player.hand.get_hand(), player.round.deck.inspect_discard())
             if player.ai_only:
-                output += View.template_ai_discard_data(current_score, scores)
+                output += AiView.discard_data(current_score, scores)
             output += cls._choose_pickup(player, current_score, scores)
         else:
             player.take_from_deck()
-            output += View.template_ai_thought(player, 'Drawing from deck')
+            output += AiView.thinking(player, 'Drawing from deck')
         View.render(output)
 
     @staticmethod
@@ -56,10 +58,10 @@ class AiController:
         output = ''
         if min(scores) < current_score - 4 or min(scores) <= 10:
             player.take_from_discard()
-            output += View.template_ai_thought(player, 'Drawing from discard')
+            output += AiView.thinking(player, 'Drawing from discard')
         else:
             player.take_from_deck()
-            output += View.template_ai_thought(player, 'Drawing from deck')
+            output += AiView.thinking(player, 'Drawing from deck')
         return output
 
     @classmethod
