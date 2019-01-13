@@ -21,7 +21,6 @@ pytest-mock==1.10.0
 readme-renderer==24.0
 requests==2.20.1
 requests-toolbelt==0.8.0
-rummy==1.1.8
 six==1.11.0
 text-template==0.1.4
 tqdm==4.28.1
