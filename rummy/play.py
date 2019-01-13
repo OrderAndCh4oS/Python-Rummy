@@ -47,20 +47,13 @@ class Play:
             player.turn(self.round)
             # Todo: Views should be agnostic. Each template will have placeholders for data.
             # Todo: Player should return data to be displayed in views placeholders.
-            if isinstance(player, Human):
-                HumanController.show_start_turn(player)
-                HumanController.show_knocked(player)
-                HumanController.draw_card(player)
-                HumanController.show_end_turn(player)
-                HumanController.discard_or_knock(player)
-                HumanController.show_discard(player)
-            else:
-                AiController.show_start_turn(player)
-                AiController.show_knocked(player)
-                AiController.draw_card(player)
-                AiController.show_end_turn(player)
-                AiController.discard_or_knock(player)
-                AiController.show_discard(player)
+            controller = self._select_player_controller(player)
+            controller.show_start_turn(player)
+            controller.show_knocked(player)
+            controller.draw_card(player)
+            controller.show_end_turn(player)
+            controller.discard_or_knock(player)
+            controller.show_discard(player)
             self.round.end_turn()
         View.render(self.end_round())
         sleep(1.2)
@@ -68,6 +61,13 @@ class Play:
             View.render(self.score.show_winners())
         else:
             self.start_new_round()
+
+    def _select_player_controller(self, player):
+        if isinstance(player, Human):
+            controller = HumanController
+        else:
+            controller = AiController
+        return controller
 
     def start_new_round(self):
         self.round.rotate_first_player()
