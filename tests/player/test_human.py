@@ -15,11 +15,11 @@ class TestHuman:
         human = Human(1)
         human.round = mocker.MagicMock()
         human.round.deck.has_discard.return_value = False
-        human.draw_from_deck_or_discard_pile()
+        human.draw_card()
         assert human._choose_pick_up.call_count == 0
         assert human.take_from_deck.call_count == 1
         human.round.deck.has_discard.return_value = True
-        human.draw_from_deck_or_discard_pile()
+        human.draw_card()
         assert human._choose_pick_up.call_count == 1
         assert human.take_from_deck.call_count == 1
 
@@ -50,35 +50,35 @@ class TestHuman:
         human.round = mocker.MagicMock()
         # valid score, not knocked; chooses to knock
         # scores = [9, 12], knocked = False, player_choice = 'k' -> '1'
-        human.round.knocked = False
+        human.round.show_knocked = False
         human.discard_or_knock()
-        assert human.round.knocked
+        assert human.round.show_knocked
         assert Hand.discard_card.call_count == 1
 
         # valid score, not knocked
         # scores = [9, 12], knocked = False, player_choice = '3'
-        human.round.knocked = False
+        human.round.show_knocked = False
         human.discard_or_knock()
-        assert not human.round.knocked
+        assert not human.round.show_knocked
         assert Hand.discard_card.call_count == 2
 
         # valid score, knocked
         # scores = [9, 12], knocked = True, player_choice = '5'
-        human.round.knocked = True
+        human.round.show_knocked = True
         human.discard_or_knock()
-        assert human.round.knocked
+        assert human.round.show_knocked
         assert Hand.discard_card.call_count == 3
 
         # invalid score, not knocked
         # scores = [11, 12], knocked = False, player_choice = '3'
-        human.round.knocked = False
+        human.round.show_knocked = False
         human.discard_or_knock()
-        assert not human.round.knocked
+        assert not human.round.show_knocked
         assert Hand.discard_card.call_count == 4
 
         # invalid score, knocked
         # scores = [11, 12], knocked = True, player_choice = '4'
-        human.round.knocked = True
+        human.round.show_knocked = True
         human.discard_or_knock()
-        assert human.round.knocked
+        assert human.round.show_knocked
         assert Hand.discard_card.call_count == 5

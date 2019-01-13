@@ -15,7 +15,8 @@ class UserInput:
         while True:
             for action in action_collection.actions:
                 if isinstance(action.key, range):
-                    output += "%s: %s\n" % (str(action), ', '.join([Colour.green(str(key)) for key in action.key]))
+                    output += "%s: %s\n" % (
+                    str(action), '%s-%s' % (Colour.green(str(action.key[0])), Colour.green(str(action.key[-1]))))
                     keys.extend([str(key) for key in action.key])
                 else:
                     output += "%s: %s\n" % (str(action), Colour.green(action.key))

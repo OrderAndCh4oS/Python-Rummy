@@ -6,9 +6,12 @@ from time import sleep
 
 import colorama
 
+from rummy.controller.ai_controller import AiController
+from rummy.controller.human_controller import HumanController
 from rummy.game.players import Players
 from rummy.game.round import Round
 from rummy.game.score import Score
+from rummy.player.human import Human
 from rummy.ui.menu_action_dialog import MenuActionDialog
 from rummy.ui.user_input import UserInput
 from rummy.ui.view import View
@@ -42,12 +45,22 @@ class Play:
             self.round.prepare_turn()
             player = self.players[self.round.current_player]
             player.turn(self.round)
-            View.render(player.show_turn_start())
-            View.render(player.has_someone_knocked())
-            View.render(player.draw_from_deck_or_discard_pile())
-            View.render(player.show_turn_end())
-            player.discard_or_knock()
-            View.render(player.show_discard())
+            # Todo: Views should be agnostic. Each template will have placeholders for data.
+            # Todo: Player should return data to be displayed in views placeholders.
+            if isinstance(player, Human):
+                HumanController.show_start_turn(player)
+                HumanController.show_knocked(player)
+                HumanController.draw_card(player)
+                HumanController.show_end_turn(player)
+                HumanController.discard_or_knock(player)
+                HumanController.show_discard(player)
+            else:
+                AiController.show_start_turn(player)
+                AiController.show_knocked(player)
+                AiController.draw_card(player)
+                AiController.show_end_turn(player)
+                AiController.discard_or_knock(player)
+                AiController.show_discard(player)
             self.round.end_turn()
         View.render(self.end_round())
         sleep(1.2)

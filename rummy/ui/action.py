@@ -8,6 +8,3 @@ class Action:
 
     def __repr__(self):
         return self.label
-
-    def check_input(self, input_value):
-        return input_value == self.key

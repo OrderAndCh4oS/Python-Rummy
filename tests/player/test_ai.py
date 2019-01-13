@@ -19,11 +19,11 @@ class TestAI:
         ai.round = mocker.MagicMock()
         ai.round.deck.take_card.return_value = Card("A", "♥")
         ai.round.deck.has_discard.return_value = True
-        ai.draw_from_deck_or_discard_pile()
+        ai.draw_card()
         assert AI._choose_pickup.call_count == 1
         assert Hand.draw_card.call_count == 1
         ai.round.deck.has_discard.return_value = False
-        ai.draw_from_deck_or_discard_pile()
+        ai.draw_card()
         assert AI._choose_pickup.call_count == 1
         assert Hand.draw_card.call_count == 2
 
@@ -66,12 +66,12 @@ class TestAI:
         ai = AI(1, False)
         ai.round = mocker.MagicMock()
         ai.hand.hand = [Card("A", "♥"), Card("2", "♥")]
-        ai.round.knocked = False
+        ai.round.show_knocked = False
         ai.discard_or_knock()
-        assert ai.round.knocked
+        assert ai.round.show_knocked
         ai.hand.discard_card.assert_called_with(2)
         assert ai.round.deck.discard_card.call_count == 1
         ai.discard_or_knock()
-        assert ai.round.knocked
+        assert ai.round.show_knocked
         ai.hand.discard_card.assert_called_with(0)
         assert ai.round.deck.discard_card.call_count == 2

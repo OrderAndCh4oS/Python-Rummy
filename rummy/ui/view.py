@@ -50,19 +50,19 @@ class View:
         return output
 
     @staticmethod
-    def template_ai_turn_start(ai):
+    def template_ai_turn_start(player):
         return TextTemplate.render(
             TEMPLATE_PATH + '/turn-start.txt',
-            turn_number=ai.round.turn,
-            player_number=ai.round.current_player + 1,
-            discard=ai.round.deck.show_discard()
+            turn_number=player.round.turn,
+            player_number=player.round.current_player + 1,
+            discard=player.round.deck.show_discard()
         )
 
     @staticmethod
-    def template_ai_turn_end(ai):
+    def template_ai_turn_end(player):
         return TextTemplate.render(
             TEMPLATE_PATH + '/ai-turn-end.txt',
-            hand=str(ai.hand)
+            hand=str(player.hand)
         )
 
     @staticmethod

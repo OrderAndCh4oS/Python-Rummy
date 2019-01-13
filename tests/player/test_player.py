@@ -9,16 +9,16 @@ from rummy.player.player import Player
 class DummyPlayer(Player):
     # Dummies away the abstract methods from Player to allow testing
 
-    def show_turn_start(self):
+    def start_turn(self):
         pass
 
-    def show_turn_end(self):
+    def end_turn(self):
         pass
 
     def show_discard(self):
         pass
 
-    def draw_from_deck_or_discard_pile(self):
+    def draw_card(self):
         pass
 
     def discard_or_knock(self):

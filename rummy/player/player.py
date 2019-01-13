@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 
 from rummy.game.melds import Melds
 from rummy.player.hand import Hand
-from rummy.ui.view import View
 
 
 class Player(metaclass=ABCMeta):
@@ -35,7 +34,7 @@ class Player(metaclass=ABCMeta):
         self.round.deck.discard_card(self.hand.discard_card(user_input))
 
     def knock(self):
-        self.round.knocked = True
+        self.round.show_knocked = True
 
     def get_name(self):
         return str(self)
@@ -53,25 +52,4 @@ class Player(metaclass=ABCMeta):
         return self.hand.score
 
     def has_someone_knocked(self):
-        if self.round.knocked:
-            return View.prepare_template('/knocked.txt')
-
-    @abstractmethod
-    def show_turn_start(self):
-        pass
-
-    @abstractmethod
-    def show_turn_end(self):
-        pass
-
-    @abstractmethod
-    def show_discard(self):
-        pass
-
-    @abstractmethod
-    def draw_from_deck_or_discard_pile(self):
-        pass
-
-    @abstractmethod
-    def discard_or_knock(self):
-        pass
+        return self.round.knocked
