@@ -5,6 +5,9 @@ python:
   - "3.6"
   - "3.7"
   - "3.8"
+
+dist: xenial
+
 stages:
   - test
   - name: deploy
@@ -24,6 +27,11 @@ jobs:
     - stage: deploy
       script:
         - echo Deploying to PyPI...
+
+before_install:
+  - pip install poetry
+install:
+  - poetry install
 
 before_deploy:
   # User and password environment variables are set as hidden variables through
