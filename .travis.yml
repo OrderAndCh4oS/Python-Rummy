@@ -16,8 +16,6 @@ stages:
 jobs:
   include:
     - stage: test
-      install:
-        - poetry install -v
       script:
         - coverage run -m pytest
       after_success:
@@ -30,6 +28,8 @@ before_install:
   - pip install --upgrade pip
   - pip install poetry
   - poetry self update --preview
+install:
+  - poetry install -v
 
 before_deploy:
   # User and password environment variables are set as hidden variables through
