@@ -5,13 +5,38 @@ python:
   - "3.6"
   - "3.7"
   - "3.8"
-install:
+stages:
+  - test
+  - name: deploy
+    if: tag IS present
+
+jobs:
+  include:
+    - stage: test
+      install:
+        - pip install --upgrade pip
+        - pip install poetry
+        - poetry install -v
+      script:
+        - coverage run -m pytest
+      after_success:
+        - codecov
+    - stage: deploy
+      script:
+        - echo Deploying to PyPI...
+
+before_deploy:
+  # User and password environment variables are set as hidden variables through
+  # the web interface in the project settings.
   - pip install --upgrade pip
   - pip install poetry
-  - poetry install -v
-# command to run tests
-script:
-  - coverage run -m pytest
-# run coverage
-after_success:
-  - codecov
+  - poetry config http-basic.pypi $PYPI_USERNAME $PYPI_PASSWORD
+  - poetry build
+
+deploy:
+  provider: script
+  script: poetry publish
+  skip_cleanup: true
+  on:
+    tags: true
+
