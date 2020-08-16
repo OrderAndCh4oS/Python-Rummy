@@ -25,7 +25,6 @@ jobs:
 before_install:
   - pip install --upgrade pip
   - pip install poetry
-  - poetry self update --preview
 install:
   - poetry install -v
 
