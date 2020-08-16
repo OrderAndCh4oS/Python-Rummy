@@ -1,0 +1,43 @@
+[build-system]
+build-backend = "poetry.masonry.api"
+requires = ["poetry>=0.11"]
+
+[tool]
+[tool.poetry]
+authors = ["Sarcoma <sarcoma@live.co.uk>"]
+description = "Console Rummy game"
+license = "MIT"
+name = "rummy"
+version = "2.0.1"
+[tool.poetry.dependencies]
+Pygments = "2.2.0"
+ansi-colours = "0.2.6"
+atomicwrites = "1.2.1"
+attrs = "18.2.0"
+bleach = "3.0.2"
+certifi = "2018.10.15"
+chardet = "3.0.4"
+codecov = "2.0.15"
+colorama = "0.4.0"
+coverage = "4.5.1"
+docutils = "0.14"
+idna = "2.7"
+more-itertools = "4.3.0"
+pathlib2 = "2.3.2"
+pkginfo = "1.4.2"
+pluggy = "0.8.0"
+py = "1.7.0"
+pytest = "3.10.0"
+pytest-cov = "2.6.0"
+pytest-mock = "1.10.0"
+python = "^3.8"
+readme-renderer = "24.0"
+requests = "2.20.1"
+requests-toolbelt = "0.8.0"
+six = "1.11.0"
+text-template = "0.1.4"
+tqdm = "4.28.1"
+twine = "1.12.1"
+urllib3 = "1.24.1"
+webencodings = "0.5.1"
+[tool.poetry.dev-dependencies]

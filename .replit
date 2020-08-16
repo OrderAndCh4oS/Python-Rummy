@@ -1,2 +1,1 @@
-language = "python3"
-run = "python rummy"
+run = "python rummy/play.py"

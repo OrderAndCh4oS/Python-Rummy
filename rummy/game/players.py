@@ -26,7 +26,7 @@ class Players:
                 self.players.append(AI(len(self.players) + 1, ai_only))
 
     def is_ai_only(self):
-        return True if self.number_of_players is 0 else False
+        return True if self.number_of_players == 0 else False
 
     def get_players(self):
         return self.players
