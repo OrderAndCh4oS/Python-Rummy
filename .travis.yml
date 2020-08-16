@@ -1,16 +1,31 @@
 language: python
 python:
-  - "3.4"
-  - "3.5"
   - "3.6"
   - "3.7"
-install:
+  - "3.8"
+
+script:
+- coverage run -m pytest
+
+after_success:
+- codecov
+
+before_install:
   - pip install --upgrade pip
   - pip install poetry
+install:
   - poetry install -v
-# command to run tests
-script:
-  - coverage run -m pytest
-# run coverage
-after_success:
-  - codecov
+
+before_deploy:
+  # User and password environment variables are set as hidden variables through
+  # the web interface in the project settings.
+  - poetry config http-basic.pypi $PYPI_USERNAME $PYPI_PASSWORD
+  - poetry build
+
+deploy:
+  provider: script
+  script: poetry publish
+  skip_cleanup: true
+  on:
+    tags: true
+

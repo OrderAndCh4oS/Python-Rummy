@@ -15,7 +15,7 @@ class MenuActionDialog:
     def ai_players(human_players=0):
         return ActionCollection(
             Action(range(
-                1 if human_players is not 0 else 2,
+                1 if human_players != 0 else 2,
                 5 - int(human_players)
             ), 'Choose number of AI players'),
         )
