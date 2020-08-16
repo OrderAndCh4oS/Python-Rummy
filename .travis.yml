@@ -4,21 +4,11 @@ python:
   - "3.7"
   - "3.8"
 
-stages:
-  - test
-  - name: deploy
-    if: tag IS present
+script:
+- coverage run -m pytest
 
-jobs:
-  include:
-    - stage: test
-      script:
-        - coverage run -m pytest
-      after_success:
-        - codecov
-    - stage: deploy
-      script:
-        - echo Deploying to PyPI...
+after_success:
+- codecov
 
 before_install:
   - pip install --upgrade pip
