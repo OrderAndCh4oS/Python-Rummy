@@ -8,10 +8,7 @@ name = "rummy"
 version = "2.0.2"
 description = "Console Rummy game"
 authors = ["Sarcoma <sarcoma@live.co.uk>"]
-description = "Console Rummy game"
 license = "MIT"
-name = "rummy"
-version = "2.0.1"
 [tool.poetry.dependencies]
 Pygments = "2.2.0"
 ansi-colours = "0.2.6"
@@ -44,8 +41,3 @@ twine = "1.12.1"
 urllib3 = "1.24.1"
 webencodings = "0.5.1"
 [tool.poetry.dev-dependencies]
-
-[build-system]
-requires = ["poetry>=0.11"]
-build-backend = "poetry.masonry.api"
-
