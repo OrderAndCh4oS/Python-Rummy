@@ -1,17 +1,18 @@
 language: python
 python:
-- "3.4"
-- "3.5"
-- "3.6"
+  - "3.4"
+  - "3.5"
+  - "3.6"
 before_install:
-- "pip install -U pip"
-- "python setup.py install"
+  - pip install --upgrade pip
+  - pip install poetry
+  - poetry install -v
 # command to install dependencies
 install:
-- pip install -U -r requirements.txt
+  - pip install -U -r requirements.txt
 # command to run tests
 script:
-- coverage run -m pytest
+  - coverage run -m pytest
 # run coverage
 after_success:
-- codecov
+  - codecov
