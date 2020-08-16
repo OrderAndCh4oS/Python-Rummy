@@ -17,8 +17,6 @@ jobs:
   include:
     - stage: test
       install:
-        - pip install --upgrade pip
-        - pip install poetry
         - poetry install -v
       script:
         - coverage run -m pytest
@@ -29,9 +27,9 @@ jobs:
         - echo Deploying to PyPI...
 
 before_install:
+  - pip install --upgrade pip
   - pip install poetry
-install:
-  - poetry install
+  - poetry self update --preview
 
 before_deploy:
   # User and password environment variables are set as hidden variables through
