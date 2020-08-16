@@ -4,11 +4,11 @@ requires = ["poetry>=0.11"]
 
 [tool]
 [tool.poetry]
-authors = ["Sarcoma <sarcoma@live.co.uk>"]
-description = "Console Rummy game"
-license = "MIT"
 name = "rummy"
-version = "2.1.0"
+version = "2.1.1"
+description = "Console Rummy game"
+authors = ["Sarcoma <sarcoma@live.co.uk>"]
+license = "MIT"
 [tool.poetry.dependencies]
 Pygments = "2.2.0"
 ansi-colours = "0.2.6"
