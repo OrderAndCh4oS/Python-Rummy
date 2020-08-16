@@ -20,6 +20,7 @@ from rummy.view.round_view import RoundView
 
 class Play:
     def __init__(self):
+        print('Welcome to Python Rummy')
         self.colorama()
         players = Players()
         players.choose_players()

@@ -1,1 +1,1 @@
-run = "python rummy/play.py"
+run = "poetry run rummy"
