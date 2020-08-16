@@ -332,6 +332,7 @@ version = "0.5.1"
 
 [metadata]
 content-hash = "a6f8e2cfd5c7912a06b0ec550972292bac8371659da8ba5e1ef657bde8273413"
+lock-version = "1.0"
 python-versions = "^3.4"
 
 [metadata.files]
