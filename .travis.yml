@@ -1,5 +1,7 @@
 language: python
 python:
+  - "3.4"
+  - "3.5"
   - "3.6"
   - "3.7"
   - "3.8"
@@ -16,16 +18,21 @@ before_install:
 install:
   - poetry install -v
 
-before_deploy:
-  # User and password environment variables are set as hidden variables through
-  # the web interface in the project settings.
-  - poetry config http-basic.pypi $PYPI_USERNAME $PYPI_PASSWORD
-  - poetry build
-
-deploy:
-  provider: script
-  script: poetry publish
-  skip_cleanup: true
-  on:
-    tags: true
-
+jobs:
+  include:
+    - stage: build
+      python: "3.7"
+      script: echo "Starting Pypi build"
+      before_deploy:
+        # User and password environment variables are set as hidden variables through
+        # the web interface in the project settings.
+        - poetry config http-basic.pypi $PYPI_USERNAME $PYPI_PASSWORD
+        - poetry build
+      deploy:
+        provider: script
+        script: poetry publish
+        skip_cleanup: true
+        on:
+          tags: true
+          branch: master
+        skip_existing: true
