@@ -15,7 +15,7 @@ license = "MIT"
 [tool.poetry.dependencies]
 Pygments = "2.2.0"
 ansi-colours = "0.2.6"
-codecov = "2.0.15"
+codecov = "2.0.16"
 colorama = "0.4.0"
 coverage = "4.5.1"
 more-itertools = "4.3.0"
