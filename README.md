@@ -1,8 +1,3 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://travis-ci.org/sarcoma/Python-Rummy.svg?branch=master)](https://travis-ci.org/sarcoma/Python-Rummy) 
-[![codecov](https://codecov.io/gh/sarcoma/Python-Rummy/branch/master/graph/badge.svg)](https://codecov.io/gh/sarcoma/Python-Rummy)
-[![Run on Repl.it](https://repl.it/badge/github/sarcoma/Python-Rummy)](https://repl.it/github/sarcoma/Python-Rummy)
-
 # Command Line Rummy in Python 3
 
 This is a one to four player command line version of the card game Rummy.
